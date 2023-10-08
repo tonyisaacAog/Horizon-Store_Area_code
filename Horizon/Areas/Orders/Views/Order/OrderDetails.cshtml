@@ -1,0 +1,188 @@
+﻿@model OrderDetailsContainer
+@{
+    var title = "تفاصيل امر شغل ";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+
+
+<card title="بيانات العميل" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم العميل</label>
+                    <input data-bind="value:Order.ClientName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+             <div class="col-6">
+                <div class="form-group">
+                    <label>التليفون</label>
+                    <input data-bind="value:Order.Phone1" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</card>
+
+
+<card title="تفاصيل امر الشغل" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+      
+        <thead class="bg-gradient text-dark">
+
+            <tr>
+                <th>
+                    المنتج
+                </th>
+
+                <th>
+                    الكمية
+                </th>     
+                <th style="width:10%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+                <th>
+                  @*  <button class="btn btn-dark" data-bind="click:AddItem">
+                        <span class="fa fa-plus"></span>
+                    </button>*@
+                </th>
+            </tr>
+
+        </thead>
+        <tbody data-bind="foreach:OrderDetail">
+            <tr>
+                <td>
+ 
+                    <input disabled type="text" class="form-control" data-bind="value:ProductName" />
+
+                </td>
+
+                <td>
+                    <input disabled type="text" class="form-control" data-bind="value:QTY" />
+                </td>
+
+                <td>
+                    <input disabled type="text" class="form-control" data-bind="value:UnitPrice" />
+                </td>
+                <td>
+                    <span data-bind="numericText:TotalAmount"></span>
+                </td>
+                <td>
+                    <a class="btn btn-info" data-bind="attr:{href:'/Orders/Order/ManageConfigure/'+Id()}">
+                        <span class="fa fa-list"></span>
+                    </a>   
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</card>
+
+
+<card title="الاكسسوارات" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table  class="table table-bordered table-striped table-hover">
+      
+        <thead class="bg-gradient text-dark">
+
+            <tr>
+                <th>
+                    المادة
+                </th>
+
+                <th>
+                    الكمية
+                </th>     
+             
+            </tr>
+
+        </thead>
+        <tbody data-bind="foreach:OrderConfigure">
+            <tr data-bind="visible:OrderConfigure.length>0">
+                <td>
+ 
+                    <input disabled type="text" class="form-control" data-bind="value:StoreItemRaw" />
+
+                </td>
+
+                <td>
+                    <input disabled type="text" class="form-control" data-bind="value:Qty" />
+                </td>
+
+              
+            </tr>
+        </tbody>
+      
+    </table>
+</card>
+
+<card title="بيانات امر الشغل" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ امر الشغل</label>
+                    <input disabled data-bind="value:Order.OrderDate" class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Orders/orderDetailsValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Orders/OrderDetailsContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var orderdetails = new OrderDetailsContainer(@Html.Raw(data));
+        ko.applyBindings(orderdetails);
+        ko.bindingHandlers.select2 = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                $(element).select2();
+            }
+        }
+        $("#StoreLocID").select2();
+    </script>
+
+
+}

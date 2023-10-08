@@ -1,0 +1,23 @@
+﻿<div class="modal fade" tabindex="-1"
+     role="dialog"
+     id="message" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">رسائل</h5>
+
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-black-50" aria-hidden="true">&times;</span>
+                </button>*@
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <ul data-bind='foreach:Messages'>
+                    <li data-bind='text:$data' class='card-text'></li>
+                </ul>
+                <p id="JsError"></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+﻿@model UpdateUserViewModel
+@{
+    string title = "تعديل اللمستخدم";
+    ViewData["Title"] = title;
+}
+@{ string data = JsonConvert.SerializeObject(Model);}
+
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+<card title=@ViewBag.Title addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input class="form-control" data-bind="value:Name" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input class="form-control" data-bind="value:UserName" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>البريد الالكترونى</label>
+                    <input class="form-control" data-bind="value:Email" />
+                </div>
+            </div>
+         
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>التليفون</label>
+                    <input class="form-control" data-bind="value:PhoneNumber" />
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>المحمول</label>
+                    <input class="form-control" data-bind="value:Mobile" />
+                </div>
+            </div>       
+        </div>
+    </div>
+    <div class="container mb-4">
+        <div class="row">
+          
+
+            <div class="col-12">
+                <div class="form-group">
+                        <label>صلاحيات المستخدم</label>
+                        <div data-bind="foreach:UserRoles">
+                        <div class="container mb-1  ">
+                            <label class="switch mr-2">
+                                <input type="checkbox" data-bind="checked:Checked">
+                                <span class="slider round"></span>
+                            </label>
+                            <label><span data-bind="text:RoleName"></span></label>
+                        </div>
+                        <br />
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <card-footer>
+        <button class="btn btn-primary" data-bind="click:Save">
+            حفظ
+        </button>
+    </card-footer>
+
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Settings/EditUser/UserUpdateValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Settings/EditUser/UpdateUser.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var user = new UpdateUser(@Html.Raw(data));
+        ko.applyBindings(user);
+    </script>
+
+
+}

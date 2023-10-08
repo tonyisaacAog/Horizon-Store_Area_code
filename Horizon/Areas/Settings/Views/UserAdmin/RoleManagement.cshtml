@@ -1,0 +1,41 @@
+﻿@model IEnumerable<IdentityRole>
+@{
+    string title = "الصلاحيات";
+    ViewData["Title"] = title;
+}
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title=@ViewBag.Title addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+
+    @if (!Model.Any())
+    {
+        <h4 class="text-danger">No roles defined yet. Please create the first role </h4>
+    }
+    else
+    {
+        <table class="table table-condensed table-bordered">
+            <tr>
+                
+                <th>الصلاحيات</th>
+            </tr>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    
+                    <td>@role.Name</td>
+                    
+                </tr>
+            }
+        </table>
+    }
+<card-footer>
+    <a class="btn btn-primary" asp-action="AddNewRole">اضافة صلاحية </a>
+</card-footer>
+</card>
+
+  

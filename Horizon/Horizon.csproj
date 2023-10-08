@@ -1,0 +1,163 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Horizon-d77d7b1f-fd4b-4dd0-8561-2d83a04827e6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Manufacturing\Data\**" />
+    <Content Remove="Areas\Manufacturing\Data\**" />
+    <EmbeddedResource Remove="Areas\Manufacturing\Data\**" />
+    <None Remove="Areas\Manufacturing\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Purchases\Services\SupplierManager.cs" />
+    <Compile Remove="Areas\Store\Controllers\StoreItemRawController2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\Manufacturing\Views\Home\ManageManufacturing.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="BoldReports.AspNet.Core" Version="4.2.79" />
+    <PackageReference Include="BoldReports.Net.Core" Version="4.2.79" />
+    <PackageReference Include="EPPlus" Version="6.1.2" />
+    <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Settings\Controllers\" />
+    <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="Areas\Settings\Views\" />
+    <Folder Include="Areas\Store\ViewModel\Raw\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\dist\js\i18n\af.js" />
+    <None Include="wwwroot\dist\js\i18n\ar.js" />
+    <None Include="wwwroot\dist\js\i18n\az.js" />
+    <None Include="wwwroot\dist\js\i18n\bg.js" />
+    <None Include="wwwroot\dist\js\i18n\bn.js" />
+    <None Include="wwwroot\dist\js\i18n\bs.js" />
+    <None Include="wwwroot\dist\js\i18n\ca.js" />
+    <None Include="wwwroot\dist\js\i18n\cs.js" />
+    <None Include="wwwroot\dist\js\i18n\da.js" />
+    <None Include="wwwroot\dist\js\i18n\de.js" />
+    <None Include="wwwroot\dist\js\i18n\dsb.js" />
+    <None Include="wwwroot\dist\js\i18n\el.js" />
+    <None Include="wwwroot\dist\js\i18n\en.js" />
+    <None Include="wwwroot\dist\js\i18n\es.js" />
+    <None Include="wwwroot\dist\js\i18n\et.js" />
+    <None Include="wwwroot\dist\js\i18n\eu.js" />
+    <None Include="wwwroot\dist\js\i18n\fa.js" />
+    <None Include="wwwroot\dist\js\i18n\fi.js" />
+    <None Include="wwwroot\dist\js\i18n\fr.js" />
+    <None Include="wwwroot\dist\js\i18n\gl.js" />
+    <None Include="wwwroot\dist\js\i18n\he.js" />
+    <None Include="wwwroot\dist\js\i18n\hi.js" />
+    <None Include="wwwroot\dist\js\i18n\hr.js" />
+    <None Include="wwwroot\dist\js\i18n\hsb.js" />
+    <None Include="wwwroot\dist\js\i18n\hu.js" />
+    <None Include="wwwroot\dist\js\i18n\hy.js" />
+    <None Include="wwwroot\dist\js\i18n\id.js" />
+    <None Include="wwwroot\dist\js\i18n\is.js" />
+    <None Include="wwwroot\dist\js\i18n\it.js" />
+    <None Include="wwwroot\dist\js\i18n\ja.js" />
+    <None Include="wwwroot\dist\js\i18n\ka.js" />
+    <None Include="wwwroot\dist\js\i18n\km.js" />
+    <None Include="wwwroot\dist\js\i18n\ko.js" />
+    <None Include="wwwroot\dist\js\i18n\lt.js" />
+    <None Include="wwwroot\dist\js\i18n\lv.js" />
+    <None Include="wwwroot\dist\js\i18n\mk.js" />
+    <None Include="wwwroot\dist\js\i18n\ms.js" />
+    <None Include="wwwroot\dist\js\i18n\nb.js" />
+    <None Include="wwwroot\dist\js\i18n\ne.js" />
+    <None Include="wwwroot\dist\js\i18n\nl.js" />
+    <None Include="wwwroot\dist\js\i18n\pl.js" />
+    <None Include="wwwroot\dist\js\i18n\ps.js" />
+    <None Include="wwwroot\dist\js\i18n\pt-BR.js" />
+    <None Include="wwwroot\dist\js\i18n\pt.js" />
+    <None Include="wwwroot\dist\js\i18n\ro.js" />
+    <None Include="wwwroot\dist\js\i18n\ru.js" />
+    <None Include="wwwroot\dist\js\i18n\sk.js" />
+    <None Include="wwwroot\dist\js\i18n\sl.js" />
+    <None Include="wwwroot\dist\js\i18n\sq.js" />
+    <None Include="wwwroot\dist\js\i18n\sr-Cyrl.js" />
+    <None Include="wwwroot\dist\js\i18n\sr.js" />
+    <None Include="wwwroot\dist\js\i18n\sv.js" />
+    <None Include="wwwroot\dist\js\i18n\th.js" />
+    <None Include="wwwroot\dist\js\i18n\tk.js" />
+    <None Include="wwwroot\dist\js\i18n\tr.js" />
+    <None Include="wwwroot\dist\js\i18n\uk.js" />
+    <None Include="wwwroot\dist\js\i18n\vi.js" />
+    <None Include="wwwroot\dist\js\i18n\zh-CN.js" />
+    <None Include="wwwroot\dist\js\i18n\zh-TW.js" />
+    <None Include="wwwroot\dist\js\select2.full.js" />
+    <None Include="wwwroot\dist\js\select2.full.min.js" />
+    <None Include="wwwroot\dist\js\select2.js" />
+    <None Include="wwwroot\dist\js\select2.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Settings\Views\UserAdmin\AddNewRole.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\CreateUser.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\EditUser.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\ResetPassword.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\RoleManagement.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\UserManagment - Copy.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\UserAdmin\UserManagment.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\_ViewImports.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Settings\Views\_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\APP\Store\Reports\ItemContainer.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

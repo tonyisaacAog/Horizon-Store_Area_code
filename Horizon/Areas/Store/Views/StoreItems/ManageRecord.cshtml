@@ -1,0 +1,88 @@
+﻿@model StoreItemVM
+@{
+    var title = "بيانات المنتج";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title=@title addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-4  mb-2">
+                <label>اسم المنتج</label>
+                <input class="form-control" data-bind="value:ProductName" />
+            </div>
+            <div class="col-4 mb-2">
+                <label>اسم المنتج عربى</label>
+                <input class="form-control" data-bind="value:ProductNameAr" />
+            </div>
+            <div class="col-4 mb-2">
+                <label>كود المنتج</label>
+                <input class="form-control" data-bind="value:ItemCode" />
+            </div>
+            <div class="col-4 mb-2">
+                <label>نوع المنتج</label>
+                @Html.Editor("Id","StoreFamilyList", new
+                {
+                htmlAttributes = new
+                {
+                @data_bind = "value:FamilyId",
+                @class = "form-select",
+                @id = "storefamily"
+
+                }
+                })
+            </div>
+            <div class="col-4 mb-2">
+                <label>ماركة المنتج</label>
+                @Html.Editor("Id","StoreBrandList", new
+                {
+                htmlAttributes = new
+                {
+                @data_bind = "value:StoreBrandId",
+                @class = "form-select",
+                @id = "storeBrand"
+                }
+                })
+            </div>
+        </div>
+    </div>
+
+    <card-footer>
+        <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
+    </card-footer>
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/App/Store/Store_Item_Brand_Family/StoreItemValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var client = new GeneralKoViewModel(@Html.Raw(data));
+        ko.applyBindings(client);
+        ko.bindingHandlers.select2 = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                $(element).select2();
+            }
+        }
+        $("#storefamily").select2();
+        $("#storeBrand").select2();
+    </script>
+}

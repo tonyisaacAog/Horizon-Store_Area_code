@@ -1,0 +1,103 @@
+﻿@model CreateUserViewModel
+@{
+    string title = "اضافة مستخدم";
+    ViewData["Title"] = title;
+}
+@{ string data = JsonConvert.SerializeObject(Model);}
+
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+<card title=@ViewBag.Title addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input class="form-control" data-bind="value:Name" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input class="form-control" data-bind="value:UserName" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>البريد الالكترونى</label>
+                    <input class="form-control" autocomplete="off" data-bind="value:Email" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" autocomplete="New-Password" class="form-control" data-bind="value:Password" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>رقم التليفون</label>
+                    <input class="form-control" data-bind="value:Phone" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>رقم المحمول</label>
+                    <input class="form-control" data-bind="value:Mobile" />
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>صلاحيات المستخدم</label>
+                    <div data-bind="foreach:UserRoles">
+                        <label class="switch">
+                            <input type="checkbox" data-bind="checked:Checked">
+                            <span class="slider round"></span>
+                        </label>
+                        <label><span data-bind="text:RoleName"></span></label>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <card-footer>
+        <button class="btn btn-primary" data-bind="click:Save">حفظ المستخدم</button>
+    </card-footer>
+
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Settings/CreateUser/UserCreateValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Settings/CreateUser/CreateUserVM.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var user = new CreateUser(@Html.Raw(data));
+        ko.applyBindings(user);
+    </script>
+
+
+}

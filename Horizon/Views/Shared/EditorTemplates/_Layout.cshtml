@@ -1,0 +1,415 @@
+﻿@*@using Microsoft.AspNetCore.Identity
+
+@using Admin.Model
+@using Finance.CurrentAssetModule.Stores.Model.Main
+@using Finance.Purchases.Model 
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject Admin.Services.UserDataManager userDataManager
+@inject SpareParts.DAL.Data.ApplicationDbContext db
+@{
+    var CurrentUser = userDataManager.GetCurrentLogedUser();
+    var OrderUnderApproval = db.InvoiceToBeApproved
+        .Where(x => x.InvoiceStatus ==
+        Finance.Sales.Model.InvoiceStatus.Pending).Count();
+    var OrderUnderEdit = db.InvoiceToBeApproved
+        .Where(x => x.InvoiceStatus ==
+        Finance.Sales.Model.InvoiceStatus.ForEdit).Count();
+    var TodaysSales = db.InvoiceToBeApproved
+    .Where(x => x.ApprovalDate.Value.Date ==
+    DateTime.Now.Date).Count();
+
+    var ReturnUnderApproval = db.SalesReturns
+       .Where(x => x.Approved == false).Count();
+    var TodaysReturn = db.SalesReturns
+  .Where(x => x.LastModified.Date ==
+  DateTime.Now.Date && x.Approved==true).Count();
+    var StoreTrans = db.StoreTransactions
+        .Where(x => x.TransStatus == StoreTransStatus.Pending).Count();
+    var ImportList = db.Purchasing
+        .Where(x => x.PurchaseStatus == PurchaseStatus.UnderProcess).Count();
+    var CheckInSafe = db.Check.Where(x => (x.CheckStatusId == 1 || x.CheckStatusId == 4)
+    && x.CheckLocationId == 1).Count();
+    var CheckInBank = db.Check
+                        .Where(x => x.CheckStatusId == 1 && x.CheckLocationId == 2).Count();
+
+    var PendingPurchases = db.Purchasing.Where(x => x.PurchaseStatus == PurchaseStatus.UnderProcess).Count();
+    var SalesUnderProcess = db.InvoiceToBeApproved.Where(x => x.InvoiceStatus == Finance.Sales.Model.InvoiceStatus.ToBeCompleted).Count();
+}*@
+@*
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - MG</title>
+    <link href="~/lib/jqueryui/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/RTL/BS5RTL.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/RTL/DashboardRTL.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/all.css" />
+
+</head>
+<body class="sb-nav-fixed">
+    <div class="se-pre-con"></div>
+    <nav class="sb-topnav navbar navbar-expand navbar-light bg-white d-print-none">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3 text-center" href="~/Home">
+            <img src="~/Images/Logo.png" />
+        </a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item dropdown">
+                    <a target="_blank" class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>مرحبا @User.Identity.Name!</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="~/Identity/Account/Manage/ChangePassword">
+                                تغيير كلمة المرور
+                            </a>
+                        </li>
+                        <li>
+                            <form class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="nav-link btn btn-link text-dark">خروج</button>
+                            </form>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">دخول</a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav" class="d-print-none">
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        @if (User.IsInRole("Finance") || User.IsInRole("Sales"))
+                        {
+                            <div class="sb-sidenav-menu-heading">المبيعات</div>
+                            if (User.IsInRole("Sales"))
+                            {
+                                <a class="nav-link" href="~/Finance/Sales/ManageSale">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    امر بيع جديد
+                                </a>
+                                <a class="nav-link" href="~/Finance/Sales/InvoiceUnderEdit">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    فواتير تحت التعديل
+                                    <span class="badge bg-danger mx-2 rounded-pill">@OrderUnderEdit</span>
+                                </a>
+                            }
+                            if (User.IsInRole("Finance"))
+                            {
+                                <a class="nav-link" href="~/Finance/Sales/InvoiceUnderApproval">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    فواتير تحت الموافقة
+                                    <span class="badge bg-danger mx-2 rounded-pill">@OrderUnderApproval</span>
+                                </a>
+                                <a class="nav-link" href="~/Finance/Sales/ReturnsUnderApporoval">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    مرتجع تحت الموافقة
+                                    <span class="badge bg-danger mx-2 rounded-pill">@ReturnUnderApproval</span>
+                                </a>
+                            }
+                            <a class="nav-link" href="~/Finance/Sales/TodayInvoices">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                مبيعات اليوم
+                                <span class="badge bg-danger mx-2 rounded-pill">@TodaysSales</span>
+                            </a>
+                            <a class="nav-link" href="~/Finance/Sales/TodaysReturns">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                مرتجعات اليوم
+                                <span class="badge bg-danger mx-2 rounded-pill">@TodaysReturn</span>
+                            </a>
+                            <a class="nav-link" href="~/Reports/SalesReports/SalesReport">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                تقرير مبيعات
+                            </a>
+                            <a class="nav-link collapsed" href="#"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ClientReports"
+                               aria-expanded="false"
+                               aria-controls="pagesCollapseAuth">
+                                <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                تقارير عملاء
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="ClientReports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="~/Reports/SalesReports/SalesSummary"> تقرير ملخص مبيعات</a>
+                                    <a class="nav-link" href="~/Reports/SalesReports/SalesByProduct"> تقرير مبيعات تفصيلي</a>
+                                    <a class="nav-link" href="~/Reports/SalesReports/SalesReturnReport"> تقرير مرتجع</a>
+                                    <a class="nav-link" href="~/Reports/SalesReports/ReturnByProduct"> تقرير مرتجع تفصيلي</a>
+                                    <a class="nav-link" href="~/Reports/SalesReports/CollectionReport">  تقرير التحصيل</a>
+                                    <a class="nav-link" href="~/Reports/SalesReports/ClientStatmentReport">كشف حساب عميل</a>
+
+                                </nav>
+                            </div>
+                        }
+
+                        @if (User.IsInRole("Sales") || User.IsInRole("Inventory") || User.IsInRole("Admin"))
+                        {
+                            <div class="sb-sidenav-menu-heading">المخازن</div>
+                            <a class="nav-link" href="~/Stores/StoreItem/ManageStoreItem">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                قائمة المنتجات
+                            </a>
+                            @if (User.IsInRole("Inventory"))
+                            {
+                                <a class="nav-link" href="~/Stores/StoreItem/MoveProducts">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    ادارة المخزون
+                                </a>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a class="nav-link collapsed" href="#"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#StoreSettings"
+                                   aria-expanded="false"
+                                   aria-controls="pagesCollapseAuth">
+                                    <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                    اعدادات المخزن
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="StoreSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageFamily">أنواع المنتجات</a>
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageStoreBrand">ماركات المنتجات</a>
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageOrigin">دول المنشأ</a>
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageCarBrand">ماركات السيارات</a>
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageCarModel">موديلات السيارات</a>
+                                        <a class="nav-link" href="~/Stores/StoreSettings/ManageStoreLocations">قائمة المخازن</a>
+                                    </nav>
+                                </div>
+                            }
+
+                        }
+
+                        @if (User.IsInRole("Finance"))
+                        {
+                            <div class="sb-sidenav-menu-heading">المشتريات</div>
+                            <a class="nav-link" href="~/Stores/StoreTrans/NewReceive">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                استلام بضاعة جديدة
+                            </a>
+                            <a class="nav-link" href="~/Finance/Purchase/NewImportList">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                حركات مخزن تحت التنفيذ
+                                <span class="badge bg-danger mx-2 rounded-pill">@StoreTrans</span>
+                            </a>
+                            <a class="nav-link" href="~/Finance/Purchase/ImportUnderProcessList">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                عمليات شراء تحت التنفيذ
+                                <span class="badge bg-danger mx-2 rounded-pill">@ImportList</span>
+                            </a>
+                            @if (PendingPurchases == 0 && SalesUnderProcess > 0)
+                            {
+                                <a class="nav-link" href="~/Reports/FinanceReports/SalesNotCompleted">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    عمليات بيع تحت الانهاء
+                                    <span class="badge bg-danger mx-2 rounded-pill">@SalesUnderProcess</span>
+                                </a>
+                            }
+
+
+                            <a class="nav-link" href="~/Finance/Purchase/ImportFinalizedList">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                عمليات شراء منتهية
+                            </a>
+                            <a class="nav-link" href="~/Finance/Purchase/ManageStoreItem">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                قائمة المنتجات بالقيمة
+                            </a>
+                            <div class="sb-sidenav-menu-heading">حسابات</div>
+                            <a class="nav-link" href="~/CRM/Clients/ManageClients">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة العملاء
+                            </a>
+                            <a class="nav-link" href="~/Finance/GL/AccountList">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                شجرة الحسابات
+                            </a>
+                            <a class="nav-link collapsed" href="#"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ClientChecks"
+                               aria-expanded="false"
+                               aria-controls="pagesCollapseAuth">
+                                <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                شيكات العملاء
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="ClientChecks" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+
+                                    <a class="nav-link" href="~/Finance/NR/CheckInSafe">
+                                        <div>شيكات في الخزنة</div>
+                                        <span class="badge bg-danger mx-2 rounded-pill">@CheckInSafe</span>
+                                    </a>
+
+                                    <a class="nav-link" href="~/Finance/NR/CheckInBank">
+                                        <div>شيكات في البنك</div>
+                                        <span class="badge bg-danger mx-2 rounded-pill">@CheckInBank</span>
+                                    </a>
+
+                                </nav>
+                            </div>
+                            <a class="nav-link" href="~/Finance/Journal/CreateJournal">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                قيود عامة
+                            </a>
+                            <a class="nav-link" href="~/Finance/Journal/CurrencyDiff">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                فروق العملة
+                            </a>
+                            <a class="nav-link" href="~/CRM/Suppliers/SupplierList">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة الموردين
+                            </a>
+                            <a class="nav-link" href="~/Finance/Expenses/AddNewExpense">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                المصروفات
+                            </a>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                اعدادات المصروفات
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="~/Finance/Expenses/Index">بنود المصروفات</a>
+                                    <a class="nav-link" href="~/Settings/ERPSettings/ManageExpenseCategory">مراكز التكلفة</a>
+                                    <a class="nav-link" href="~/Settings/ERPSettings/ManageExpenseType">انواع المصروفات</a>
+                                </nav>
+                            </div>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#AccReports" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                                تقارير الحسابات
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="AccReports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="~/Reports/FinanceReports/SafesBanksStatement"> كشوف حساب</a>
+                                    <a class="nav-link" href="~/Reports/FinanceReports/ExpenseSummaryInPeriod">تقرير مصروفات</a>
+                                    <a class="nav-link" href="~/Reports/FinanceReports/TransactionsInPeriod">تقرير الحركات</a>
+                                    <a class="nav-link" href="~/Reports/FinanceReports/TrailBalance"> ميزان المراجعة</a>
+                                </nav>
+                            </div>
+
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+
+                            <div class="sb-sidenav-menu-heading">اعدادات</div>
+                            <a class="nav-link" href="~/Stores/StoreItem/UpdatePrices">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة الاسعار
+                            </a>
+                            <a class="nav-link" href="~/Settings/UserAdmin/UserManagment">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة المستخدمين
+                            </a>
+                            <a class="nav-link" href="~/Settings/UserAdmin/ManageAreas">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة المناطق
+                            </a>
+                            <a class="nav-link" href="~/Settings/UserAdmin/ManageSalesRep">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                ادارة المندوبين
+                            </a>
+                            <a class="nav-link" href="~/Finance/Sales/OpenReturn">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                مرتجع مفتوح
+                            </a>
+                        }
+
+                        @*<a class="nav-link" href="~/Finance/Settings/Index">
+            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+            ادارة اعدادات الحسابات
+        </a>
+
+
+                    </div>
+                </div>
+               
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <div class="alert alert-dark alert-dismissible fade"
+                         id="feedback" role="alert">
+                      
+                        <button type="button" class="btn-close"
+                                data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                @await RenderSectionAsync("PageHeading", required: false)
+
+
+                <div class="container-fluid p-4">
+                    @RenderBody()
+                </div>
+
+            </main>
+       <footer class="py-4 bg-light mt-auto fixed-bottom">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery-1.10.2.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js" crossorigin="anonymous"></script>
+
+    <script src="~/lib/jquery-number/jquery.number.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
+
+    <script src="~/APP/General/General.js" asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+*@

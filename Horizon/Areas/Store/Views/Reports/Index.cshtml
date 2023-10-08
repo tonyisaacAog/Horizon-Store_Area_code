@@ -1,0 +1,158 @@
+﻿@model ItemCardContainer
+@{
+    var title = "كارت صنف للمنتج";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+    <card title=@title addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+        <div class="container ">
+            <div class="row mx-auto border p-2" style="width:80%">
+                <div class="col-6  mb-2">
+                    <label>اسم المنتج</label>  :
+                    <span data-bind="text:StoreItem.ProductName"></span>
+                </div>
+                <div class="col-6 mb-2">
+                    <label>اسم المنتج عربى</label>  :
+                    <span data-bind="text:StoreItem.ProductNameAr"></span>
+                </div>
+                <div class="col-6 mb-2">
+                    <label>كود المنتج</label>    :
+                    <span data-bind="text:StoreItem.ItemCode"></span>
+                </div>
+                <div class="col-6 mb-2">
+                    <label>نوع المنتج</label>    :
+                    <span data-bind="text:StoreItem.FamilyName"></span>
+                </div>
+                <div class="col-6 mb-2">
+                    <label>ماركة المنتج</label>   :
+                    <span data-bind="text:StoreItem.StoreBrandName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class=" col-3 m-2">
+                    <label>كمية المنتج</label>   :
+                    <span class="form-control alert alert-primary text-center" data-bind="text:StoreItem.CurrentQty"></span>
+                </div>
+                <div class=" col-3 m-2">
+                    <label>كمية التالف</label>   :
+                    <span class="form-control alert alert-danger text-center" data-bind="text:StoreItem.DestroyedQty"></span>
+
+                </div>
+                <div class=" col-3 m-2">
+                    <label>اجمالى المنتج</label>   :
+                    <sapn class="form-control alert alert-success  text-center" data-bind="text:QtyAfter"></sapn>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered table-hover ">
+            <thead>
+                <tr>
+                    <th>اسم المخزن</th>
+                    <th>الكمية</th>
+                    <th>التالف</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach:StoreLocationBalances">
+                <tr>
+                    <td><span data-bind="text:LocationName"></span></td>
+                    <td><span data-bind="text:QTY"></span></td>
+                    <td><span data-bind="text:DestroyedQty"></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </card>
+
+    <card title="تفاصيل التحركات" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="form-group row col-4">
+                    <label class="col-sm-2 col-form-label">من</label>
+                    <div class="col-sm-10">
+                        <input data-bind="value:TransactionContainer.Search.StartDate" class=" smallDate form-control" />
+                    </div>
+                </div>
+                <div class="form-group row col-4">
+                    <label class="col-sm-2 col-form-label">الى</label>
+                    <div class="col-sm-10">
+                        <input data-bind="value:TransactionContainer.Search.EndDate" class=" smallDate form-control" />
+                    </div>
+                </div>
+                <div class="form-group row col-4">
+                    <div class="col-sm-10">
+                        <a class="btn btn-primary w-100" data-bind="click:LoadReport">عرض التقرير</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6  mb-2">
+                    <label>رصيد أول المدة</label>
+                    <span data-bind="text:TransactionContainer.Search.StartBalance" class=" form-control mx-2"></span>
+                </div>
+                <div class="col-6  mb-2">
+                    <label>رصيد أخر المدة</label>
+                    <span data-bind="text:TransactionContainer.Search.EndBalance" class=" form-control mx-2"></span>
+                </div>
+
+            </div>
+        </div>
+        <card  addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-primary">
+
+            <table class="table table-striped table-bordered table-hover ">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الكمية</th>
+                        <th>الكمية بعد</th>
+                        <th>نوع العملية</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach:TransactionContainer.TransactionDetails">
+                    <tr>
+                        <td><span data-bind="text:TransDate"></span></td>
+                        <td><span data-bind="text:QTY"></span></td>
+                        <td><span data-bind="text:QtyAfter"></span></td>
+                        <td data-bind="visible:TransType == 60">
+                            <a target="_blank" class="btn btn-primary" data-bind="text: TransTypeName, attr: { href: '/Manufacturing/Home/DetailsManufacturing/' + ReferanceId }"></a>
+                        </td>
+                        <td data-bind="visible: TransType == 20">
+                            <a target="_blank" class="btn btn-success" data-bind="text: TransTypeName, attr: { href: '/Sales/Home/DetailsSales/' + ReferanceId }"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </card>
+
+    </card>
+
+    @section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Store/Reports/CardContainer.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var report = new CardReport(@Html.Raw(data));
+        ko.applyBindings(report);
+    </script>
+    }

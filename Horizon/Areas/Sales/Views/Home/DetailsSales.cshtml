@@ -1,0 +1,139 @@
+﻿@model SalesContainer
+@{
+    var title = "تفاصيل صرف منتجات";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+
+<card title="بيانات العميل" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم العميل</label>  :
+                    <span data-bind="text:Client.ClientName" ></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم العميل</label>  :
+                    <span data-bind="text:Client.Phone1"  ></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</card>
+
+<card title="تفاصيل عملية صرف المنتجات" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    اسم المنتج
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th style="width:15%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+               
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: SaleDetails">
+            <tr>
+                <td>
+                    <span data-bind="text:StoreItemName"></span>
+                </td>
+
+                <td>
+                    <span data-bind="text:QTY"></span>
+                </td>
+
+                <td>
+                    <span data-bind="text:UnitPrice"></span>
+                </td>
+                <td>
+                    <span  data-bind="text:TotalAmount"></span>
+                </td>
+               
+            </tr>
+
+        </tbody>
+       <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:SaleInfo.TotalAmount"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</card>
+
+
+<card title="ملخص عملية الصرف" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>تاريخ الصرف</label>  :
+                    <span  data-bind="text:SaleInfo.SalesDate"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>رقم الفاتورة </label>  :
+                    <span data-bind="text:SaleInfo.InvoiceNum()==''?'غير متاح':SaleInfo.InvoiceNum"></span>
+                </div>
+            </div>
+             <div class="col-4">
+                <div class="form-group">
+                    <label>مخزن الصرف </label>  :
+                    <span data-bind="text:SaleInfo.StoreLocationName"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Sales/SalesValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Sales/SalesContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var sale = new Sales(@Html.Raw(data));
+        ko.applyBindings(sale);
+    </script>
+
+
+}

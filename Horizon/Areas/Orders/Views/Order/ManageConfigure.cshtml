@@ -1,0 +1,130 @@
+﻿@model OrderConfigureContainer
+@{
+    var title = "مستلزمات المنتج للتجميع";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title="بيانات المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <input data-bind="value:StoreItemVM.ProductName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>نوع المنتج</label>
+                    <input data-bind="value:StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>كود المنتج</label>
+                    <input data-bind="value:StoreItemVM.ItemCode" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>ماركة المنتج</label>
+                    <input data-bind="value:StoreItemVM.StoreBrandName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+@*            <div class="col-12">
+                <div class="form-group">
+                    <label>الكمية الاكبر التى يمكن انتاجها من المنتج من المستلزمات الموجود فى المخزن</label>
+                    <input data-bind="value:NumberProductCanMade" disabled="disabled" class="form-control text-center" />
+                </div>
+            </div>*@
+        </div>
+    </div>
+
+
+    
+</card>
+
+<card title="تفاصيل المواد المستخدمة لتجميع المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    المادة الخام
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th>
+                    <button class="btn btn-dark" data-bind="click:AddItem">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: OrderConfigure">
+            <tr data-bind="visible:RecordStatus()!=2">
+                <td>
+                    @Html.Editor("Id","StoreItemRawList", new
+                    {
+                    htmlAttributes = new
+                    {
+                    @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItem}",
+                    @class = "form-select",
+                    }
+                    })
+                </td>
+                <td>
+                    <input type="text" class="form-control" data-bind="value:Qty,event:{change:$parent.UpdateItem}" />
+                </td>
+                <td>
+                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
+                        <span class="fa fa-minus"></span>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</card>
+<card-footer>
+    <partial name="_SaveButton" />
+</card-footer>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Orders/ConfigurationValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Orders/ConfigurationContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var configuration = new ConfigureContainer(@Html.Raw(data));
+        ko.applyBindings(configuration);
+        ko.bindingHandlers.select2 = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                $(element).select2();
+            }
+        }
+    </script>
+
+
+}

@@ -1,0 +1,186 @@
+﻿@model PurchaseContainerForProduct
+@{
+    var title = "طلب تخزين مستلزمات للمنتج";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+
+}
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+}
+
+<card title="بيانات المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                        <input data-bind="value:StoreItem.ProductName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>نوع المنتج</label>
+                        <input data-bind="value:StoreItem.FamilyName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+         
+            <div class="col-6">
+                <div class="form-group">
+                    <label>ماركة المنتج</label>
+                        <input data-bind="value:StoreItem.StoreBrandName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>كمية المنتج</label>
+                    <input data-bind="value:StoreItem.Quantity,event:{change:UpdateTotalRaw}" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+
+
+<card title="تفاصيل عملية تخزين المستلزمات" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+        <table class="table table-bordered table-striped table-hover">
+
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>
+                        المنتج
+                    </th>
+                    <th>
+                        عدد المستلزمات
+                    </th>
+                    <th>
+                        الكمية
+                    </th>
+                    <th>
+                        سعر الوحدة
+                    </th>
+
+                    <th>
+                        السعر الإجمالي
+                    </th>
+                    
+                </tr>
+            </thead>
+            <tbody data-bind="foreach:PurchaseDetails">
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" disabled data-bind="value:StoreItemName" />
+                    </td>
+
+                    <td>
+                        <input type="text" class="form-control" disabled data-bind="value:ConfigueQty" />
+                    </td>
+                    
+                    <td>
+                        <input type="text" class="form-control" disabled data-bind="value:Qty" />
+                    </td>
+
+                    <td>
+                        <input type="text" class="form-control" data-bind="value:UnitPrice" />
+                    </td>
+
+                    <td>
+                        <span data-bind="numericText:TotalAmount"></span>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                    <td><b>الاجمالي</b></td>
+                    <td><span class="fw-bold" data-bind="numericText:PurchaseInfo.TotalAmount"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </card>
+
+
+
+<card title="ملخص عملية التخزين" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>تاريخ التخزين للمستلزمات</label>
+                        <input data-bind="value:PurchaseInfo.PurchasingDate" class="form-control smallDate" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>رقم الفاتورة </label>
+                        <input data-bind="value:PurchaseInfo.InvoiceNum" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>اسم المورد</label>
+
+                        @Html.Editor("Id","SupplierList", new
+                    {
+                    htmlAttributes = new
+                    {
+                    @data_bind = "value:SupplierId",
+                    @class = "form-select",
+                    @id="supplierId"
+                    }
+                    })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+  
+    </card>
+
+
+<card-footer>
+    <partial name="_SaveButton" />
+</card-footer>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Purchases/PurchaseContainerForProductRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Purchases/PurchaseContainerForProduct.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var purchase = new Purchase(@Html.Raw(data));
+        ko.applyBindings(purchase);
+        ko.bindingHandlers.select2 = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                $(element).select2();
+            }
+        }
+        $("#supplierId").select2();
+    </script>
+
+
+}

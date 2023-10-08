@@ -1,0 +1,37 @@
+﻿@model AddRoleViewModel
+@{
+
+    string title =  "اضافة صلاحية جديدة";
+    ViewData["Title"] = title;
+}
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+<card title=@ViewBag.Title addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+    <form method="post" class="form-horizontal" role="form">
+        <h4>اضف تفاصيل الصلاحية</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group mb-4">
+            <label asp-for="RoleName" class="col-md-2 control-label">صلاحية جديدة</label>
+            <div class="col-md-8">
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+        </div>
+        <card-footer>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-primary" value="اضافة" />
+                </div>
+            </div>
+        </card-footer>
+    </form>
+</card>
+
+    

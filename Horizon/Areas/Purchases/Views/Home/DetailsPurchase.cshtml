@@ -1,0 +1,133 @@
+﻿@model PurchaseContainer
+@{
+    var title = "تفاصيل فاتورة تخزين مستلزمات";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+
+<card title="بيانات المورد" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم المورد</label>  :
+                    <span data-bind="text:Supplier.SupplierName" ></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>التليفون</label>  :
+                    <span data-bind="text:Supplier.Phone1"  ></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</card>
+
+<card title="تفاصيل عملية التخزين" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    اسم المنتج
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th style="width:15%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+               
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: PurchaseDetails">
+            <tr>
+                <td>
+                    <span  data-bind="text:StoreItemName"></span>
+                </td>
+
+                <td>
+                    <span  data-bind="numericText:Qty" ></span>
+                </td>
+
+                <td>
+                    <span  data-bind="numericText:UnitPrice"></span>
+                </td>
+                <td>
+                    <span  data-bind="numericText:TotalAmount"></span>
+                </td>
+               
+            </tr>
+
+        </tbody>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</card>
+
+
+<card title="ملخص عملية التخزين" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ التخزين للمستلزمات</label>  :
+                    <span  data-bind="text:PurchaseInfo.PurchasingDate"><</span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم فاتورة المورد</label>  :
+                    <span data-bind="text:PurchaseInfo.InvoiceNum()==''?'غير متاح':PurchaseInfo.InvoiceNum"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Purchases/PurchaseValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/Purchases/PurchaseContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var purchase = new Purchase(@Html.Raw(data));
+        ko.applyBindings(purchase);
+    </script>
+
+
+}

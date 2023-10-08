@@ -1,0 +1,127 @@
+﻿@model ManufacturingContainer
+@{
+    var title = "عملية تصنيع منتج";
+    ViewData["Title"] = title;
+   string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+
+
+<card title="بيانات المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+      <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <input data-bind="" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>نوع المنتج</label>
+                    <input data-bind="" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+<card title="المواد المستخدمة لصنيع المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    المادة الخام
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th>
+                    <button class="btn btn-dark" data-bind="click:AddItem">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: ItemConfigurationVMs">
+            <tr>
+                <td>
+                    <input type="text" class="form-control" value="rack" data-bind="" />
+
+                </td>
+                <td>
+                    <input type="text" class="form-control" value="5" data-bind="" />
+                </td>
+                <td>
+                    <button class="btn btn-danger" data-bind="click:RemoveItem">
+                        <span class="fa fa-minus"></span>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</card>
+
+
+
+<card title="ملخص عملية التصنيع" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ عملية التصنيع</label>
+                    <input data-bind=""  class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم عملية التصنيع</label>
+                    <input data-bind="" value="123123123"  class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم عملية التصنيع</label>
+                    <input data-bind="" value="123123123" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <card-footer>
+        <partial name="_SaveButton" />
+    </card-footer>
+</card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var manufacturing = new ManufacturingContainer(@Html.Raw(data));
+        ko.applyBindings(manufacturing);
+    </script>
+
+
+}

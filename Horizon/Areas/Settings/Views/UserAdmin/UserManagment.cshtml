@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    string title = "قائمة المستخدمين";
+    ViewData["Title"] = title;
+}
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title=@ViewBag.Title addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+
+    <table class="table table-hover table-striped table-bordered dataTable">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>اسم المستخدم</th>
+                <th>البريد الالكترونى</th>
+                <th>التليفون</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                    <td>@item.Name</td>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>@item.Mobile</td>
+                <th>
+                    <a href="/Settings/UserAdmin/EditUser/@item.Id" class="btn btn-primary">
+                        تعديل
+                    </a>
+
+                    @if (string.IsNullOrWhiteSpace(item.LockoutEnd.ToString()))
+                    {
+                            <a href="/Settings/UserAdmin/LockUser/@item.Id" 
+                           onclick="return confirm('Do you really want to lock this user?');"
+                           class="btn btn-info">
+                            الغاء التفعيل
+                        </a>
+                    }
+                    else
+                    {
+                            <a href="/Settings/UserAdmin/UnLockUser/@item.Id"
+                           onclick="return confirm('Do you really want to unlock this user?');"
+                           class="btn btn-success">
+                            تشغيل التفعيل
+                        </a>
+                    }
+
+
+                    @*<a asp-action="DeleteUser" asp-controller="Admin" asp-route-userId="@item.Id"
+                       onclick="return confirm('Do you really want to delete this user?');"
+                       class="btn btn-danger">
+                        Delete
+                    </a>*@
+
+                        <a href="/Settings/UserAdmin/ResetPassword/@item.Id" 
+                       class="btn btn-warning">
+                        اعادة تعيين كلمة المرور
+                    </a>
+                </th>
+
+            </tr>
+            }
+            
+        </tbody>
+    </table>
+    <card-footer>
+         @*asp-action="CreateUser" asp-controller="UserAdmin" asp-area="Settings"*@
+        <a class="btn btn-primary" href="~/Settings/UserAdmin/CreateUser" >
+            <i class="fa fa-plus-circle"></i>&nbsp;
+            اضافة مستخدم جديد
+        </a>
+    </card-footer>
+</card>
+
+

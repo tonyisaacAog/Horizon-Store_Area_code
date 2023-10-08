@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ApplicationUser>
+
+
+@{
+    ViewData["Title"] = "UserManagment";
+}
+@{ string data = JsonConvert.SerializeObject(Model);}
+
+
+
+<card title="User List" addational-class="fa-list"
+      text-color-class="text-white" header-class="bg-primary">
+
+    <table class="table table-hover table-striped table-bordered dataTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+             
+                <th>Mobile</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach:items">
+            <tr>
+                <td><span data-bind="text:Name"></span></td>
+                <td><span data-bind="text:Email"></span></td>
+                <td><span data-bind="text:Mobile"></span></td>
+                <td>
+                    <a class="btn btn-primary" data-bind="attr:{href:'/Settings/UserAdmin/EditUser/'+Id()}">
+                        Edit
+                    </a>
+
+                    <a class="btn btn-secondary" data-bind="attr:{href:'/Settings/UserAdmin/ResetPassword/'+Id()}">
+                        Password Reset
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <card-footer>
+        <a class="btn btn-primary" data-bind="attr:{href:'/Settings/UserAdmin/CreateUser'}">
+            <i class="fa fa-plus-circle"></i>&nbsp; Create New User
+        </a>
+    </card-footer>
+</card>
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var users = new GeneralTable(@Html.Raw(data));
+        ko.applyBindings(users);
+    </script>
+
+
+}
+

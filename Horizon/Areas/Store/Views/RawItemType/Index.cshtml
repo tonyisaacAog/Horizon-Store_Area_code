@@ -1,0 +1,53 @@
+﻿@model List<RawItemTypeVM> 
+@{
+    var title = "قائمة انواع المواد الخام";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title=@title addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-striped table-bordered table-hover dataTable">
+        <thead>
+            <tr>
+                <th>اسم النوع</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach:items">
+            <tr>
+                <td><span data-bind="text:RawItemTypeName"></span></td>
+                <td data-bind="visible:Id()==1"></td>
+                <td data-bind="visible:Id()!=1"><a data-bind="attr:{href:'/Store/RawItemType/ManageRecord/'+Id() }" class="btn btn-primary">تعديل</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <card-footer>
+        <a data-bind="attr:{href:'/Store/RawItemType/ManageRecord/0'}" class="btn btn-primary">اضافة</a>
+    </card-footer>
+</card>
+
+
+
+
+
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
+    
+    <script type="text/javascript">
+        var client = new GeneralTable(@Html.Raw(data));
+        ko.applyBindings(client);
+    </script>
+
+
+}
+

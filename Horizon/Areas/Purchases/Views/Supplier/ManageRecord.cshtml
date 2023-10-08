@@ -1,0 +1,74 @@
+﻿@model SupplierVM
+@{
+    var title = "بيانات المورد";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title=@title addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-primary">
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <label>اسم المورد</label>
+            <input class="form-control" data-bind="value:SupplierName" />
+        </div>
+        <div class="col-4">
+            <label>اسم المورد -عربي</label>
+            <input class="form-control" data-bind="value:SupplierNameAr" />
+        </div>
+        <div class="col-4">
+            <label>البريد الالكتروني</label>
+            <input class="form-control" data-bind="value:Email" />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <label>تليفون 1</label>
+            <input class="form-control" data-bind="value:Phone1" />
+        </div>
+        <div class="col-4">
+            <label>تليفون 2</label>
+            <input class="form-control" data-bind="value:Phone2" />
+        </div>
+        <div class="col-4">
+            <label>تليفون 3</label>
+            <input class="form-control" data-bind="value:Phone3" />
+        </div>
+    </div>
+</div>
+
+<card-footer>
+    <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
+</card-footer>
+ </card>
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Purchases/SupplierInfoValidationRules.js" asp-append-version="true"></script>
+    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var client = new GeneralKoViewModel(@Html.Raw(data));
+        ko.applyBindings(client);
+    </script>
+
+
+}

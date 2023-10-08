@@ -1,0 +1,126 @@
+﻿@model ManufacturingContainerDisplay
+@{
+    var title = "عملية تجميع منتج";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+@section PageHeading{
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+<card title="بيان عملية التجميع" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+
+
+    <card title="بيان " addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-dark">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <span data-bind="text:ProductConfigurations.StoreItemVM.ProductName" class="form-control"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>نوع المنتج</label>
+                    <span data-bind="text:ProductConfigurations.StoreItemVM.FamilyName" class="form-control" ></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <span data-bind="text:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" class="form-control" ></span>
+                </div>
+            </div>
+        </div>
+        <card title="مستلزمات المنتج" addational-class="fa-list-ol"
+              text-color-class="text-dark" header-class="bg-smoke">
+            <div class="row">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="bg-primary text-white">
+
+                        <tr>
+                            <th>
+                                المادة الخام
+                            </th>
+                            <th>
+                                الكمية المستخدمة
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
+                        <tr>
+                            <td>
+                                <span data-bind="text:StoreItemRawName"></span>
+                            </td>
+                            <td>
+                                <span data-bind="text:QTY" ></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </card>
+    </card>
+
+
+</card>
+
+<card title="ملخص عملية التجميع" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>تاريخ عملية التجميع</label>
+                    <span data-bind="text:ManufacturingInfoVM.BatchDate" class="form-control" ></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>رقم عملية التجميع</label>
+                    <span data-bind="text:ManufacturingInfoVM.BatchNumber" class="form-control"></span>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>المخزن</label>
+                    <span data-bind="text:StoreLocationName" class="form-control"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <card-footer>
+        <partial name="_SaveButton" />
+    </card-footer>
+</card>
+
+
+
+
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        var Manufacturing = new ManufacturingContainer(@Html.Raw(data));
+        ko.applyBindings(Manufacturing);
+    </script>
+
+}

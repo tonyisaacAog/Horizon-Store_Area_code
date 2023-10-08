@@ -1,0 +1,33 @@
+﻿using BaseEntities;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Horizon.Areas.Purchases.Models
+{
+    [Table("Finance_PurchasingModule_Supplier")]
+    public class Supplier : BaseEntity
+    {
+        [Required, StringLength(100)]
+        public string SupplierName { get; set; }
+
+        [Required, StringLength(100)]
+        public string SupplierNameAr { get; set; }
+
+        [StringLength(50),
+            RegularExpression("^[0-9]*$", ErrorMessage = "Only Numbers")]
+
+        public string Phone1 { get; set; }
+
+        [StringLength(50),
+            RegularExpression("^[0-9]*$", ErrorMessage = "Only Numbers")]
+        public string? Phone2 { get; set; }
+
+        [StringLength(50),
+            RegularExpression("^[0-9]*$", ErrorMessage = "Only Numbers")]
+        public string? Phone3 { get; set; }
+
+        [StringLength(50), DataType(DataType.EmailAddress)]
+
+        public string? Email { get; set; }
+    }
+}
