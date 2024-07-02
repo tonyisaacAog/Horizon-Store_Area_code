@@ -186,6 +186,8 @@ namespace Horizon.Areas.Orders.Services
             //}
             //else
             //{
+            var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == vm.orderId);
+            if(order != null&&order.IsProcess == true) { throw new Exception("لا يمكن التعديل على امر شغل تم تاكيده"); }
             foreach (var item in vm.OrderConfigure)
             {
                 var config = _mapper.Map<OrderConfigure>(item);

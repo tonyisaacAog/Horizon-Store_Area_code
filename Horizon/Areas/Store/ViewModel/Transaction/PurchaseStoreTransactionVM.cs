@@ -10,7 +10,7 @@ namespace Horizon.Areas.Store.ViewModel.Transaction
         public int Id { get; set; }
         public int StoreItemId { get; set; }
         public int ConfigueQty { get; set; } = 0;
-        public string StoreItemName { get; set; }
+        public string StoreItemName { get; set; } = string.Empty;
         public decimal Qty { get; set; }
         public StoreRawTransTypeEnum TransType { get; set; } = StoreRawTransTypeEnum.Purchase;
         public decimal UnitPrice { get; set; }

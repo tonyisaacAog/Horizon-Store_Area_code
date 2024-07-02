@@ -1,5 +1,6 @@
 ﻿using BaseEntities;
 using Finance.CurrentAssetModule.Stores.Model.Settings;
+using Horizon.Areas.Store.Models.Settings;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,6 +38,7 @@ namespace Finance.CurrentAssetModule.Stores.Model.Main
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
 
+        public ICollection<ItemConfguration> ItemConfgurations { get; set; }
 
         public void UpdateQTY(decimal value, bool Plus)
         {

@@ -249,8 +249,39 @@
     <script src="~/dist/js/select2.full.js"></script>
     <script src="~/dist/js/select2.js"></script>
     <script src="~/dist/js/select2.min.js"></script>
+    <script asp-append-version="true">
+        $(document).ready(function () {
+            $(".nav-link").on("click", function (e) {
+                e.stopPropagation(); 
+                var target = $(this).data("bs-target"); 
+                var toggleId = target;
+                var menuState = localStorage.getItem(toggleId);
+                if (menuState !== null && menuState === "open" && toggleId != undefined) {
+                    $(this).find(".collapse").removeClass("show");
+                    $(`[data-bs-target="#${toggleId}"]`).addClass("collapsed");
+                    localStorage.setItem(toggleId, "closed");
+                } else if (toggleId != undefined) {
+                    $(`[data-bs-target="#${toggleId}"]`).removeClass("collapsed");
+                    $(this).find(".collapse").addClass("show");
+                    localStorage.setItem(toggleId, "open");
+                }
+            });
 
-     @await RenderSectionAsync("Scripts", required: false)
+            $(".collapse").each(function () {
+                var toggleId = $(this).attr("id");
+                var menuState = localStorage.getItem("#"+toggleId);
+                if (menuState === "open" && toggleId != undefined) {
+                    $(this).addClass("show");
+                    $(`[data-bs-target="#${toggleId}"]`).removeClass("collapsed");
+                } else {
+                    $(`[data-bs-target="#${toggleId}"]`).addClass("collapsed");
+                    $(this).removeClass("show");
+                }
+            });
+          
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

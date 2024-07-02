@@ -4,8 +4,10 @@ using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Manufacturing.VewModels;
 using Horizon.Areas.Store.ViewModel.Main;
 using Horizon.Areas.Store.ViewModel.Settings;
+using Horizon.Areas.Store.ViewModel.StoreItems;
 using Horizon.Data;
 using Manufacturing.Models;
+using Microsoft.EntityFrameworkCore;
 using MyInfrastructure.Filters;
 using MyInfrastructure.Model;
 using Services;
@@ -18,17 +20,20 @@ namespace Horizon.Areas.Store.Services
         private readonly SaveManager<StoreItemDestoryVM> _saveDestroyManager;
         private readonly StoreLocBalanceTransManager _storeLocBalanceTransManager;
         private readonly StoreTransDetailsManager _storeTransDetailsManager;
+        private readonly StoreItemRawManager _storeItemRawManager;
         public StoreItemManager(ApplicationDbContext db, IMapper mapper, SaveManager<StoreItemVM> saveManager,
             StoreTransactionManager storeTransactionManager,
             SaveManager<StoreItemDestoryVM> saveDestroyManager,
             StoreLocBalanceTransManager storeLocBalanceTransManager,
-            StoreTransDetailsManager storeTransDetailsManager)  
+            StoreTransDetailsManager storeTransDetailsManager,
+            StoreItemRawManager storeItemRawManager)  
             : base(db, mapper, saveManager)
         {
             _storeTransactionManager = storeTransactionManager;
             _saveDestroyManager = saveDestroyManager;
             _storeLocBalanceTransManager = storeLocBalanceTransManager;
             _storeTransDetailsManager = storeTransDetailsManager;
+            _storeItemRawManager = storeItemRawManager;
         }
         [ModelValidationWithJsonFeedBackFilter]
         public async Task<FeedBackWithMessages> SaveDestroyOperation(StoreItemDestoryVM vm)
@@ -59,6 +64,28 @@ namespace Horizon.Areas.Store.Services
             //// Store Transaction
             await _storeTransDetailsManager.DoStoreTransactionDetailsForDestroyQty((int)DestroyedQty, item, StoreTransId, LocationBalanceAfter);
             return vm;
+        }
+        public async Task<List<InqueryDetailsForProduct>> CalcInqueryForProduct(StoreItemVM storeItemVM) {
+            var details = new List<InqueryDetailsForProduct>();
+            var inqueryDetails = await _db.StoreItems.Include(obj => obj.ItemConfgurations).FirstOrDefaultAsync(obj => obj.Id == storeItemVM.Id);
+            var storeItemRaw = await _storeItemRawManager.GetStoreItemsRawByIds(inqueryDetails.ItemConfgurations.Select(obj => obj.StoreItemRawId).ToList());
+            foreach(var item in inqueryDetails.ItemConfgurations)
+            {
+                var itemRaw = storeItemRaw.FirstOrDefault(obj => obj.Id == item.StoreItemRawId);
+                var minimumAmount = storeItemVM.Quantity * item.MinimumAmount;
+                var availableAmount = itemRaw?.QTY ?? 0;
+                var weNeed = ( availableAmount - minimumAmount ) < 0 ? true : false;
+                details.Add(new InqueryDetailsForProduct
+                {
+                    StoreItemRawId = item.StoreItemRawId,
+                    NumberStoreItemRaw = item.MinimumAmount,
+                    MinimumAmount =  minimumAmount,
+                    AvailableAmount = availableAmount,
+                    NeededAmount = weNeed? minimumAmount-availableAmount:0,
+                    StoreItemRawName = itemRaw.ItemNameAr
+                });
+            }
+            return details;
         }
 
     }

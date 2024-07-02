@@ -26,6 +26,14 @@ namespace Horizon.Areas.Store.Services
             _saveDestroyManager = saveDestroyManager;
         }
 
+
+
+        public async Task<List<StoreItemRawVM>> GetStoreItemsRawByIds(List<int> ids)
+        {
+            var storeItemsRaw = await _db.StoreItemsRaw.Where(obj => ids.Contains(obj.Id)).ToListAsync();
+            var storeItemsRawVM = _mapper.Map<List<StoreItemRawVM>>(storeItemsRaw);
+            return storeItemsRawVM;
+        }
         public async Task<List<StoreItemRawVM>> GetStoreItemRawTeaks()
         {
             var teaks = await _db.StoreItemsRaw.Where(s => s.RawItemTypeId == 1).ToListAsync();
@@ -115,6 +123,7 @@ namespace Horizon.Areas.Store.Services
             StoreTrans.TotalWithrd = 0;
             StoreTrans.StoreItemId = storeitemraw.Id;
             StoreTrans.UnitPrice = unitPrice;
+            StoreTrans.Qty = vm.DestroyQty;
             await _db.AddAsync(StoreTrans);
             await _db.SaveChangesAsync();
         }

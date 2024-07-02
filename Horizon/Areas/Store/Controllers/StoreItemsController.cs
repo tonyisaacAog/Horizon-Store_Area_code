@@ -1,7 +1,9 @@
 ﻿using Finance.CurrentAssetModule.Stores.Model.Main;
+using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Areas.Store.Services;
 using Horizon.Areas.Store.ViewModel.Main;
 using Horizon.Areas.Store.ViewModel.Settings;
+using Horizon.Areas.Store.ViewModel.StoreItems;
 using Horizon.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -31,6 +33,22 @@ namespace Horizon.Areas.Store.Controllers
             return View(vm);
         }
 
+        public async Task<IActionResult> InqueryPurchaseForProduct(int Id)
+        {
+            var vm = await _settingsManager.CheckAndReturnWithRef(Id);
+            if( vm == null )
+                return RedirectToAction(nameof(Index));
+            var container = new InqueryContainerForProduct();
+            container.StoreItem = vm;
+            return View(container);
+        }
+        [ModelValidationWithJsonFeedBackFilter]
+
+        public async Task<IActionResult> CalcInqueryForProduct([FromBody] StoreItemVM storeItemVM)
+        {
+            var vm = await _settingsManager.CalcInqueryForProduct(storeItemVM);
+            return Json(new { Details = vm });
+        }
         public async Task<IActionResult> ManageRecord(int Id)
         {
 

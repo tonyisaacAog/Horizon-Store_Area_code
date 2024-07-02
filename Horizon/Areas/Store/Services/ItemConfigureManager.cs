@@ -126,7 +126,19 @@ namespace Horizon.Areas.Store.Services
                 switch (item.RecordStatus)
                 {
                     case RecordStatus.Added:
-                        await _db.AddAsync(config);
+                        var itemConfigueDel = await _db.ItemConfgurations.IgnoreQueryFilters()
+                            .FirstOrDefaultAsync(obj => obj.StoreItemId == item.StoreItemId 
+                            && obj.StoreItemRawId == item.StoreItemRawId && obj.IsDeleted == true);
+                        if( itemConfigueDel != null )
+                        {
+                            itemConfigueDel.IsDeleted = false;
+                            itemConfigueDel.MinimumAmount = item.MinimumAmount;
+                            _db.Update(itemConfigueDel);
+                        }
+                        else
+                        {
+                            await _db.AddAsync(config);
+                        }
                         break;
                     case RecordStatus.Updated:
                         _db.Update(config);

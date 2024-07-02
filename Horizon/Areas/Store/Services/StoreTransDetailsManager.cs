@@ -106,7 +106,7 @@ namespace Horizon.Areas.Store.Services
                 StoreTransId = StoreTransId,
                 StoreItemId = item.Id,
                 QTY = Qty,
-                UnitPrice = item.Balance / item.CurrentQty,
+                UnitPrice = item.Balance / (item.CurrentQty==0?1: item.CurrentQty),
                 QtyBalanceAfterDestination = QtyAfter,
                 AmountBalanceAfter = item.Balance,
                 ManfactId = 0,

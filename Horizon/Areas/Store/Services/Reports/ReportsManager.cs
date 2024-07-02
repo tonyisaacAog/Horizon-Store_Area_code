@@ -146,7 +146,9 @@ namespace Horizon.Areas.Store.Services.Reports
                 ST.TransType = item.TransType;
                 ST.QtyAfter = item.QtyBalanceAfter;
                 ST.TransTypeName =
-                    item.TransType == StoreRawTransTypeEnum.Manfacturing ? "تصنيع" : "مشتريات";
+                    item.TransType == StoreRawTransTypeEnum.Manfacturing ? "تصنيع" :
+                    item.TransType == StoreRawTransTypeEnum.Purchase? "مشتريات":
+                    item.TransType == StoreRawTransTypeEnum.Sales?"مبيعات":"تالف";
                 ST.UnitPrice = item.UnitPrice;
                 if (item.TransType == StoreRawTransTypeEnum.Manfacturing)
                 {

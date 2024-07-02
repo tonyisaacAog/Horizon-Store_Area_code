@@ -116,7 +116,7 @@
     <script src="~/APP/Store/ConfigurationItem/ConfigurationContainer.js" asp-append-version="true"></script>
 
 
-    <script type="text/javascript">
+    <script type="text/javascript" asp-append-version="true">
         var configuration = new ConfigureContainer(@Html.Raw(data));
         ko.applyBindings(configuration);
         ko.bindingHandlers.select2 = {

@@ -102,6 +102,10 @@
                     <td data-bind="visible:TransType == 1">
                             <a target="_blank" class="btn btn-success" data-bind="text: TransTypeName, attr: { href: '/Manufacturing/Home/DetailsManufacturing/' + ReferanceId }"></a>
                     </td>
+                    <td data-bind="visible:TransType == 3">
+                        @* <a target="_blank" class="btn btn-success" data-bind="text: TransTypeName, attr: { href: '/Manufacturing/Home/DetailsManufacturing/' + ReferanceId }"></a> *@
+                        <span  class="btn btn-info" data-bind="text: TransTypeName"></span>
+                    </td>
                 </tr>
             </tbody>
         </table>
