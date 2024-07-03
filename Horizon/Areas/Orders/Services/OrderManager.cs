@@ -45,16 +45,22 @@ namespace Horizon.Areas.Orders.Services
 
         public async Task<List<OrderVM>> GetOrders()
         {
-            return _mapper.Map<List<OrderVM>>(await _db.Orders.Include(c=>c.Client).ToListAsync());
+            return _mapper.Map<List<OrderVM>>(await _db.Orders.Include(c=>c.Client).OrderByDescending(obj=>obj.DeliveryOrder).ToListAsync());
         }
-
 
         public async Task<List<OrderVM>> GetProcessOrder()
         {
-            var orderLst = await _db.Orders.Include(c=>c.Client).Where(o=>o.IsProcess == false).ToListAsync();
+            var orderLst = await _db.Orders.Include(c=>c.Client).Where(o=>o.OrderStatus == OrderStatus.Process)
+                .OrderByDescending(obj => obj.DeliveryOrder).ToListAsync();
             return _mapper.Map<List<OrderVM>>(orderLst);
         }
 
+        public async Task ChangeOrderSatus(int orderId, OrderStatus orderStatus)
+        {
+            var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == orderId);
+            order.OrderStatus = orderStatus;
+            await _db.SaveChangesAsync();
+        }
         public async Task<OrderDetailsContainer> GetDetails(int orderId)
         {
             var orderContainer = new OrderDetailsContainer();
@@ -91,8 +97,6 @@ namespace Horizon.Areas.Orders.Services
             await AddOrderDetails(vm.OrderDetail, orderId);
             return vm;
         }
-
-
 
         private async Task<int> AddOrder(OrderVM ordervm,int clientId)
         {
@@ -138,8 +142,6 @@ namespace Horizon.Areas.Orders.Services
                 return await GetItemsConfiguretb(details);
             }
         }
-
-
 
         private async Task<OrderConfigureContainer> GetOrderConfiguretb(OrderDetails details)
         {

@@ -16,8 +16,8 @@
         <thead>
             <tr>
                 <th>اسم العميل</th>
-                <th>تليفون 1</th>
                 <th>تاريخ امر الشغل</th>
+                <th>تاريخ التسليم</th>
                 <th>الكمية</th>
                 <th>الحالة</th>
                 <th></th>
@@ -26,13 +26,18 @@
         <tbody data-bind="foreach:items">
             <tr>
                 <td><span data-bind="text:ClientName"></span></td>
-                <td><span data-bind="text:Phone1"></span></td>
                 <td><span data-bind="text:OrderDate"></span></td>
+                <td><span data-bind="text:DeliveryOrder"></span></td>
                 <td><span data-bind="text:TotalAmount"></span></td>
-                <td><span class="text-success h5" data-bind="visible:IsProcess()==true">تم التنفيذ</span>
-                    <span class="text-warning h5" data-bind="visible:IsProcess()==false">تحت التنفيذ</span></td>
                 <td>
-                    <a data-bind="attr:{href:'/Orders/Order/OrderDetails/'+Id() }" class="btn btn-sm btn-primary">تفاصيل</a>
+                    <span class="text-primary h5" data-bind="visible:OrderStatus()==0">جديد</span>
+                    <span class="text-warning h5" data-bind="visible:OrderStatus()==1">جارى التنفيذ</span>
+                    <span class="text-success h5" data-bind="visible:OrderStatus()==2">تم التنفيذ</span>
+                </td>
+                <td>
+                    <a data-bind="attr:{href:'/Orders/Order/OrderDetails/'+Id() }" class="btn btn-sm btn-info">تفاصيل</a>
+                    <a data-bind="visible:OrderStatus()==0,attr:{href:'/Orders/Order/StartProcessOrder/'+Id() }" class="btn btn-sm btn-primary">معالجة امر الشغل</a>
+
                 </td>
                 
             </tr>

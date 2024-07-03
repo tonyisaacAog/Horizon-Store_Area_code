@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240702184714_addnewPro_Order")]
+    partial class addnewPro_Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,9 +322,6 @@ namespace Horizon.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeliveryOrder")
-                        .HasColumnType("Date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -881,9 +880,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 7, 2, 22, 12, 26, 325, DateTimeKind.Local).AddTicks(7770),
+                            DateCreated = new DateTime(2024, 7, 2, 21, 47, 13, 297, DateTimeKind.Local).AddTicks(2862),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 7, 2, 22, 12, 26, 325, DateTimeKind.Local).AddTicks(7724),
+                            LastModified = new DateTime(2024, 7, 2, 21, 47, 13, 297, DateTimeKind.Local).AddTicks(2814),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });

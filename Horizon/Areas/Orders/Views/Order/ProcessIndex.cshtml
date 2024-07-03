@@ -16,8 +16,8 @@
         <thead>
             <tr>
                 <th>اسم العميل</th>
-                <th>تليفون 1</th>
                 <th>تاريخ امر الشغل</th>
+                <th>تاريخ التسليم</th>
                 <th>الكمية</th>
                 <th></th>
             </tr>
@@ -25,8 +25,8 @@
         <tbody data-bind="foreach:items">
             <tr>
                 <td><span data-bind="text:ClientName"></span></td>
-                <td><span data-bind="text:Phone1"></span></td>
                 <td><span data-bind="text:OrderDate"></span></td>
+                <td><span data-bind="text:DeliveryOrder"></span></td>
                 <td><span data-bind="text:TotalAmount"></span></td>
                 <td>
                     <a data-bind="attr:{href:'/Orders/Order/ProcessOrderDetails/'+Id() }" class="btn btn-sm btn-primary">تفاصيل</a>

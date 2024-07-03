@@ -20,7 +20,7 @@ namespace Horizon.Areas.Manufacturing.Controllers
 
         public HomeController(
             ManufacturingManager ManufacturingManager,
-            GenericSettingsManager<StoreItemsRaw,StoreItemRawVM> StoreItemRawManager            )
+            GenericSettingsManager<StoreItemsRaw,StoreItemRawVM> StoreItemRawManager)
         {
             _ManufacturingManager = ManufacturingManager;
             _StoreItemRawManager = StoreItemRawManager;
@@ -36,7 +36,7 @@ namespace Horizon.Areas.Manufacturing.Controllers
         public async Task<IActionResult> ManageManufactingForOrder(int Id)
         {
             var container =await _ManufacturingManager.GetExtraConfigurationForOrder(Id);
-            return View(nameof(Index), container);
+            return View(container);
         }
 
         public async Task<IActionResult> DetailsManufacturing(int Id)

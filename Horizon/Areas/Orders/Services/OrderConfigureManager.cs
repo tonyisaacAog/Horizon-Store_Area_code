@@ -115,6 +115,7 @@ namespace Horizon.Areas.Orders.Services
                     if (order != null)
                     {
                         order.IsProcess = true;
+                        order.OrderStatus = Models.OrderStatus.Done;
                         _db.Update(order);
                         await _db.SaveChangesAsync();
                     }

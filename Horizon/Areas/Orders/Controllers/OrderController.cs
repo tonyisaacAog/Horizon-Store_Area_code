@@ -1,4 +1,5 @@
-﻿using Horizon.Areas.Orders.Services;
+﻿using Horizon.Areas.Orders.Models;
+using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Orders.ViewModel.Container;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -26,7 +27,11 @@ namespace Horizon.Areas.Orders.Controllers
             return View(orders);
         }
 
-
+        public async Task<IActionResult> StartProcessOrder(int id)
+        {
+            await _orderManager.ChangeOrderSatus(id,OrderStatus.Process);
+            return Redirect("/Orders/Order/Index");
+        }
 
         public async Task<IActionResult> OrderDetails(int Id)
         {

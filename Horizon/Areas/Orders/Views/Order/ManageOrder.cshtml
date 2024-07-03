@@ -49,9 +49,9 @@
                 <th>
                     الكمية
                 </th>     
-                <th style="width:10%">
+               @*  <th style="width:10%">
                     سعر الوحدة
-                </th>
+                </th> *@
 
                 <th>
                     السعر الإجمالي
@@ -81,9 +81,9 @@
                     <input type="text" class="form-control" data-bind="value:QTY" />
                 </td>
 
-                <td>
+              @*   <td>
                     <input type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
+                </td> *@
                 <td>
                     <span data-bind="numericText:TotalAmount"></span>
                 </td>
@@ -111,13 +111,19 @@
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="form-group">
                     <label>تاريخ امر الشغل</label>
                     <input data-bind="value:Order.OrderDate" class="form-control smallDate" />
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>تاريخ التسليم</label>
+                    <input data-bind="value:Order.DeliveryOrder" class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-4">
                 <div class="form-group">
                     <label>الكمية</label>
                     <input disabled data-bind="value:Order.TotalAmount" class="form-control" />

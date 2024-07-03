@@ -16,7 +16,10 @@ namespace Horizon.Areas.Orders.Models
 
         [Column(TypeName = "Date")]
         public DateTime? OrderDate { get; set; }
+        [Column(TypeName = "Date")]
+        public DateTime DeliveryOrder { get; set; }
         public bool IsProcess { get; set; } = false;
+        public OrderStatus OrderStatus { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }
