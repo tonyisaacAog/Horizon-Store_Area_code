@@ -1,5 +1,6 @@
 ﻿using Horizon.Areas.Orders.Models;
 using Horizon.Areas.Orders.Services;
+using Horizon.Areas.Orders.ViewModel;
 using Horizon.Areas.Orders.ViewModel.Container;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -27,6 +28,14 @@ namespace Horizon.Areas.Orders.Controllers
             return View(orders);
         }
 
+        public async Task<IActionResult> SaveNotesForOrder([FromBody] OrderVM orderVM)
+        {
+            var fdback = await _orderManager.UpdateNotesOrder(orderVM);
+            if( fdback.Done )
+                return Json(new { newLocation = "/Orders/Order/OrderDetails/" + orderVM.Id });
+            else
+                return Json(new { errors = fdback.Messages });
+        }
         public async Task<IActionResult> StartProcessOrder(int id)
         {
             await _orderManager.ChangeOrderSatus(id,OrderStatus.Process);

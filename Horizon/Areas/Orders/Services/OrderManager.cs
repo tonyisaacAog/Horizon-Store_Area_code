@@ -45,16 +45,38 @@ namespace Horizon.Areas.Orders.Services
 
         public async Task<List<OrderVM>> GetOrders()
         {
-            return _mapper.Map<List<OrderVM>>(await _db.Orders.Include(c=>c.Client).OrderByDescending(obj=>obj.DeliveryOrder).ToListAsync());
+            return _mapper.Map<List<OrderVM>>(await _db.Orders.Include(c=>c.Client).OrderBy(obj=>obj.DeliveryOrder).ToListAsync());
         }
 
+        public async Task<FeedBackWithMessages> UpdateNotesOrder(OrderVM ordervm)
+        {
+            var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == ordervm.Id);
+            if( order != null )
+            {
+                order.Notes = ordervm.Notes;
+                await _db.SaveChangesAsync();
+                return new FeedBackWithMessages { Done = true };
+            }
+            else
+            {
+                return new FeedBackWithMessages { Done = false,Messages = new List<string> { "امر الشغل غير موجود" } };
+            }
+        }
         public async Task<List<OrderVM>> GetProcessOrder()
         {
             var orderLst = await _db.Orders.Include(c=>c.Client).Where(o=>o.OrderStatus == OrderStatus.Process)
-                .OrderByDescending(obj => obj.DeliveryOrder).ToListAsync();
+                .OrderBy(obj => obj.DeliveryOrder).ToListAsync();
             return _mapper.Map<List<OrderVM>>(orderLst);
         }
-
+        public async Task<OrderVM> GetOrderById(int orderId)
+        {
+            return _mapper.Map<OrderVM>(await _db.Orders.Include(obj=>obj.Client).FirstOrDefaultAsync(obj => obj.Id == orderId));
+        }
+        public async Task<OrderVM> GetOrderByDetailsId(int detailsId)
+        {
+            return _mapper.Map<OrderVM>(await _db.OrderDetails.Include(obj => obj.Order).ThenInclude(obj=>obj.Client)
+                .Where(obj => obj.Id == detailsId).Select(obj=>obj.Order).FirstOrDefaultAsync());
+        }
         public async Task ChangeOrderSatus(int orderId, OrderStatus orderStatus)
         {
             var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == orderId);
@@ -103,6 +125,8 @@ namespace Horizon.Areas.Orders.Services
             var order = _mapper.Map<Order>(ordervm);
             order.ClientId = clientId;
             await _db.Orders.AddAsync(order);
+            await _db.SaveChangesAsync();
+            Order.GenerateSerial(order);
             await _db.SaveChangesAsync();
             return order.Id;    
         }

@@ -11,6 +11,48 @@
     <partial name="_PageTitle" model="@title" />
 
 }
+<card title="بيانات امر الشغل" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم امر الشغل</label>
+                    <input disabled data-bind="value:Order.NoOfOrder" class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ امر الشغل</label>
+                    <input disabled data-bind="value:Order.OrderDate" class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ التسليم</label>
+                    <input disabled data-bind="value:Order.DeliveryOrder" class="form-control smallDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
+                </div>
+            </div>
+            <div class="col-12 mb-2">
+                <div class="form-group">
+                    <label>ملاحظات امر الشغل</label>
+                    <textarea rows="8" disabled data-bind="value:Order.Notes" class="form-control">
+                        </textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</card>
+
 <card title="بيانات العميل" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
@@ -113,25 +155,6 @@
     </table>
 </card>
 
-<card title="بيانات امر الشغل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ امر الشغل</label>
-                    <input disabled data-bind="value:Order.OrderDate" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>الكمية</label>
-                    <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
-                </div>
-            </div>
-        </div>
-    </div>
-</card>
 
 
 

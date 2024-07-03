@@ -10,9 +10,10 @@ namespace Horizon.Areas.Orders.Models
         public int ClientId { get; set; }
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
-
+        public string? NoOfOrder { get; private set; } = string.Empty;
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
+        public string? Notes { get; set; }
 
         [Column(TypeName = "Date")]
         public DateTime? OrderDate { get; set; }
@@ -21,5 +22,10 @@ namespace Horizon.Areas.Orders.Models
         public bool IsProcess { get; set; } = false;
         public OrderStatus OrderStatus { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
+        
+        public static void GenerateSerial(Order order)
+        {
+            order.NoOfOrder = $"{order.Id}/{DateTime.Now.Year}";
+        }
     }
 }

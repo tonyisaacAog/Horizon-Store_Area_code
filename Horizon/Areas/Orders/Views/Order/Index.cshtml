@@ -15,6 +15,7 @@
     <table class="table table-striped table-bordered table-hover dataTable">
         <thead>
             <tr>
+                <th>تسلسل</th>
                 <th>اسم العميل</th>
                 <th>تاريخ امر الشغل</th>
                 <th>تاريخ التسليم</th>
@@ -25,6 +26,7 @@
         </thead>
         <tbody data-bind="foreach:items">
             <tr>
+                <td><span data-bind="text:NoOfOrder"></span></td>
                 <td><span data-bind="text:ClientName"></span></td>
                 <td><span data-bind="text:OrderDate"></span></td>
                 <td><span data-bind="text:DeliveryOrder"></span></td>

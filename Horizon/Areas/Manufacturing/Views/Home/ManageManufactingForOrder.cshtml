@@ -11,85 +11,122 @@
 
 }
 
-<card title="بيان عملية التجميع" addational-class="fa-list-ol"
-       text-color-class="text-white" header-class="bg-primary">
 
-  
-        <card title="بيان " addational-class="fa-list-ol"
-              text-color-class="text-white" header-class="bg-dark">
-            <div class="row">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>اسم المنتج</label>
-                    <input data-bind="value:ProductConfigurations.StoreItemVM.ProductName" disabled="disabled" class="form-control" />
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>نوع المنتج</label>
-                    <input data-bind="value:ProductConfigurations.StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>الكمية</label>
-                    <input data-bind="value:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" disabled="disabled" class="form-control" />
-                    </div>
+
+<card title="بيان عملية التجميع" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+
+    <card title="بيان امر الشغل " addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-dark">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم امر الشغل</label>
+                    <input data-bind="value:Order.NoOfOrder" disabled="disabled" class="form-control" />
                 </div>
             </div>
-            <card title="مستلومات المنتج" addational-class="fa-list-ol"
-                  text-color-class="text-dark" header-class="bg-smoke">
-                <div class="row">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="bg-primary text-white">
-
-                            <tr>
-                                <th>
-                                    المادة الخام
-                                </th>
-
-                                <th>
-                                    الكمية
-                                </th>
-                                <th>
-                                    الكمية المستخدمة
-                                </th>
-                                <th>
-                                    الكمية المتاحة
-                                </th>
-                              
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
-                            <tr>
-                                <td>
-                                    @Html.Editor("Id","StoreItemRawList", new
-                                    {
-                                         htmlAttributes = new
-                                            {
-                                                @data_bind = "value:StoreItemRawId,select2,event:{change:$parent.UpdateItem}",
-                                                @class = "form-select" ,disabled="true"
-                                            }
-                                    })
-                                </td>
-                                <td>
-                                    <span data-bind="text:MinimumAmount"></span>
-                                </td>
-                                <td>
-                                    <input class="form-control"  disabled data-bind="value:UsedQTY" />
-                                    @*event:{change:CheckQuantity}*@
-                                </td>
-                                <td>
-                                    <span data-bind="text:CurrentQty"></span>
-                                </td>
-                               
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>العميل</label>
+                    <input data-bind="value:Order.ClientName" disabled="disabled" class="form-control" />
                 </div>
-            </card>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ امر الشغل</label>
+                    <input data-bind="value:Order.OrderDate" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ التسليم</label>
+                    <input data-bind="value:Order.DeliveryOrder" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>ملاحظات</label>
+                    <textarea data-bind="value:Order.Notes" rows="8" disabled="disabled" class="form-control" ></textarea>
+                </div>
+            </div>
+        </div>
+    </card>
+
+    <card title="بيان المنتج " addational-class="fa-list-ol"
+          text-color-class="text-white" header-class="bg-dark">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <input data-bind="value:ProductConfigurations.StoreItemVM.ProductName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>نوع المنتج</label>
+                    <input data-bind="value:ProductConfigurations.StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <input data-bind="value:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" disabled="disabled" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <card title="مستلومات المنتج" addational-class="fa-list-ol"
+              text-color-class="text-dark" header-class="bg-smoke">
+            <div class="row">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="bg-smoke text-dark">
+
+                        <tr>
+                            <th>
+                                المادة الخام
+                            </th>
+
+                            <th>
+                                الكمية
+                            </th>
+                            <th>
+                                الكمية المستخدمة
+                            </th>
+                            <th>
+                                الكمية المتاحة
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
+                        <tr>
+                            <td>
+                                @Html.Editor("Id","StoreItemRawList", new
+                                {
+                                htmlAttributes = new
+                                {
+                                @data_bind = "value:StoreItemRawId,select2,event:{change:$parent.UpdateItem}",
+                                @class = "form-select" ,disabled="true"
+                                }
+                                })
+                            </td>
+                            <td>
+                                <span data-bind="text:MinimumAmount"></span>
+                            </td>
+                            <td>
+                                <input class="form-control" disabled data-bind="value:UsedQTY" />
+                                @*event:{change:CheckQuantity}*@
+                            </td>
+                            <td>
+                                <span data-bind="text:CurrentQty"></span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </card>
-  
+    </card>
+
 
 </card>
 
@@ -97,29 +134,29 @@
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-6">
                 <div class="form-group">
                     <label>تاريخ عملية التجميع</label>
                     <input data-bind="value:ManufacturingInfoVM.BatchDate" class="form-control smallDate" />
                 </div>
             </div>
-            <div class="col-4">
+           @*  <div class="col-4">
                 <div class="form-group">
                     <label>رقم عملية التجميع</label>
-                    <input data-bind="value:ManufacturingInfoVM.BatchNumber"  class="form-control" />
+                    <input data-bind="value:ManufacturingInfoVM.BatchNumber" class="form-control" />
                 </div>
-            </div>
-            <div class="col-4">
+            </div> *@
+            <div class="col-6">
                 <div class="form-group">
                     <label>المخزن</label>
                     @Html.Editor("Id","StoreLocationList",new
                     {
-                        htmlAttributes = new
-                        {
-                            @data_bind = "value:StoreLocationId",
-                            @class = "form-select",
-                            @id = "StoreLoc"
-                        }
+                    htmlAttributes = new
+                    {
+                    @data_bind = "value:StoreLocationId",
+                    @class = "form-select",
+                    @id = "StoreLoc"
+                    }
                     })
                 </div>
             </div>
@@ -138,49 +175,49 @@
 
 
 @section Scripts {
-        <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-        <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-        <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-        <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-        <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-        <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-        <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-        <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-        <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script>
-        <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufactContainerForProductValidRule.js" asp-append-version="true"></script>
+    <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
 
 
-        <script type="text/javascript">
-            var Manufacturing = new ManufacturingContainer(@Html.Raw(data));
-            ko.applyBindings(Manufacturing);
+    <script type="text/javascript">
+        var Manufacturing = new ManufacturingContainer(@Html.Raw(data));
+        ko.applyBindings(Manufacturing);
         ko.bindingHandlers.select2 = {
             update: function (element, valueAccessor, allBindingsAccessor) {
                 $(element).select2();
             }
         }
         $("#StoreLoc").select2()
-        </script>
+    </script>
 
-        <script>
-            function EditColumn(self){
-                let inputs = self.closest("tr").querySelectorAll('input');
-                let selects = self.closest("tr").querySelectorAll('select');
-                const isDisabled = inputs[0].hasAttribute('disabled');
-                self.innerHTML = "";
-                if(!isDisabled){
+    <script>
+        function EditColumn(self) {
+            let inputs = self.closest("tr").querySelectorAll('input');
+            let selects = self.closest("tr").querySelectorAll('select');
+            const isDisabled = inputs[0].hasAttribute('disabled');
+            self.innerHTML = "";
+            if (!isDisabled) {
                 let i = '<i class="fas fa-edit"></i>';
-                    self.innerHTML = i;
-                    inputs[0].disabled = true;
-                    selects[0].disabled = true;
-                }else{
+                self.innerHTML = i;
+                inputs[0].disabled = true;
+                selects[0].disabled = true;
+            } else {
                 let i = '<i class="fas fa-save"></i>';
-                    
-                    self.innerHTML = i;
-                    inputs[0].disabled = false
-                    selects[0].disabled = false;
-                }
-            }
 
-        </script>
+                self.innerHTML = i;
+                inputs[0].disabled = false
+                selects[0].disabled = false;
+            }
+        }
+
+    </script>
 
 }

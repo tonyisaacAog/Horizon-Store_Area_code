@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240703100802_editPro_NoOfOrder_order")]
+    partial class editPro_NoOfOrder_order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,9 +340,6 @@ namespace Horizon.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("NoOfOrder")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("OrderDate")
@@ -887,9 +886,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 7, 3, 15, 20, 27, 549, DateTimeKind.Local).AddTicks(4497),
+                            DateCreated = new DateTime(2024, 7, 3, 13, 8, 1, 88, DateTimeKind.Local).AddTicks(6474),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 7, 3, 15, 20, 27, 549, DateTimeKind.Local).AddTicks(4450),
+                            LastModified = new DateTime(2024, 7, 3, 13, 8, 1, 88, DateTimeKind.Local).AddTicks(6411),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });

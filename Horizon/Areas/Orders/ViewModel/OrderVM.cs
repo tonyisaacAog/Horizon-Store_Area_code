@@ -13,9 +13,11 @@ namespace Horizon.Areas.Orders.ViewModel
         //public int ClientId { get; set; }
         public string? ClientName { get; set; }
         public string? Phone1 { get; set; }
+        public string? NoOfOrder { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
+        public string? Notes { get; set; }
 
         [Required]
         public string? OrderDate { get; set; }

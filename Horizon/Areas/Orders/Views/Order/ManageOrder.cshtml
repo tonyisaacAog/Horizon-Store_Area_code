@@ -53,9 +53,9 @@
                     سعر الوحدة
                 </th> *@
 
-                <th>
+            @*     <th>
                     السعر الإجمالي
-                </th>
+                </th> *@
                 <th>
                     <button class="btn btn-dark" data-bind="click:AddItem">
                         <span class="fa fa-plus"></span>
@@ -84,9 +84,9 @@
               @*   <td>
                     <input type="text" class="form-control" data-bind="value:UnitPrice" />
                 </td> *@
-                <td>
+        @*         <td>
                     <span data-bind="numericText:TotalAmount"></span>
-                </td>
+                </td> *@
                 <td>
                     <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
                         <span class="fa fa-minus"></span>
@@ -94,15 +94,14 @@
                 </td>
             </tr>
         </tbody>
-        <tbody>
+       @*  <tbody>
             <tr>
                 <td></td>
                 <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
                 <td><b>الاجمالي</b></td>
                 <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
-                <td></td>
             </tr>
-        </tbody>
+        </tbody> *@
     </table>
 </card>
 
@@ -111,6 +110,12 @@
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
         <div class="row">
+            <div class="col-12 mb-2">
+                <div class="form-group">
+                    <label>ملاحظات</label>
+                    <textarea data-bind="value:Order.Notes" rows="8" class="form-control"></textarea>
+                </div>
+            </div>
             <div class="col-4">
                 <div class="form-group">
                     <label>تاريخ امر الشغل</label>
@@ -129,6 +134,7 @@
                     <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
                 </div>
             </div>
+            
         </div>
     </div>
 </card>

@@ -33,6 +33,7 @@ namespace Horizon.Areas.Manufacturing.Services
         private readonly StoreTransDetailsManager _storeTransDetailsManager;
         private readonly StoreLocBalanceTransManager _storeLocBalanceTransManager;
         private readonly OrderConfigureManager _orderConfigureManager;
+        public readonly OrderManager _orderManager;
         public ManufacturingManager(ApplicationDbContext db,
             IMapper mapper,
             GenericSettingsManager<StoreItem, StoreItemVM> StoreItemManager,
@@ -41,7 +42,8 @@ namespace Horizon.Areas.Manufacturing.Services
             StoreTransactionManager storeTransactionManager,
             StoreTransDetailsManager storeTransDetailsManager,
             StoreLocBalanceTransManager storeLocBalanceTransManager,
-            OrderConfigureManager orderConfigureManager
+            OrderConfigureManager orderConfigureManager,
+            OrderManager orderManager
            )
 
         {
@@ -53,6 +55,7 @@ namespace Horizon.Areas.Manufacturing.Services
             _storeTransDetailsManager = storeTransDetailsManager;
             _storeLocBalanceTransManager = storeLocBalanceTransManager;
             _orderConfigureManager = orderConfigureManager;
+            _orderManager = orderManager;
         }
 
 
@@ -122,7 +125,12 @@ namespace Horizon.Areas.Manufacturing.Services
             // Save Manfacturing
             var NewManufacturng = _mapper.Map<ManufacturingBatch>(vm.ManufacturingInfoVM);
             await _db.AddAsync(NewManufacturng);
-            await _db.SaveChangesAsync();  
+            await _db.SaveChangesAsync();
+            if( vm.IsManufacturingForOrder )
+            {
+                NewManufacturng.BatchNumber = $"{NewManufacturng.Id}-{vm.Order.NoOfOrder}";
+                await _db.SaveChangesAsync();
+            }
             // Store Raw Updates
             var CostItem = await _ManufacturngTransManager.DoItemRawTransactions(vm,NewManufacturng.Id);
             // Update Product
@@ -147,6 +155,9 @@ namespace Horizon.Areas.Manufacturing.Services
        public async Task<ManufacturingContainer> GetExtraConfigurationForOrder(int Id)
         {
             var container = await _orderConfigureManager.GetExtraConfiguration(Id);
+            var order = await _orderManager.GetOrderByDetailsId(container.param);
+            container.Order = order;
+            container.IsManufacturingForOrder = true;
             return container;
         }
 

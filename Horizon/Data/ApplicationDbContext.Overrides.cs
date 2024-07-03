@@ -1,5 +1,6 @@
 ﻿using BaseEntities;
 using Finance.CurrentAssetModule.Stores.Model.Main;
+using Horizon.Areas.Orders.Models;
 using Horizon.Areas.Store.Models.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyModel;

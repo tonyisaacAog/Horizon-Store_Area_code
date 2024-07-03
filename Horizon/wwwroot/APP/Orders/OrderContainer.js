@@ -108,7 +108,7 @@ const OrderContainer = function (data) {
             Id: 0,
             ProductId: 0,
             QTY: 0,
-            UnitPrice: 0,
+            UnitPrice: 1,
             RecordStatus: RecordStatus.Added
         }
         self.OrderDetail.push(new OrderDetail(newLine));
