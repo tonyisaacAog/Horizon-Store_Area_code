@@ -19,9 +19,8 @@ namespace Horizon.Areas.Orders.ViewModel
         public decimal TotalAmount { get; set; }
         public string? Notes { get; set; }
 
-        [Required]
-        public string? OrderDate { get; set; }
-        public string DeliveryOrder { get; set; }
+        public string? OrderDate { get; set; } = string.Empty;
+        public string DeliveryOrder { get; set; } = string.Empty;
         public OrderStatus OrderStatus { get; set; }
         public bool IsProcess { get; set; } = false;
 

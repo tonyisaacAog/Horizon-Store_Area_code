@@ -43,12 +43,12 @@
                     <input data-bind="value:Order.DeliveryOrder" disabled="disabled" class="form-control" />
                 </div>
             </div>
-            <div class="col-12">
+           @*  <div class="col-12">
                 <div class="form-group">
                     <label>ملاحظات</label>
                     <textarea data-bind="value:Order.Notes" rows="8" disabled="disabled" class="form-control" ></textarea>
                 </div>
-            </div>
+            </div> *@
         </div>
     </card>
 
@@ -73,6 +73,12 @@
                     <input data-bind="value:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" disabled="disabled" class="form-control" />
                 </div>
             </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>ملاحظات</label>
+                    <textarea data-bind="value:ProductConfigurations.StoreItemVM.Notes" rows="2" disabled="disabled" class="form-control"></textarea>
+                </div>
+            </div>
         </div>
         <card title="مستلومات المنتج" addational-class="fa-list-ol"
               text-color-class="text-dark" header-class="bg-smoke">
@@ -85,7 +91,7 @@
                                 المادة الخام
                             </th>
 
-                            <th>
+                            <th style="width:10%">
                                 الكمية
                             </th>
                             <th>
@@ -98,7 +104,7 @@
                         </tr>
                     </thead>
                     <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
-                        <tr>
+                        <tr data-bind="style: { color: UsedQTY()>CurrentQty() ? 'red' : 'black' }">
                             <td>
                                 @Html.Editor("Id","StoreItemRawList", new
                                 {
@@ -119,7 +125,7 @@
                             <td>
                                 <span data-bind="text:CurrentQty"></span>
                             </td>
-
+                           
                         </tr>
                     </tbody>
                 </table>

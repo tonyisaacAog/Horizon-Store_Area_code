@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using BaseEntities;
 using MyInfrastructure.Extensions;
+using Finance.CurrentAssetModule.Stores.Model.Main;
 
 namespace Horizon.Areas.Purchases.Models
 {
@@ -20,6 +21,12 @@ namespace Horizon.Areas.Purchases.Models
         public DateTime? PurchasingDate { get; set; }
         [StringLength(50)]
         public string? InvoiceNum { get; set; }
+
+        // purchases Price For StoreItem Raw صاج
+        public StoreItem? StoreItem { get; set; }
+        [ForeignKey(nameof(StoreItem))]
+        public int? StoreItemId { get; set; }
+        public decimal PriceItemsRaw { get; set; }
 
         public override string ToString()
         {

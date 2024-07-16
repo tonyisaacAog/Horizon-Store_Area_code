@@ -1,6 +1,6 @@
 ﻿@model SaleReport
 @{
-    var title = "تقارير صرف للمنتجات";
+    var title = "تقارير مبيعات للمنتجات";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -46,6 +46,7 @@
                 <th>التاريخ</th>
                 <th>الكمية</th>
                 <th>رقم الفاتورة</th>
+                <th></th>
             </tr>
         </thead>
         <tbody data-bind="foreach:SaleVMs">
@@ -54,6 +55,9 @@
                 <td><span data-bind="text:SalesDate"></span></td>
                 <td><span data-bind="text:TotalAmount"></span></td>
                 <td><span data-bind="text:InvoiceNum"></span></td>
+                <td>
+                    <a target="_blank" class="btn btn-success" data-bind="attr: { href: '/Sales/Home/DetailsSales/' + Id }">تفاصيل</a>
+                </td>
             </tr>
         </tbody>
     </table>

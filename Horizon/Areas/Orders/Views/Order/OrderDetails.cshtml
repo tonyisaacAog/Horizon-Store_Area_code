@@ -48,7 +48,7 @@
                     <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
                 </div>
             </div>
-            <div class="col-12 mb-2">
+           @*  <div class="col-12 mb-2">
                 <div class="form-group">
                     <label>ملاحظات امر الشغل</label>
                     <textarea rows="8"  data-bind="value:Order.Notes" class="form-control">
@@ -57,7 +57,7 @@
                 <div class="form-group mb-2 mt-2 row justify-content-center align-items-center">
                     <button data-bind="click:SaveNotes" class="btn btn-primary col-6">حفظ الملاحظات</button>
                 </div>
-            </div>
+            </div> *@
         </div>
     </div>
 </card>
@@ -95,16 +95,16 @@
                     المنتج
                 </th>
 
-                <th>
+                <th style="width:10%">
                     الكمية
                 </th>     
-                <th style="width:10%">
-                    سعر الوحدة
+                <th >
+                   ملاحظات
                 </th>
 
-                <th>
+           @*      <th>
                     السعر الإجمالي
-                </th>
+                </th> *@
                 <th data-bind="visible:Order.OrderStatus()==0">
                   @*  <button class="btn btn-dark" data-bind="click:AddItem">
                         <span class="fa fa-plus"></span>
@@ -124,13 +124,16 @@
                 <td>
                     <input disabled type="text" class="form-control" data-bind="value:QTY" />
                 </td>
+                   <td>
+                    <textarea rows="1" disabled  class="form-control" data-bind="value:Notes" ></textarea>
+                </td>
 
-                <td>
+              @*   <td>
                     <input disabled type="text" class="form-control" data-bind="value:UnitPrice" />
                 </td>
                 <td>
                     <span data-bind="numericText:TotalAmount"></span>
-                </td>
+                </td> *@
                 <td data-bind="visible:$parent.Order.OrderStatus()==0">
                     <a class="btn btn-info" data-bind="attr:{href:'/Orders/Order/ManageConfigure/'+Id()}">
                         <span class="fa fa-list"></span>
@@ -140,11 +143,11 @@
         </tbody>
         <tbody>
             <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
                 <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                <td></td>
                 <td data-bind="visible:Order.OrderStatus()==0"></td>
+
             </tr>
         </tbody>
     </table>

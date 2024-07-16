@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Horizon.Areas.Orders.Models;
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
@@ -59,30 +60,38 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
 
-                       
+
                         <div class="sb-sidenav-menu-heading">العملاء والمواردين</div>
                         <a class="nav-link" href="~/Sales/Client/Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             قائمة العملاء
                         </a>
-                         <a class="nav-link" href="~/Purchases/Supplier/Index">
+                        <a class="nav-link" href="~/Purchases/Supplier/Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             قائمة الموردين
                         </a>
 
-                        
+
                         <div class="sb-sidenav-menu-heading">اوامر الشغل</div>
-                        <a class="nav-link" href="~/Orders/Order/Index">
-                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                  امر شغل      
+                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            امر شغل - جديد
+                        </a>
+                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Process">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            امر شغل - يتم المعالجة
+                        </a>
+                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Done">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            امر شغل - تم التجهيز
                         </a>
                         <a class="nav-link" href="~/Orders/Order/ProcessIndex">
-                           <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                           تحت التنفيذ
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            تحت التنفيذ
                         </a>
 
-                         <div class="sb-sidenav-menu-heading">المخازن</div>
-                          <a class="nav-link collapsed" href="#"
+                        <div class="sb-sidenav-menu-heading">المخازن</div>
+                        <a class="nav-link collapsed" href="#"
                            data-bs-toggle="collapse"
                            data-bs-target="#ProductSettings"
                            aria-expanded="false"
@@ -90,22 +99,22 @@
                             <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
                             المنتجات
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                          </a>
+                        </a>
                         <div class="collapse" id="ProductSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                           
-                            <a class="nav-link" href="~/Store/StoreItems/Index">
-                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                قائمة المنتجات      
-                            </a>
-                            <a class="nav-link" href="~/Store/StoreFamily/Index">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+
+                                <a class="nav-link" href="~/Store/StoreItems/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    قائمة المنتجات
+                                </a>
+                                <a class="nav-link" href="~/Store/StoreFamily/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                     انواع المنتجات
-                            </a>
-                            <a class="nav-link" href="~/Store/StoreBrand/Index">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                </a>
+                                <a class="nav-link" href="~/Store/StoreBrand/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                     الماركات
-                           </a>
+                                </a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#"
@@ -128,15 +137,18 @@
                                     مستلزمات الانتاج الاكسوارات
                                 </a>
                                 <a class="nav-link" href="~/Store/StoreLocations/Index">
-                           <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    المخازن</a>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    المخازن
+                                </a>
                                 <a class="nav-link" href="~/Store/StoreMeasureUnit/Index">
-                           <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    وحدات القياس</a>
-                                                    
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    وحدات القياس
+                                </a>
+
                                 <a class="nav-link" href="~/Store/RawItemType/Index">
-                           <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    قائمة الانواع</a>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    قائمة الانواع
+                                </a>
                             </nav>
                         </div>
 
@@ -147,10 +159,10 @@
                             فواتير تخزين المستلزمات
                         </a>
                         <a class="nav-link" href="~/Sales/Home/Index">
-                           <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             فواتير صرف منتج
                         </a>
-                        
+
                         <div class="sb-sidenav-menu-heading">التقارير</div>
                         <a class="nav-link collapsed" href="#"
                            data-bs-toggle="collapse"
@@ -158,14 +170,19 @@
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
                             <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
-                            التقارير 
+                            التقارير
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="ClientReports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Sales/Reports/SalesBetweenDate">تقرير صرف منتج </a>
-                                <a class="nav-link" href="~/Purchases/Reports/PurchaesBetweenDate">تقرير تخزين مسلتزمات </a>
-                                <a class="nav-link" href="~/Manufacturing/Reports/ManufacturingReport"> تقرير تجميع</a>
+                                <a class="nav-link" href="~/Sales/Reports/SalesBetweenDate">تقرير مبيعات المنتج </a>
+                                <a class="nav-link" href="~/Purchases/Reports/PurchaesBetweenDate">تقرير مشتريات المسلتزمات </a>
+                                <a class="nav-link" href="~/Manufacturing/Reports/ManufacturingReport"> تقرير تجميع منتج</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemInStore">تقرير جرد المنتجات</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItem">تقرير ارصدة المنتجات</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemRaw">تقرير ارصدة المستلزمات</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollect">تقرير ارصدة منتجات غير مجمعة</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectFromPurchase">تقرير ارصدة منتجات غير مجمعة (سعر الصاج)</a>
                             </nav>
                         </div>
 
@@ -176,7 +193,7 @@
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
                             <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
-                            المستخدمين 
+                            المستخدمين
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="Users" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
@@ -207,7 +224,7 @@
 
                 <div class="container-fluid p-4">
                     @RenderBody()
-                   
+
                 </div>
 
             </main>
@@ -239,7 +256,7 @@
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery-number/jquery.number.min.js"></script>
     <script src="~/lib/font-awesome/js/all.js"></script>
-    <script src="~/bootstrap5/js/bootstrap.bundle.min.js"></script>   
+    <script src="~/bootstrap5/js/bootstrap.bundle.min.js"></script>
     @* <script src="https://cdn.jsdelivr.XYZ/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> *@
     <script src="~/js/scripts.js" asp-append-version="true"></script>
     <script src="~/APP/General/General.js" asp-append-version="true"></script>
@@ -252,8 +269,8 @@
     <script asp-append-version="true">
         $(document).ready(function () {
             $(".nav-link").on("click", function (e) {
-                e.stopPropagation(); 
-                var target = $(this).data("bs-target"); 
+                e.stopPropagation();
+                var target = $(this).data("bs-target");
                 var toggleId = target;
                 var menuState = localStorage.getItem(toggleId);
                 if (menuState !== null && menuState === "open" && toggleId != undefined) {
@@ -269,7 +286,7 @@
 
             $(".collapse").each(function () {
                 var toggleId = $(this).attr("id");
-                var menuState = localStorage.getItem("#"+toggleId);
+                var menuState = localStorage.getItem("#" + toggleId);
                 if (menuState === "open" && toggleId != undefined) {
                     $(this).addClass("show");
                     $(`[data-bs-target="#${toggleId}"]`).removeClass("collapsed");
@@ -278,7 +295,7 @@
                     $(this).removeClass("show");
                 }
             });
-          
+
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

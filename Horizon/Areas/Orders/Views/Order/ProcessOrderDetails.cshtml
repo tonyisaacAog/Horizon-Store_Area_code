@@ -41,14 +41,14 @@
                     <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
                 </div>
             </div>
-            <div class="col-12 mb-2">
+         @*    <div class="col-12 mb-2">
                 <div class="form-group">
                     <label>ملاحظات امر الشغل</label>
                     <textarea rows="8" disabled data-bind="value:Order.Notes" class="form-control">
                         </textarea>
                 </div>
 
-            </div>
+            </div> *@
         </div>
     </div>
 </card>
@@ -85,14 +85,15 @@
                     المنتج
                 </th>
 
-                <th>
+                <th style="width:10%">
                     الكمية
                 </th>     
+                <th>ملاحظات</th>
                 <th></th>
             </tr>
 
         </thead>
-        <tbody data-bind="foreach:OrderDetail">
+        <tbody data-bind="foreach:OrderDetail"> 
             <tr>
                 <td>
  
@@ -103,7 +104,9 @@
                 <td>
                     <input disabled type="text" class="form-control" data-bind="value:QTY" />
                 </td>
-
+                <td>
+                    <textarea rows="1" disabled class="form-control" data-bind="value:Notes"></textarea>
+                </td>
                 <td>
                   
                     <a class="btn btn-primary" data-bind="visible:IsManufacturing()==false,attr:{href:'/Manufacturing/Home/ManageManufactingForOrder/'+Id()}">

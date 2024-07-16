@@ -33,6 +33,7 @@ namespace Horizon.Areas.Store.ViewModel.Main
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
         public int Quantity { get; set; }
+        public string? Notes { get; set; }
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<StoreItem, StoreItemVM>()

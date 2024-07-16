@@ -16,6 +16,7 @@ namespace Horizon.Areas.Orders.Models
         public int QTY { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
+        public string? Notes { get; set; }
         public int? ManfactId { get; set; }
         public bool IsManufacturing { get; set; } = false;
 

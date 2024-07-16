@@ -17,9 +17,9 @@ namespace Horizon.Areas.Orders.Controllers
             _orderManager = orderManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(OrderStatus? Status)
         {
-            var orders =await _orderManager.GetOrders();
+            var orders =await _orderManager.GetOrders(Status);
             return View(orders);
         }
         public async Task<IActionResult> ProcessIndex()
@@ -39,7 +39,7 @@ namespace Horizon.Areas.Orders.Controllers
         public async Task<IActionResult> StartProcessOrder(int id)
         {
             await _orderManager.ChangeOrderSatus(id,OrderStatus.Process);
-            return Redirect("/Orders/Order/Index");
+            return Redirect("/Orders/Order/Index?Status="+OrderStatus.Process);
         }
 
         public async Task<IActionResult> OrderDetails(int Id)
@@ -70,7 +70,7 @@ namespace Horizon.Areas.Orders.Controllers
         {
             var feedback = await _orderManager.SaveOrders(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Orders/Order/Index?success" });
+                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}?success" });
             else
                 return Json(new { errors = feedback.Messages });
         }

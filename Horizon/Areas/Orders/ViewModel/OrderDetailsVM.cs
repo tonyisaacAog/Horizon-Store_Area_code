@@ -17,6 +17,7 @@ namespace Horizon.Areas.Orders.ViewModel
         public int QTY { get; set; }
         public decimal UnitPrice { get; set; }
         public int? ManfactId { get; set; }
+        public string? Notes { get; set; }
         public bool IsManufacturing { get; set; }
         public void CreateMapping(Profile configuration)
         {

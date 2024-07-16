@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240713160959_addNotes_OrderDetaisl")]
+    partial class addNotes_OrderDetaisl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -493,14 +495,8 @@ namespace Horizon.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<decimal>("PriceItemsRaw")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime?>("PurchasingDate")
                         .HasColumnType("Date");
-
-                    b.Property<int?>("StoreItemId")
-                        .HasColumnType("int");
 
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
@@ -509,8 +505,6 @@ namespace Horizon.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StoreItemId");
 
                     b.HasIndex("SupplierId");
 
@@ -898,9 +892,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 7, 16, 16, 53, 47, 817, DateTimeKind.Local).AddTicks(3761),
+                            DateCreated = new DateTime(2024, 7, 13, 19, 9, 58, 339, DateTimeKind.Local).AddTicks(5655),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 7, 16, 16, 53, 47, 817, DateTimeKind.Local).AddTicks(3716),
+                            LastModified = new DateTime(2024, 7, 13, 19, 9, 58, 339, DateTimeKind.Local).AddTicks(5617),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
@@ -1317,17 +1311,11 @@ namespace Horizon.Migrations
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Purchasing", b =>
                 {
-                    b.HasOne("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", "StoreItem")
-                        .WithMany()
-                        .HasForeignKey("StoreItemId");
-
                     b.HasOne("Horizon.Areas.Purchases.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("StoreItem");
 
                     b.Navigation("Supplier");
                 });

@@ -20,7 +20,41 @@ namespace Horizon.Areas.Store.Controllers.Reports
             return View(card);
         }
 
+        public async Task<IActionResult> GetAmountBalanceStoreItemRaw(int id,string WarningLimit)
+        {
+            var storeItemRawBalance = await _reportManager.GetAmountBalanceStoreItemRaw(id,WarningLimit);
+            ViewBag.WarningLimit = WarningLimit?.ToLower().Trim() == "on" ? true : false;
+            ViewBag.Id = id;
+            return View(storeItemRawBalance);
+        }
+        //public async Task<IActionResult> GetAmountBalanceStoreItemRawWithType(string type)
+        //{
 
+        //    var storeItemRawBalance = await _reportManager.GetAmountBalanceStoreItemRaw(type);
+        //    return View(storeItemRawBalance);
+        //}
+        public async Task<IActionResult> GetAmountBalanceStoreItemInStore()
+        {
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemInStore();
+            return View(storeItemBalance);
+        }
+        public async Task<IActionResult> GetAmountBalanceStoreItem()
+        {
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItem();
+            return View(storeItemBalance);
+        }
+
+
+        public async Task<IActionResult> GetAmountBalanceStoreItemNotCollect()
+        {
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectInGeneral();
+            return View(storeItemBalance);
+        }
+        public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectFromPurchase()
+        {
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchase();
+            return View(storeItemBalance);
+        }
         public async Task<IActionResult> ItemRawIndex(int Id)
         {
             var card = await _reportManager.GetDataStoreItemRaw(Id);

@@ -110,6 +110,8 @@ namespace Horizon.Areas.Purchases.Services
             }
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
             NewPurchase.SupplierId = vm.SupplierId;
+            NewPurchase.StoreItemId = vm.StoreItem.Id;
+            NewPurchase.PriceItemsRaw = vm.PurchaseInfo.PriceItemsRaw;
             await _db.AddAsync(NewPurchase);
             await _db.SaveChangesAsync();
             await _purchaseTransactionManager.DoPurchaseTransactionsForProduct(vm, NewPurchase.Id);

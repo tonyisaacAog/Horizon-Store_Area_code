@@ -33,6 +33,7 @@ namespace Horizon.Areas.Orders.Services
             if (details.OrderConfigure.Count > 0)
             {
                 var storeitemvm = _mapper.Map<StoreItemVM>(await _db.StoreItems.Where(s => s.Id == details.ProductId).Include(f => f.Family).FirstOrDefaultAsync());
+                storeitemvm.Notes = details.Notes;
                 var Container = new ManufacturingContainer();
                 var itemconfiguration =
                     details.OrderConfigure.Select(obj => new ItemConfigurationVM()
@@ -46,6 +47,7 @@ namespace Horizon.Areas.Orders.Services
                     }).ToList();
                 Container.ProductConfigurations.ItemConfigurationVM = itemconfiguration;
                 Container.ProductConfigurations.StoreItemVM = storeitemvm;
+                Container.ProductConfigurations.Id = details.ProductId;
                 Container.ProductConfigurations.StoreItemVM.Quantity = details.QTY;
                 Container.RedirectUrl = "/Orders/Order/ProcessOrderDetails/" + details.OrderId;
                 Container.param = detailsId;
@@ -55,6 +57,7 @@ namespace Horizon.Areas.Orders.Services
             {
                 var Container = await GetConfigurationProduct(details.ProductId);
                 Container.RedirectUrl = "/Orders/Order/ProcessOrderDetails/" + details.OrderId;
+                Container.ProductConfigurations.StoreItemVM.Notes = details.Notes;
                 Container.ProductConfigurations.StoreItemVM.Quantity = details.QTY;
                 Container.param = detailsId;
                 return Container;
