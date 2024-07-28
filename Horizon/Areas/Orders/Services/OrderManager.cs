@@ -156,7 +156,35 @@ namespace Horizon.Areas.Orders.Services
         /////////////////////////
         ///
 
-
+        public async Task<OrderReportContainerVM> OrderReport(int orderId)
+        {
+            var report = new OrderReportContainerVM();
+            var orderDetail = await _db.OrderDetails.Include(obj=>obj.Product).Include(c => c.OrderConfigure)
+                                                    .ThenInclude(obj=>obj.StoreItems).Where(d => d.OrderId == orderId).ToListAsync();
+            var order = await _db.Orders.Include(obj=>obj.Client).Where(obj => obj.Id == orderId).FirstOrDefaultAsync();           
+            foreach(var configure in orderDetail )
+            {
+                if( configure.OrderConfigure.Count > 0 )
+                {
+                    var details = configure.OrderConfigure.Where(obj=>obj.StoreItems.RawItemTypeId != 1)
+                                                          .Select(obj => new ItemRawReportVM { Name = obj.StoreItems.ItemName,Id = obj.StoreItemId,Quantity = obj.Qty * configure.QTY })
+                                                          .ToList();
+                    report.OrderConfigures.AddRange(details);
+                }
+                else
+                {
+                    var itemConfiguration = _db.ItemConfgurations.Include(obj=>obj.StoreItemsRaw)
+                                                                 .Where(obj=>obj.StoreItemsRaw.RawItemTypeId !=1 )
+                                                                 .Select(obj => new ItemRawReportVM { Name = obj.StoreItemsRaw.ItemName,Id = obj.StoreItemRawId,Quantity = obj.MinimumAmount * configure.QTY })
+                                                                 .ToList();
+                    report.OrderConfigures.AddRange(itemConfiguration);
+                }
+            }
+            report.Order = _mapper.Map<OrderVM>(order);
+            report.OrderConfigures = report.OrderConfigures.GroupBy(obj => obj.Id).Select((group,index) => new ItemRawReportVM { Id = index+1,Name = group.FirstOrDefault()?.Name ?? string.Empty,Quantity = group.Sum(obj => obj.Quantity) }).ToList();
+            report.StoreItems = orderDetail.Select((obj,index) => new StoreItemReportVM { Id = index + 1,Name = obj.Product.ProductName,Quantity = obj.QTY,Notes = obj.Notes }).ToList();
+            return report;
+        }
         public async Task<OrderConfigureContainer> ExtraConfiguration(int detailsId)
         {
 

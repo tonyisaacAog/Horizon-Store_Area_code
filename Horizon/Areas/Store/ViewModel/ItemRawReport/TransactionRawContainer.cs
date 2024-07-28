@@ -10,4 +10,6 @@
         public SearchVM Search { get; set; }
         public List<StoreItemRawTransactionVM> StoreItemRawTransactions { get; set; }
     }
+
+  
 }

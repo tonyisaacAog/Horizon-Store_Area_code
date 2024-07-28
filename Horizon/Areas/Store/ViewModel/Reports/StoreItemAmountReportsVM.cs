@@ -36,7 +36,8 @@ namespace Horizon.Areas.Store.ViewModel.Reports
     public class StoreItemAmountNotCollectReportVM
     {
         public string StoreItemName { get; set; }
-        public int StoreItemQuantity { get; set; }
+        public int StoreItemRestQuantity { get; set; }
+        public int StoreItemMainQuantity { get; set; }
         public decimal PriceItemsRawPurchase { get; set; }
         public decimal PriceItemsRaw { get; set; }
     }

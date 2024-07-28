@@ -33,7 +33,7 @@
             <div class="col-4">
                 <div class="form-group">
                     <label>الكمية</label>
-                    <span data-bind="text:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" class="form-control" ></span>
+                    <span data-bind="text:ProductConfigurations.StoreItemVM.Quantity" class="form-control" ></span>
                 </div>
             </div>
         </div>
@@ -96,9 +96,9 @@
     </div>
 
 
-    <card-footer>
+ @*    <card-footer>
         <partial name="_SaveButton" />
-    </card-footer>
+    </card-footer> *@
 </card>
 
 
@@ -115,8 +115,8 @@
     <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
     <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
     <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script>
-    <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
+    @* <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script> *@
+    <script src="~/APP/Manufacturing/ManufacturingContainer2.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
         var Manufacturing = new ManufacturingContainer(@Html.Raw(data));

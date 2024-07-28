@@ -66,7 +66,7 @@ namespace Horizon.Areas.Store.Services.Reports
             {
                 var itemConfigurations = await _db.ItemConfgurations.Where(obj => obj.StoreItemId == storeItem.Id).ToListAsync();
                 var numberOfProduct = await GetNumProductCanMadeOfMatiaral(itemConfigurations);
-                storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemQuantity = numberOfProduct });
+                storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemMainQuantity = numberOfProduct,StoreItemRestQuantity=0 });
             }
             return storeItemNotCollectContainer;
         }
@@ -83,24 +83,29 @@ namespace Horizon.Areas.Store.Services.Reports
                 {
                     var storeTransForPurchase = await _db.StoreTransactionsRaw.Include(obj=>obj.StoreItems).Where(obj => obj.PurchaseId == purchase.Id).ToListAsync();
                     var numberOfProduct = await GetNumProductCanMadeOfMatiaral(itemConfigurations,storeTransForPurchase);
-                    storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemQuantity = numberOfProduct,PriceItemsRawPurchase = purchase.PriceItemsRaw });
+                    storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemMainQuantity = numberOfProduct.MainQty,StoreItemRestQuantity=numberOfProduct.RestQty,PriceItemsRawPurchase = purchase.PriceItemsRaw });
                 }
                 if( purchases.Count == 0 )
                 {
-                    storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemQuantity = 0,PriceItemsRawPurchase = 0 });
+                    storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName,StoreItemRestQuantity = 0,StoreItemMainQuantity = 0,PriceItemsRawPurchase = 0 });
                 }
             }
             return storeItemNotCollectContainer;
         }
-        private async Task<int> GetNumProductCanMadeOfMatiaral(List<ItemConfguration> itemConfigurationVM,List<StoreTransactionsRaw> storeTransactionsRaw)
+        private async Task<(int MainQty,int RestQty)> GetNumProductCanMadeOfMatiaral(List<ItemConfguration> itemConfigurationVM,List<StoreTransactionsRaw> storeTransactionsRaw)
         {
-            List<int> lst = new List<int>();
+            List<int> RestQtylst = new List<int>();
+            List<int> MainQtylst = new List<int>();
             foreach( var config in itemConfigurationVM )
             {
-                var calc = (int)storeTransactionsRaw.FirstOrDefault(i => i.StoreItemId == config.StoreItemRawId).RestQty / config.MinimumAmount;
-                lst.Add(calc);
+                var RestQtycalc = (int)storeTransactionsRaw.FirstOrDefault(i => i.StoreItemId == config.StoreItemRawId).RestQty / config.MinimumAmount;
+                RestQtylst.Add(RestQtycalc);
+                var MainQtycalc = (int)storeTransactionsRaw.FirstOrDefault(i => i.StoreItemId == config.StoreItemRawId).Qty / config.MinimumAmount;
+                MainQtylst.Add(MainQtycalc);
             }
-            return lst.Count > 0 ? lst.Min() : 0;
+            var RestQty =  RestQtylst.Count > 0 ? RestQtylst.Min() : 0;
+            var MainQty = MainQtylst.Count > 0 ? MainQtylst.Min() : 0;
+            return (MainQty, RestQty);
         }
         private async Task<int> GetNumProductCanMadeOfMatiaral(List<ItemConfguration> itemConfigurationVM)
         {
@@ -263,6 +268,71 @@ namespace Horizon.Areas.Store.Services.Reports
 
             return card;
         }
+
+        public async Task<TransactionRawContainer> GetTransactionItemRawForManufactProduct(TransactionRawContainer card)
+        {
+            var endDate = card.Search.EndDate.ToEgyptionDate().AddDays(1);
+            var startDate = card.Search.StartDate.ToEgyptionDate();
+
+            var transDetails =
+                    await _db.StoreTransactionsRaw.Include(obj=>obj.StoreItems).Where
+                    (trans => trans.StoreItemId == card.Search.StoreItemId&& trans.TransType == StoreRawTransTypeEnum.Manfacturing
+                    && trans.TransDate >= startDate
+                    && trans.TransDate < endDate).ToListAsync();
+
+            foreach( var item in transDetails )
+            {
+                var ST = new StoreItemRawTransactionVM();
+                ST.Id = item.Id;
+                ST.QTY = item.Qty;
+                ST.StoreItemRawName = item.StoreItems.ItemName;
+                ST.StoreItemId = item.StoreItemId;
+                ST.TransDate = item.TransDate.ToEgyptianDate();
+                ST.TransType = item.TransType;
+                ST.QtyAfter = item.QtyBalanceAfter;
+                ST.AmountBalanceAfter = item.Qty + item.QtyBalanceAfter;
+                ST.TransTypeName =
+                    item.TransType == StoreRawTransTypeEnum.Manfacturing ? "تصنيع" :
+                    item.TransType == StoreRawTransTypeEnum.Purchase ? "مشتريات" :
+                    item.TransType == StoreRawTransTypeEnum.Sales ? "مبيعات" : "تالف";
+                ST.UnitPrice = item.UnitPrice;
+                if( item.TransType == StoreRawTransTypeEnum.Manfacturing )
+                {
+                    ST.ReferanceId = item.ManfacturingId;
+                }
+               
+                card.StoreItemRawTransactions.Add(ST);
+            }
+            var listbefore = await _db.StoreTransactionsRaw.Where
+                   (trans => trans.StoreItemId == card.Search.StoreItemId && trans.TransType == StoreRawTransTypeEnum.Manfacturing
+                   && trans.TransDate < startDate).OrderByDescending(x => x.Id).ToListAsync();
+
+            if( listbefore.Count() > 0 )
+                card.Search.StartBalance = listbefore.FirstOrDefault()?.QtyBalanceAfter ?? 0;
+            else
+                card.Search.StartBalance = 0;
+
+            if( transDetails.Count() > 0 )
+                card.Search.EndBalance = transDetails.OrderByDescending(x => x.Id).FirstOrDefault()?.QtyBalanceAfter ?? 0;
+            else
+                card.Search.EndBalance = 0;
+
+            return card;
+        }
+        public async Task<TransactionRawContainerForProduct> GetTransactionItemRawForManufactProduct(SearchForProductVM search)
+        {
+            var container = new TransactionRawContainerForProduct();
+            var productItemRaw = _db.ItemConfgurations.Where(obj => obj.StoreItemId == search.StoreItemId).ToList();
+            foreach(var itemRaw in productItemRaw )
+            {
+                var searchvm = new TransactionRawContainer() { Search = new ViewModel.ItemRawReport.SearchVM { StartDate = search.StartDate,EndDate = search.EndDate,StoreItemId = itemRaw.StoreItemRawId } };
+                var trans = await GetTransactionItemRawForManufactProduct(searchvm);
+                container.StoreItemRawTransactions.Add(trans);
+            }
+            container.Search = search;
+            return container;
+        }
+      
 
 
     }

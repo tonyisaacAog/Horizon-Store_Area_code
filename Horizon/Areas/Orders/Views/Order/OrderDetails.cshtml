@@ -12,6 +12,8 @@
 
 }
 
+
+
 <card title="بيانات امر الشغل" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
@@ -37,7 +39,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>حالة امر الشغل</label>
-                    <input disabled data-bind="visible:Order.OrderStatus()==0" class="form-control " value="جديد"/>
+                    <input disabled data-bind="visible:Order.OrderStatus()==0" class="form-control " value="جديد" />
                     <input disabled data-bind="visible:Order.OrderStatus()==1" class="form-control " value="جارى التنفيذ" />
                     <input disabled data-bind="visible:Order.OrderStatus()==2" class="form-control " value="تم التنفيذ" />
                 </div>
@@ -48,15 +50,15 @@
                     <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
                 </div>
             </div>
-           @*  <div class="col-12 mb-2">
-                <div class="form-group">
-                    <label>ملاحظات امر الشغل</label>
-                    <textarea rows="8"  data-bind="value:Order.Notes" class="form-control">
-                        </textarea>
-                </div>
-                <div class="form-group mb-2 mt-2 row justify-content-center align-items-center">
-                    <button data-bind="click:SaveNotes" class="btn btn-primary col-6">حفظ الملاحظات</button>
-                </div>
+            @*  <div class="col-12 mb-2">
+            <div class="form-group">
+            <label>ملاحظات امر الشغل</label>
+            <textarea rows="8"  data-bind="value:Order.Notes" class="form-control">
+            </textarea>
+            </div>
+            <div class="form-group mb-2 mt-2 row justify-content-center align-items-center">
+            <button data-bind="click:SaveNotes" class="btn btn-primary col-6">حفظ الملاحظات</button>
+            </div>
             </div> *@
         </div>
     </div>
@@ -73,7 +75,7 @@
                     <input data-bind="value:Order.ClientName" disabled="disabled" class="form-control" />
                 </div>
             </div>
-             <div class="col-6">
+            <div class="col-6">
                 <div class="form-group">
                     <label>التليفون</label>
                     <input data-bind="value:Order.Phone1" disabled="disabled" class="form-control" />
@@ -87,7 +89,7 @@
 <card title="تفاصيل امر الشغل" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <table class="table table-bordered table-striped table-hover">
-      
+
         <thead class="bg-gradient text-dark">
 
             <tr>
@@ -97,17 +99,17 @@
 
                 <th style="width:10%">
                     الكمية
-                </th>     
-                <th >
-                   ملاحظات
+                </th>
+                <th>
+                    ملاحظات
                 </th>
 
-           @*      <th>
-                    السعر الإجمالي
+                @*      <th>
+                السعر الإجمالي
                 </th> *@
                 <th data-bind="visible:Order.OrderStatus()==0">
-                  @*  <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
+                    @*  <button class="btn btn-dark" data-bind="click:AddItem">
+                    <span class="fa fa-plus"></span>
                     </button>*@
                 </th>
             </tr>
@@ -116,7 +118,7 @@
         <tbody data-bind="foreach:OrderDetail">
             <tr>
                 <td>
- 
+
                     <input disabled type="text" class="form-control" data-bind="value:ProductName" />
 
                 </td>
@@ -124,20 +126,20 @@
                 <td>
                     <input disabled type="text" class="form-control" data-bind="value:QTY" />
                 </td>
-                   <td>
-                    <textarea rows="1" disabled  class="form-control" data-bind="value:Notes" ></textarea>
+                <td>
+                    <textarea rows="1" disabled class="form-control" data-bind="value:Notes"></textarea>
                 </td>
 
-              @*   <td>
-                    <input disabled type="text" class="form-control" data-bind="value:UnitPrice" />
+                @*   <td>
+                <input disabled type="text" class="form-control" data-bind="value:UnitPrice" />
                 </td>
                 <td>
-                    <span data-bind="numericText:TotalAmount"></span>
+                <span data-bind="numericText:TotalAmount"></span>
                 </td> *@
                 <td data-bind="visible:$parent.Order.OrderStatus()==0">
                     <a class="btn btn-info" data-bind="attr:{href:'/Orders/Order/ManageConfigure/'+Id()}">
                         <span class="fa fa-list"></span>
-                    </a>   
+                    </a>
                 </td>
             </tr>
         </tbody>
@@ -156,8 +158,8 @@
 
 <card title="الاكسسوارات" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
-    <table  class="table table-bordered table-striped table-hover">
-      
+    <table class="table table-bordered table-striped table-hover">
+
         <thead class="bg-gradient text-dark">
 
             <tr>
@@ -167,15 +169,15 @@
 
                 <th>
                     الكمية
-                </th>     
-             
+                </th>
+
             </tr>
 
         </thead>
         <tbody data-bind="foreach:OrderConfigure">
             <tr data-bind="visible:OrderConfigure.length>0">
                 <td>
- 
+
                     <input disabled type="text" class="form-control" data-bind="value:StoreItemRaw" />
 
                 </td>
@@ -184,13 +186,16 @@
                     <input disabled type="text" class="form-control" data-bind="value:Qty" />
                 </td>
 
-              
+
             </tr>
         </tbody>
-      
-    </table>
-</card>
 
+    </table>
+  
+</card>
+<div class="mx-auto mt-2 row justify-content-center align-items-center">
+    <a class="btn btn-primary col-2" href="/Orders/Order/PrintOrder/@Model.Order.Id">طباعة امر الشغل</a>
+</div>
 
 
 @section Scripts {

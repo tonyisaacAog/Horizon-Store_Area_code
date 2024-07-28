@@ -74,5 +74,17 @@ namespace Horizon.Areas.Store.Controllers.Reports
             var Card = await _reportManager.GetTransactionItemRaw(searchModel);
             return Json(new { Result = Card });
         }
+
+        public async Task<IActionResult> ItemRawForProduct()
+        {
+            return View(new TransactionRawContainerForProduct());
+        }
+        [HttpPost]
+        public async Task<IActionResult> ItemRawForProduct([FromForm] SearchForProductVM search)
+        {
+            search.StoreItemId = 1;
+            var result = await _reportManager.GetTransactionItemRawForManufactProduct(search);
+            return View(result);
+        }
     }
 }

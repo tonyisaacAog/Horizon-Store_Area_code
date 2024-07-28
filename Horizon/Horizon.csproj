@@ -24,6 +24,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Orders\BoldReports\OrderReport.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="MSDATASRC">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>7c0ffab0-cd84-11d0-949a-00a0c91110ed</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Areas\Orders\BoldReports\OrderReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="BoldReports.AspNet.Core" Version="4.2.79" />
     <PackageReference Include="BoldReports.Net.Core" Version="4.2.79" />
@@ -115,6 +137,7 @@
     <None Include="wwwroot\dist\js\select2.full.min.js" />
     <None Include="wwwroot\dist\js\select2.js" />
     <None Include="wwwroot\dist\js\select2.min.js" />
+    <None Include="wwwroot\PhantomJS\phantomjs.exe" />
   </ItemGroup>
 
   <ItemGroup>
