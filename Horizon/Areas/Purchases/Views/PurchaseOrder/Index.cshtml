@@ -1,6 +1,7 @@
-﻿@model List<SaleVM>
+﻿@using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
+@model List<PurchaseOrderVM>
 @{
-    var title = "قائمة فواتير صرف المنتجات";
+    var title = "قائمة اوامر الانتاج";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -18,21 +19,19 @@
             <tr>
                 <th>رقم الفاتورة</th>
                 <th>التاريخ</th>
-                <th>
-                    السعر الإجمالي
-               </th>
-                <th>العميل</th>
+                <th>اسم المورد</th>
+                <th>تمت كاذن اضافة خامات</th>
                 <th></th>
             </tr>
         </thead>
         <tbody data-bind="foreach:items">
             <tr>
-                <td><span data-bind="text:InvoiceNum"></span></td>
-                <td><span data-bind="text:SalesDate"></span></td>
-                <td><span data-bind="text:TotalAmount"></span></td>
-                <td><span data-bind="text:ClientName"></span></td>
+                <td><span data-bind="text:PurchaseOrderNumber"></span></td>
+                <td><span data-bind="text:PurchaseOrderDate"></span></td>
+                <td><span data-bind="text:SupplierName"></span></td>
+                <td><span data-bind="text:IsStoreInStock"></span></td>
                 <td>
-                    <a data-bind="attr:{href:'/Sales/Home/DetailsSales/'+Id() }" class="btn btn-sm btn-info">تفاصيل اذن الصرف</a>
+                    <a data-bind="attr:{href:'/Purchases/PurchaseOrder/ManagePurchaseOrder/'+Id() }" class="btn btn-sm btn-info">تفاصيل امر الانتاج</a>
                 </td>
 
             </tr>

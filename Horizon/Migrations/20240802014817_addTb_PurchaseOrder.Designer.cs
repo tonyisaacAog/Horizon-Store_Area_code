@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240802014817_addTb_PurchaseOrder")]
+    partial class addTb_PurchaseOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,12 +315,6 @@ namespace Horizon.Migrations
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ClientName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientPhone")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(255)
@@ -1000,9 +996,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 3, 20, 1, 41, 473, DateTimeKind.Local).AddTicks(6262),
+                            DateCreated = new DateTime(2024, 8, 2, 4, 48, 16, 363, DateTimeKind.Local).AddTicks(813),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 3, 20, 1, 41, 473, DateTimeKind.Local).AddTicks(6205),
+                            LastModified = new DateTime(2024, 8, 2, 4, 48, 16, 363, DateTimeKind.Local).AddTicks(777),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
@@ -1431,7 +1427,7 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrderDetails", b =>
                 {
                     b.HasOne("Horizon.Areas.Purchases.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("PurchaseOrderDetails")
+                        .WithMany()
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1580,11 +1576,6 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Orders.Models.OrderDetails", b =>
                 {
                     b.Navigation("OrderConfigure");
-                });
-
-            modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrder", b =>
-                {
-                    b.Navigation("PurchaseOrderDetails");
                 });
 #pragma warning restore 612, 618
         }

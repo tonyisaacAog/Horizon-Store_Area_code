@@ -72,7 +72,35 @@
                         </a>
 
 
+                        <a class="nav-link collapsed" href="#"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ProductSettings"
+                           aria-expanded="false"
+                           aria-controls="pagesCollapseAuth">
+                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                            امر الانتاج
+                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="ProductSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="~/Purchases/PurchaseOrder/ManagePurchaseOrder">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                     امر انتاج جديد
+                                </a>
+                                <a class="nav-link" href="~/Purchases/PurchaseOrder/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    اوامر الانتاج
+                                </a>
+                            </nav>
+                        </div>
+                      
+
                         <div class="sb-sidenav-menu-heading">اوامر الشغل</div>
+                        
+                        <a class="nav-link" href="~/Orders/Order/ManageOrderForPerson">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            انشاء امر شغل
+                        </a>
                         <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             امر شغل - جديد
