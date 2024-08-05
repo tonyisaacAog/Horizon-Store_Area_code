@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vZ91+XytsuQp/BmtlTKMbBg6bDWGIWcylRE9IsgeTGc=",
+  "Hash": "/QSw3YqTl/LvpIAFOTtjoVRo/M0UJDNWOuWzPcYU3gs=",
   "Source": "Horizon",
   "BasePath": "_content/Horizon",
   "Mode": "Default",
@@ -1290,6 +1290,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Manufacturing\\ManufacturingContainer.js"
+    },
+    {
+      "Identity": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Manufacturing\\ManufacturingContainer2.js",
+      "SourceId": "Horizon",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\",
+      "BasePath": "_content/Horizon",
+      "RelativePath": "APP/Manufacturing/ManufacturingContainer2.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\APP\\Manufacturing\\ManufacturingContainer2.js"
     },
     {
       "Identity": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Manufacturing\\ManufacturingContainerValidationRule.js",
@@ -17831,6 +17848,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\rtl\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Identity": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\PhantomJS\\phantomjs.exe",
+      "SourceId": "Horizon",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\",
+      "BasePath": "_content/Horizon",
+      "RelativePath": "PhantomJS/phantomjs.exe",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PhantomJS\\phantomjs.exe"
     }
   ]
 }

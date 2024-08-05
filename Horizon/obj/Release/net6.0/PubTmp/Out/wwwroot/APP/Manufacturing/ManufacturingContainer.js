@@ -54,6 +54,7 @@ const ManufacturingContainer = function (data) {
             StoreItemRawId: 0,
             MinimumAmount: 1,
             UsedQTY: 0,
+            Notest:null,
             CurrentQty:0
         }
 

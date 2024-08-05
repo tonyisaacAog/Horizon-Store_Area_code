@@ -12,6 +12,7 @@ const DataTableWithFilter = (pagesize=10) => {
         return (/DataTables/i).test($(this).attr('id'));
     }).dataTable({
         "order": [],
+        buttons: [ 'csv', 'excel'],
         "pageLength": pagesize,
         "language": {
             "sProcessing": "جارٍ التحميل...",
@@ -67,9 +68,6 @@ $(document).ready(function () {
     
     $('.dataTableWithPrint').DataTable({
         dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'print'
-        ],
         "order": [],
         "language": {
             "sProcessing": "جارٍ التحميل...",
@@ -93,6 +91,7 @@ $(document).ready(function () {
     var table = $('.dataTable').DataTable({
       
         "order": [],
+        dom: 'lBfrtip',
         "language": {
             "sProcessing": "جارٍ التحميل...",
             "sLengthMenu": "أظهر _MENU_ مدخلات",

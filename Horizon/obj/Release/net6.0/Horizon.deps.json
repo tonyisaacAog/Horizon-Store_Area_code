@@ -334,7 +334,8 @@
           "System.Xml.XmlSerializer": "6.0.0.0",
           "System.Xml.XPath": "6.0.0.0",
           "System.Xml.XPath.XDocument": "6.0.0.0",
-          "WindowsBase": "4.0.0.0"
+          "WindowsBase": "4.0.0.0",
+          "Interop.MSDATASRC": "1.0.0.0"
         },
         "runtime": {
           "Horizon.dll": {}
@@ -6030,6 +6031,12 @@
           "WindowsBase.dll": {}
         },
         "compileOnly": true
+      },
+      "Interop.MSDATASRC/1.0.0.0": {
+        "compile": {
+          "Interop.MSDATASRC.dll": {}
+        },
+        "compileOnly": true
       }
     }
   },
@@ -9397,6 +9404,11 @@
       "sha512": ""
     },
     "WindowsBase/4.0.0.0": {
+      "type": "referenceassembly",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Interop.MSDATASRC/1.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

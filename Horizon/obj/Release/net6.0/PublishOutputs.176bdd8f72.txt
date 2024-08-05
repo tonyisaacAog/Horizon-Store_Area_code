@@ -1,3 +1,4 @@
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\Areas\Orders\BoldReports\OrderReport.rdlc
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\Horizon.exe
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\appsettings.json
@@ -299,6 +300,7 @@ D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\n
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\refs\System.Xml.XPath.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\refs\System.Xml.XPath.XDocument.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\refs\WindowsBase.dll
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\refs\Interop.MSDATASRC.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\Horizon.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\Horizon.runtimeconfig.json
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\PubTmp\Out\Horizon.pdb

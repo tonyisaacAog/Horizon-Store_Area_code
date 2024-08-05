@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets\\APP\\Manufacturing\\ManufacturingContainer.js"
     },
     {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Manufacturing\\ManufacturingContainer2.js",
+      "PackagePath": "staticwebassets\\APP\\Manufacturing\\ManufacturingContainer2.js"
+    },
+    {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Manufacturing\\ManufacturingContainerValidationRule.js",
       "PackagePath": "staticwebassets\\APP\\Manufacturing\\ManufacturingContainerValidationRule.js"
     },
@@ -211,6 +215,10 @@
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\Images\\Preloader_11.gif",
       "PackagePath": "staticwebassets\\Images\\Preloader_11.gif"
+    },
+    {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\PhantomJS\\phantomjs.exe",
+      "PackagePath": "staticwebassets\\PhantomJS\\phantomjs.exe"
     },
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\bootstrap5\\css\\bootstrap-grid.css",
