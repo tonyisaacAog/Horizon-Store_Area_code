@@ -1,0 +1,19 @@
+﻿@inject Horizon.Data.ApplicationDbContext dbContext
+@using Microsoft.EntityFrameworkCore
+
+
+@model dynamic
+@{
+    var currencies = dbContext.PurchaseOrders.Include(obj=>obj.Supplier)
+        .Select(x => new SelectListItem
+        {
+            Value = x.Id.ToString(),
+            Text = x.PurchaseOrderNumber +" "+x.Supplier.SupplierName
+        }).ToArray();
+}
+@{
+    var htmlAttributes = ViewData["htmlAttributes"] ?? new { };
+}
+
+
+@Html.DropDownList("", currencies, "Select ---", htmlAttributes)

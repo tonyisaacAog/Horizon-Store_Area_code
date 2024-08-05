@@ -141,6 +141,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\Orders\Views\Order\ManageOrderForPerson.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Areas\Store\Views\StoreItems\InqueryPurchaseForProduct.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

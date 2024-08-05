@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240802014817_addTb_PurchaseOrder")]
+    partial class addTb_PurchaseOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,12 +316,6 @@ namespace Horizon.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClientName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientPhone")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -574,9 +570,6 @@ namespace Horizon.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AmountStoreItem")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -601,9 +594,6 @@ namespace Horizon.Migrations
                     b.Property<decimal>("PriceItemsRaw")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("PurchaseOrderId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("PurchasingDate")
                         .HasColumnType("Date");
 
@@ -617,8 +607,6 @@ namespace Horizon.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PurchaseOrderId");
 
                     b.HasIndex("StoreItemId");
 
@@ -1008,9 +996,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3406),
+                            DateCreated = new DateTime(2024, 8, 2, 4, 48, 16, 363, DateTimeKind.Local).AddTicks(813),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3363),
+                            LastModified = new DateTime(2024, 8, 2, 4, 48, 16, 363, DateTimeKind.Local).AddTicks(777),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
@@ -1439,7 +1427,7 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrderDetails", b =>
                 {
                     b.HasOne("Horizon.Areas.Purchases.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("PurchaseOrderDetails")
+                        .WithMany()
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1457,10 +1445,6 @@ namespace Horizon.Migrations
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Purchasing", b =>
                 {
-                    b.HasOne("Horizon.Areas.Purchases.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderId");
-
                     b.HasOne("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", "StoreItem")
                         .WithMany()
                         .HasForeignKey("StoreItemId");
@@ -1470,8 +1454,6 @@ namespace Horizon.Migrations
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("PurchaseOrder");
 
                     b.Navigation("StoreItem");
 
@@ -1594,11 +1576,6 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Orders.Models.OrderDetails", b =>
                 {
                     b.Navigation("OrderConfigure");
-                });
-
-            modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrder", b =>
-                {
-                    b.Navigation("PurchaseOrderDetails");
                 });
 #pragma warning restore 612, 618
         }

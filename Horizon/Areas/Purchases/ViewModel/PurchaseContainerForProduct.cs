@@ -13,6 +13,7 @@ namespace Horizon.Areas.Purchases.ViewModel
         }
         public StoreItemVM StoreItem { get; set; }
         public int SupplierId { get; set; }
+        public int PurchaseOrderId { get; set; }
         public PurchaseInfoVM PurchaseInfo { get; set; }
         public List<PurchaseStoreTransactionVM> PurchaseDetails { get; set; }
     }

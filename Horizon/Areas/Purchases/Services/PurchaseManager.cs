@@ -108,10 +108,13 @@ namespace Horizon.Areas.Purchases.Services
             {
                 throw new Exception("لا يمكن حفظ فاتورة مشتريات بدون اضافة مواد خام للفاتورة");
             }
+            var purchaseOrder = await _db.PurchaseOrders.FirstOrDefaultAsync(obj => obj.Id == vm.PurchaseOrderId);
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
-            NewPurchase.SupplierId = vm.SupplierId;
+            NewPurchase.SupplierId = purchaseOrder.SupplierId;
+            NewPurchase.PurchaseOrderId = purchaseOrder.Id;
             NewPurchase.StoreItemId = vm.StoreItem.Id;
             NewPurchase.PriceItemsRaw = vm.PurchaseInfo.PriceItemsRaw;
+            NewPurchase.AmountStoreItem = vm.StoreItem.Quantity;
             await _db.AddAsync(NewPurchase);
             await _db.SaveChangesAsync();
             await _purchaseTransactionManager.DoPurchaseTransactionsForProduct(vm, NewPurchase.Id);

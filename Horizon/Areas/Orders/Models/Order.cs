@@ -10,6 +10,8 @@ namespace Horizon.Areas.Orders.Models
         public int ClientId { get; set; }
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
+        public string? ClientName { get; set; }
+        public string? ClientPhone { get; set; }
         public string? NoOfOrder { get; private set; } = string.Empty;
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }

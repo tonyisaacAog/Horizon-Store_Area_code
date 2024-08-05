@@ -14,11 +14,9 @@ namespace Horizon.Areas.Orders.ViewModel
         public string? ClientName { get; set; }
         public string? Phone1 { get; set; }
         public string? NoOfOrder { get; set; }
-
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         public string? Notes { get; set; }
-
         public string? OrderDate { get; set; } = string.Empty;
         public string DeliveryOrder { get; set; } = string.Empty;
         public OrderStatus OrderStatus { get; set; }
@@ -29,8 +27,8 @@ namespace Horizon.Areas.Orders.ViewModel
             configuration.CreateMap<Order, OrderVM>()
                 .ForMember(x => x.OrderDate, y => y.MapFrom(obj => obj.OrderDate.ToEgyptianDate()))
                 .ForMember(x => x.DeliveryOrder, y => y.MapFrom(obj => obj.DeliveryOrder.ToEgyptianDate()))
-                .ForMember(x => x.ClientName, y => y.MapFrom(obj => obj.Client.ClientName))
-                .ForMember(x => x.Phone1, y => y.MapFrom(obj => obj.Client.Phone1));
+                .ForMember(x => x.ClientName, y => y.MapFrom(obj => obj.ClientName??obj.Client.ClientName))
+                .ForMember(x => x.Phone1, y => y.MapFrom(obj => obj.ClientPhone ?? obj.Client.Phone1));
             configuration.CreateMap<OrderVM, Order>()
                .ForMember(x => x.OrderDate, y => y.MapFrom(obj => obj.OrderDate.ToEgyptionDate()))
                .ForMember(x => x.DeliveryOrder, y => y.MapFrom(obj => obj.DeliveryOrder.ToEgyptionDate()));

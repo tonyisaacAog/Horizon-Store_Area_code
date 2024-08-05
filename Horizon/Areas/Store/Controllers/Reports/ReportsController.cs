@@ -55,6 +55,11 @@ namespace Horizon.Areas.Store.Controllers.Reports
             var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchase();
             return View(storeItemBalance);
         }
+        public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectPurchQty()
+        {
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchaseQty();
+            return View(storeItemBalance);
+        } 
         public async Task<IActionResult> ItemRawIndex(int Id)
         {
             var card = await _reportManager.GetDataStoreItemRaw(Id);

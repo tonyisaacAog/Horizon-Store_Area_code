@@ -5,11 +5,17 @@
             params: true, message: "برجاء تحديد التاريخ"
         }
     })
-    self.SupplierId.extend({
+    //self.SupplierId.extend({
+    //    required: {
+    //        params: true, message: "برجاء اختيار المورد"
+    //    }
+    //})
+    self.PurchaseOrderId.extend({
         required: {
-            params: true, message: "برجاء اختيار المورد"
+            params: true, message: "برجاء اختيار امر الانتاج"
         }
     })
+    
     self.StoreItem.Quantity.extend({
         required: {
             params: true, message: "برجاء اضافة كمية المنتج"

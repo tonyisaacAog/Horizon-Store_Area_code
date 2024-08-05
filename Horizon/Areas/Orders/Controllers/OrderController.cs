@@ -69,6 +69,12 @@ namespace Horizon.Areas.Orders.Controllers
             var orderContainer = await _orderManager.NewOrder(Id);
             return View(orderContainer);
         }
+        public async Task<IActionResult> ManageOrderForPerson()
+        {
+            var orderContainer = await _orderManager.NewOrderForPerson();
+            return View(orderContainer);
+        }
+        
 
         [ModelValidationWithJsonFeedBackFilter]
         public async Task<JsonResult> SaveOrder([FromBody] OrderContainer vm)
@@ -79,7 +85,15 @@ namespace Horizon.Areas.Orders.Controllers
             else
                 return Json(new { errors = feedback.Messages });
         }
-
+        [ModelValidationWithJsonFeedBackFilter]
+        public async Task<JsonResult> SaveOrderForPerson([FromBody] OrderForPersonContainer vm)
+        {
+            var feedback = await _orderManager.SaveOrdersForPerson(vm);
+            if (feedback.Done)
+                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}?success" });
+            else
+                return Json(new { errors = feedback.Messages });
+        }
 
         ////////////////////////////////////
         ///       Manage Configuration ////

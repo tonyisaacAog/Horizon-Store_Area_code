@@ -5,7 +5,7 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+@* <partial name="_Messages" /> *@
 @section PageHeading{
     <partial name="_PageTitle" model="@title" />
 
@@ -96,9 +96,9 @@
     </div>
 
 
- @*    <card-footer>
+    <card-footer>
         <partial name="_SaveButton" />
-    </card-footer> *@
+    </card-footer>
 </card>
 
 

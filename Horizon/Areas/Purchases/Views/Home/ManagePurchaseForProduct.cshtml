@@ -133,7 +133,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+              @*   <div class="col-3">
                     <div class="form-group">
                         <label>اسم المورد</label>
 
@@ -147,7 +147,21 @@
                     }
                     })
                     </div>
+                </div> *@
+            <div class="col-4">
+                <div class="form-group">
+                    <label>امر الانتاج</label>
+                    @Html.Editor("Id","PurchaseOrderLst", new
+                    {
+                    htmlAttributes = new
+                    {
+                    @data_bind = "value:PurchaseOrderId",
+                    @class = "form-select",
+                    @id="PurchaseOrderId"
+                    }
+                    })
                 </div>
+            </div>
 
 
             </div>
@@ -185,6 +199,7 @@
             }
         }
         $("#supplierId").select2();
+        $("#PurchaseOrderId").select2();
     </script>
 
 

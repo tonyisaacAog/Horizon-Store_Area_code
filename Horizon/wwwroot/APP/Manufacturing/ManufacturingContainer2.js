@@ -161,7 +161,7 @@ const ManufacturingContainer = function (data) {
             self.Messages.push("تم اختيار هذا العنصر من قبل");
             $('#message').modal('show');
             self.ProductConfigurations.remove(data);
-        }
+    }
     }
 
     function ErrorManager() {
@@ -177,7 +177,7 @@ const ManufacturingContainer = function (data) {
             errs.showAllMessages();
             return;
         }
-    }
+}
 
 
 };

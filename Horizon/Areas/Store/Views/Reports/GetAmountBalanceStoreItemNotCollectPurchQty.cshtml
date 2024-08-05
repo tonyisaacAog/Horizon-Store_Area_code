@@ -1,14 +1,14 @@
-﻿@model List<SaleVM>
+﻿@model List<StoreItemAmountNotCollectReportVM>
 @{
-    var title = "قائمة فواتير صرف المنتجات";
+    var title = "ارصدة المنتجات";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
 
 @section PageHeading{
     <partial name="_PageTitle" model="@title" />
-
 }
+
 
 
 <card title=@title addational-class="fa-list-ol"
@@ -16,34 +16,21 @@
     <table class="table table-striped table-bordered table-hover dataTable">
         <thead>
             <tr>
-                <th>رقم الفاتورة</th>
-                <th>التاريخ</th>
-                <th>
-                    السعر الإجمالي
-               </th>
-                <th>العميل</th>
-                <th></th>
+                <th>المنتج</th>
+                <th>الكمية</th>
+                <th>سعر الصاج</th>
             </tr>
         </thead>
         <tbody data-bind="foreach:items">
-            <tr>
-                <td><span data-bind="text:InvoiceNum"></span></td>
-                <td><span data-bind="text:SalesDate"></span></td>
-                <td><span data-bind="text:TotalAmount"></span></td>
-                <td><span data-bind="text:ClientName"></span></td>
-                <td>
-                    <a data-bind="attr:{href:'/Sales/Home/DetailsSales/'+Id() }" class="btn btn-sm btn-info">تفاصيل اذن الصرف</a>
-                </td>
 
+            <tr>
+                <td><span data-bind="text:StoreItemName"></span></td>
+                <td><span data-bind="text:StoreItemQuantity"></span></td>
+                <td><span data-bind="text:PriceItemsRawPurchase"></span></td>
             </tr>
         </tbody>
     </table>
 </card>
-
-
-
-
-
 
 
 @section Scripts {
@@ -58,4 +45,5 @@
 
 
 }
+
 

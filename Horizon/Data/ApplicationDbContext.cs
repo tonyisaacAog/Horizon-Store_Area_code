@@ -28,6 +28,8 @@ namespace Horizon.Data
         }
 
         public DbSet<Purchasing>  Purchasings{ get; set; }
+        public DbSet<PurchaseOrder>  PurchaseOrders { get; set; }
+        public DbSet<PurchaseOrderDetails> PurchaseOrderDetails { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<RawItemType> RawItemTypes{ get; set; }
         public DbSet<StoreLocations> StoreLocations { get; set; }

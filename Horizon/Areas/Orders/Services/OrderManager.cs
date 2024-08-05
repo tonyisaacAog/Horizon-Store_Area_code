@@ -25,6 +25,7 @@ namespace Horizon.Areas.Orders.Services
         private readonly ItemConfigureManager _itemConfigureManager;
         private readonly GenericSettingsManager<Client,ClientVM> _clientManager;
         public readonly SaveManager<OrderContainer> _saveManager;
+        public readonly SaveManager<OrderForPersonContainer> _saveOrderForPersonManager;
         public readonly SaveManager<OrderConfigureContainer> _saveManagerConfigue;
         private readonly IMapper _mapper;
         private readonly StoreItemManager _storeItemManager;
@@ -32,7 +33,8 @@ namespace Horizon.Areas.Orders.Services
              SaveManager<OrderContainer> saveManager,IMapper mapper,
              ApplicationDbContext db,ItemConfigureManager itemConfigureManager,
              SaveManager<OrderConfigureContainer> saveManagerConfigue,
-             StoreItemManager storeItemManager)
+             StoreItemManager storeItemManager,
+             SaveManager<OrderForPersonContainer> saveOrderForPersonManager)
         {
             _clientManager = clientManager;
             _mapper = mapper;
@@ -41,6 +43,7 @@ namespace Horizon.Areas.Orders.Services
             _itemConfigureManager = itemConfigureManager;
             _saveManagerConfigue = saveManagerConfigue;
             _storeItemManager = storeItemManager;
+            _saveOrderForPersonManager = saveOrderForPersonManager;
         }
 
         public async Task<List<OrderVM>> GetOrders(OrderStatus? Status)
@@ -111,19 +114,43 @@ namespace Horizon.Areas.Orders.Services
             orderContainer.Client = _mapper.Map<ClientVM>(await _clientManager.CheckAndReturn(ClientId));
             return orderContainer;
         }
+        public async Task<OrderForPersonContainer> NewOrderForPerson()
+        {
+            var orderContainer = new OrderForPersonContainer();
+            return orderContainer;
+        }
 
         public async Task<FeedBackWithMessages> SaveOrders(OrderContainer vm)
         {
             return await _saveManager.SaveTransactionAsync(SaveOrder,vm);
         }
+        public async Task<FeedBackWithMessages> SaveOrdersForPerson(OrderForPersonContainer vm)
+        {
+            return await _saveOrderForPersonManager.SaveTransactionAsync(SaveOrderForPerson, vm);
+        }
 
+        private async Task<OrderForPersonContainer> SaveOrderForPerson(OrderForPersonContainer vm)
+        {
+            var orderId = await AddOrderForPerson(vm.Order, vm.Order.ClientId);
+            await AddOrderDetails(vm.OrderDetail, orderId);
+            return vm;
+        }
         private async Task<OrderContainer> SaveOrder(OrderContainer vm)
         {
             var orderId = await AddOrder(vm.Order,vm.Client.Id);
             await AddOrderDetails(vm.OrderDetail,orderId);
             return vm;
         }
-
+        private async Task<int> AddOrderForPerson(OrderForPersonVM ordervm, int clientId)
+        {
+            var order = _mapper.Map<Order>(ordervm);
+            order.ClientId = clientId;
+            await _db.Orders.AddAsync(order);
+            await _db.SaveChangesAsync();
+            Order.GenerateSerial(order);
+            await _db.SaveChangesAsync();
+            return order.Id;
+        }
         private async Task<int> AddOrder(OrderVM ordervm,int clientId)
         {
             var order = _mapper.Map<Order>(ordervm);

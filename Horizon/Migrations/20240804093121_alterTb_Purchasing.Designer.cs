@@ -4,6 +4,7 @@ using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Horizon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240804093121_alterTb_Purchasing")]
+    partial class alterTb_Purchasing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -574,9 +576,6 @@ namespace Horizon.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AmountStoreItem")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -1008,9 +1007,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3406),
+                            DateCreated = new DateTime(2024, 8, 4, 12, 31, 20, 399, DateTimeKind.Local).AddTicks(627),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3363),
+                            LastModified = new DateTime(2024, 8, 4, 12, 31, 20, 399, DateTimeKind.Local).AddTicks(577),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
