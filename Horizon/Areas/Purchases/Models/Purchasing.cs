@@ -13,7 +13,10 @@ namespace Horizon.Areas.Purchases.Models
         public int SupplierId { get; set; }
         [ForeignKey("SupplierId")]
         public Supplier Supplier { get; set; }
-      
+        public int? PurchaseOrderId { get; set; }
+        [ForeignKey("PurchaseOrderId")]
+        public PurchaseOrder? PurchaseOrder { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
@@ -27,6 +30,7 @@ namespace Horizon.Areas.Purchases.Models
         [ForeignKey(nameof(StoreItem))]
         public int? StoreItemId { get; set; }
         public decimal PriceItemsRaw { get; set; }
+        public int AmountStoreItem { get; set; }
 
         public override string ToString()
         {

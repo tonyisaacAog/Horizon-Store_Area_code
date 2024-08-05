@@ -17,7 +17,7 @@ namespace Horizon.Areas.Purchases.ViewModel
         public string? InvoiceNum { get; set; }
         public int? StoreItemId { get; set; }
         public decimal PriceItemsRaw { get; set; }
-
+        public int AmountStoreItem { get; set; }
 
         public void CreateMapping(Profile configuration)
         {
