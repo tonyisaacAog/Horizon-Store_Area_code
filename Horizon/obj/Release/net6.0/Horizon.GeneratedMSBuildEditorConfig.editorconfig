@@ -112,6 +112,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcT3JkZXJzXFZpZXdzXE9yZGVyXE1hbmFnZU9yZGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Orders/Views/Order/ManageOrderForPerson.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcT3JkZXJzXFZpZXdzXE9yZGVyXE1hbmFnZU9yZGVyRm9yUGVyc29uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Orders/Views/Order/OrderDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcT3JkZXJzXFZpZXdzXE9yZGVyXE9yZGVyRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -146,6 +150,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Purchases/Views/Home/ManagePurchaseForProduct.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcUHVyY2hhc2VzXFZpZXdzXEhvbWVcTWFuYWdlUHVyY2hhc2VGb3JQcm9kdWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Purchases/Views/PurchaseOrder/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcUHVyY2hhc2VzXFZpZXdzXFB1cmNoYXNlT3JkZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Purchases/Views/PurchaseOrder/ManagePurchaseOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcUHVyY2hhc2VzXFZpZXdzXFB1cmNoYXNlT3JkZXJcTWFuYWdlUHVyY2hhc2VPcmRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Purchases/Views/Reports/PurchaesBetweenDate.cshtml]
@@ -268,6 +280,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RvcmVcVmlld3NcUmVwb3J0c1xHZXRBbW91bnRCYWxhbmNlU3RvcmVJdGVtTm90Q29sbGVjdEZyb21QdXJjaGFzZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Store/Views/Reports/GetAmountBalanceStoreItemNotCollectPurchQty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RvcmVcVmlld3NcUmVwb3J0c1xHZXRBbW91bnRCYWxhbmNlU3RvcmVJdGVtTm90Q29sbGVjdFB1cmNoUXR5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Areas/Store/Views/Reports/GetAmountBalanceStoreItemRaw.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RvcmVcVmlld3NcUmVwb3J0c1xHZXRBbW91bnRCYWxhbmNlU3RvcmVJdGVtUmF3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -378,6 +394,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Views/Shared/EditorTemplates/ItemRawTypeList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xJdGVtUmF3VHlwZUxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Views/Shared/EditorTemplates/PurchaseOrderLst.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVkaXRvclRlbXBsYXRlc1xQdXJjaGFzZU9yZGVyTHN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Company/Horizon-Store_Area_code/Horizon-Store_Area_code/Horizon/Views/Shared/EditorTemplates/PurchasingList.cshtml]
