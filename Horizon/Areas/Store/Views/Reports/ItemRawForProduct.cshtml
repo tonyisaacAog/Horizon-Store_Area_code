@@ -1,61 +1,89 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model TransactionRawContainerForProduct
 @{
+    var title = "كارت صنف لمستلزمات منتج";
 }
-@model TransactionRawContainerForProduct
-<form asp-controller="Reports" asp-action="ItemRawForProduct" method="post">
-    <div class="row">
-        <div class="col-6">
-            <div class="form-group">
-                <label class="form-label">تاريخ البداية</label>
-                <input class=" smallDate form-control" name="StartDate" />
+<card title=@title addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <form asp-controller="Reports" asp-action="ItemRawForProduct" method="post">
+        <div class="row justify-content-center aling-items-center">
+            <div class="col-12">
+                @Html.EditorFor(obj=>obj.Search.StoreItemId,"StoreItemsList", new
+                {
+                htmlAttributes = new
+                {
+                @name = "StoreItemId",
+                @id = "StoreItemId",
+                @class = "form-select"
+                }
+                })
             </div>
-        </div>
-        <div class="col-6">
-            <div class="form-group">
-                <label class="form-label">تاريخ النهاية</label>
-                <input class=" smallDate form-control" name="EndDate" />
-            </div>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary  w-25 mx-auto">تحميل كارت الصنف لمستلزمات المنتج</button>
-</form>
-
-
-<div class="row">
-    @foreach( var item in Model.StoreItemRawTransactions )
-    {
-        <div class="col-6">
-            <div class="card">
-                
-                <div class="card-body">
-                    <table class="table table-striped table-bordered table-hover ">
-                        <thead>
-                            <tr>
-                                <th>العنصر</th>
-                                <th>التاريخ</th>
-                                <th>الكمية قبل</th>
-                                <th>الكمية المستخدمة</th>
-                                <th>الكمية بعد</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach( var itemRaw in item.StoreItemRawTransactions )
-                            {
-                                <tr>
-                                    <td>@itemRaw.StoreItemRawName</td>
-                                    <td>@itemRaw.TransDate</td>
-                                    <td>@itemRaw.AmountBalanceAfter</td>
-                                    <td>@itemRaw.QTY</td>
-                                    <td>@itemRaw.QtyAfter</td>
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label">تاريخ البداية</label>
+                    <input class=" smallDate form-control" name="StartDate" value="@Model.Search.StartDate" />
                 </div>
             </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label">تاريخ النهاية</label>
+                    <input class=" smallDate form-control" name="EndDate" value="@Model.Search.EndDate" />
+                </div>
+            </div>
+            <div class="col-12 text-center mt-2">
+                <button type="submit" class="btn btn-primary  w-25 mx-auto">تحميل كارت الصنف لمستلزمات المنتج</button>
+            </div>
         </div>
-    }
-</div>
+
+    </form>
+</card>
+
+
+
+<card title="تفاصيل المواد المستخدمة لتجميع المنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="row">
+        @foreach (var item in Model.StoreItemRawTransactions)
+        {
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover ">
+                            <thead>
+                                <tr>
+                                    <th style="width:5%">#</th>
+                                    <th style="width:40%">العنصر</th>
+                                    <th style="width:15%">التاريخ</th>
+                                    <th style="width:15%">الكمية قبل</th>
+                                    <th style="width:15%">الكمية المستخدمة</th>
+                                    <th style="width:15%">الكمية بعد</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var itemRaw in item.StoreItemRawTransactions)
+                                {
+                                    <tr>
+                                        <td>@itemRaw.StoreItemId</td>
+                                        <td>@itemRaw.StoreItemRawName</td>
+                                        <td>@itemRaw.TransDate</td>
+                                        <td>@itemRaw.AmountBalanceAfter</td>
+                                        <td>@itemRaw.QTY</td>
+                                        <td>@itemRaw.QtyAfter</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</card>
+
+@section Scripts{
+    <script>
+        $("#StoreItemsSelect2").select2();
+
+    </script>
+}

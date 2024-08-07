@@ -1,6 +1,8 @@
 ﻿using BaseEntities;
 using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Orders.Models;
+using Horizon.Areas.Purchases.Models;
+using Horizon.Areas.Sales.Models;
 using Horizon.Areas.Store.Models.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyModel;
@@ -36,7 +38,37 @@ namespace Horizon.Data
                         DateCreated = DateTime.Now,
                         ModifiedBy = "",
                         CreatedBy = ""
-                    }) ;
+                    });
+            builder.Entity<Client>().HasData(
+              new Client()
+              {
+                  Id = 1,
+                  ClientName = "عميل عام",
+                  ClientNameAr = "عميل عام",
+                  Email = "",
+                  Phone1 = "",
+                  Phone2 = "",
+                  Phone3 = "",
+                  LastModified = DateTime.Now,
+                  DateCreated = DateTime.Now,
+                  ModifiedBy = "",
+                  CreatedBy = ""
+              });
+            builder.Entity<Supplier>().HasData(
+             new Supplier()
+             {
+                 Id = 1,
+                 SupplierName = "مورد عام",
+                 SupplierNameAr = "مورد عام",
+                 Email = "",
+                 Phone1 = "",
+                 Phone2 = "",
+                 Phone3 = "",
+                 LastModified = DateTime.Now,
+                 DateCreated = DateTime.Now,
+                 ModifiedBy = "",
+                 CreatedBy = ""
+             });
         }
         public void SetGlobalQuery<T>(ModelBuilder builder) where T : BaseEntity
         {

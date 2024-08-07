@@ -87,7 +87,6 @@ namespace Horizon.Areas.Store.Controllers.Reports
         [HttpPost]
         public async Task<IActionResult> ItemRawForProduct([FromForm] SearchForProductVM search)
         {
-            search.StoreItemId = 1;
             var result = await _reportManager.GetTransactionItemRawForManufactProduct(search);
             return View(result);
         }
