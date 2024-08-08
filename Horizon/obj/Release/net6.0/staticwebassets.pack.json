@@ -69,6 +69,14 @@
       "PackagePath": "staticwebassets\\APP\\Manufacturing\\reports\\ManufacturingReport.js"
     },
     {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\OrderForPerson\\OrderContainer.js",
+      "PackagePath": "staticwebassets\\APP\\OrderForPerson\\OrderContainer.js"
+    },
+    {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\OrderForPerson\\OrderValidationRules.js",
+      "PackagePath": "staticwebassets\\APP\\OrderForPerson\\OrderValidationRules.js"
+    },
+    {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Orders\\ConfigurationContainer.js",
       "PackagePath": "staticwebassets\\APP\\Orders\\ConfigurationContainer.js"
     },
@@ -91,6 +99,14 @@
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Orders\\OrderValidationRules.js",
       "PackagePath": "staticwebassets\\APP\\Orders\\OrderValidationRules.js"
+    },
+    {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\PurchaseOrders\\PurchaseOrderContainer.js",
+      "PackagePath": "staticwebassets\\APP\\PurchaseOrders\\PurchaseOrderContainer.js"
+    },
+    {
+      "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\PurchaseOrders\\PurchaseOrderValidateRules.js",
+      "PackagePath": "staticwebassets\\APP\\PurchaseOrders\\PurchaseOrderValidateRules.js"
     },
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Purchases\\PurchaseContainer.js",
