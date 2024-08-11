@@ -1,6 +1,6 @@
 ﻿@model List<StoreItemRawAmountReportsVM>
 @{
-    var title = "ارصدة المستلزمات";
+    var title = "ارصدة الخامات والمستلزمات العامة";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
     var warning = (bool)ViewBag.WarningLimit;

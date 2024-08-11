@@ -54,12 +54,19 @@ namespace Horizon.Areas.Store.Controllers.Reports
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectFromPurchase()
         {
             var result = new AmountNotCollectReportContainer();
+            ViewBag.Errors = string.Empty;
             return View(result);
         }
         [HttpPost]
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectFromPurchase([FromForm] SearchForProductVM search)
         {
+            
             var result = new AmountNotCollectReportContainer();
+            if(string.IsNullOrEmpty(search.StartDate)|| string.IsNullOrEmpty(search.EndDate) )
+            {
+                ViewBag.Errors ="اختر التاريخ";
+                return View(result);
+            }
             var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchase(search);
             result.Search = search;
             result.Items = storeItemBalance;
@@ -68,12 +75,18 @@ namespace Horizon.Areas.Store.Controllers.Reports
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectPurchQty()
         {
             var result = new AmountNotCollectReportContainer();
+            ViewBag.Errors = string.Empty;
             return View(result);
         }
         [HttpPost]
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectPurchQty([FromForm] SearchForProductVM search)
         {
             var result = new AmountNotCollectReportContainer();
+            if( string.IsNullOrEmpty(search.StartDate) || string.IsNullOrEmpty(search.EndDate) )
+            {
+                ViewBag.Errors = "اختر التاريخ";
+                return View(result);
+            }
             var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchaseQty(search);
             result.Search = search;
             result.Items = storeItemBalance;

@@ -4,8 +4,12 @@
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model.Items);
 }
-
-@section PageHeading{
+@if (!string.IsNullOrEmpty(ViewBag.Errors))
+{
+    <partial name="_AlertText" model="@ViewBag.Errors" />
+    ViewBag.Errors = string.Empty;
+}
+@section PageHeading {
     <partial name="_PageTitle" model="@title" />
 }
 
@@ -24,18 +28,18 @@
                         }
                     })
             </div>
-           @*  <div class="col-6">
+            <div class="col-6">
                 <div class="form-group">
                     <label class="form-label">تاريخ البداية</label>
-                    <input class=" smallDate form-control" value="@Model.Search.StartDate" name="StartDate" id="StartDate" />
+                    <input class=" smallDate form-control" value="@Model.Search.StartDate" name="StartDate" id="StartDate" required />
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
                     <label class="form-label">تاريخ النهاية</label>
-                    <input class=" smallDate form-control" value="@Model.Search.EndDate" name="EndDate" id="EndDate" />
+                    <input class=" smallDate form-control" value="@Model.Search.EndDate" name="EndDate" id="EndDate" required />
                 </div>
-            </div> *@
+            </div>
             <div class="col-12 text-center mt-2">
                 <button type="submit" class="btn btn-primary  w-25 mx-auto">بحث</button>
             </div>
@@ -78,7 +82,8 @@
         var client = new GeneralTable(@Html.Raw(data));
         ko.applyBindings(client);
     </script>
-
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
 }
 

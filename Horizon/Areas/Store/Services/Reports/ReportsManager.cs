@@ -85,7 +85,9 @@ namespace Horizon.Areas.Store.Services.Reports
             var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
             foreach (var storeItem in storeWithStoreItemLst )
             {
-                var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id).ToListAsync();
+                var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id
+                                   && obj.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
+                                   && obj.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj => obj.StoreItemsRaw)
                     .Where(obj => obj.StoreItemId == storeItem.Id && obj.StoreItemsRaw.RawItemTypeId == 1).ToListAsync();
                 foreach (var purchase in purchases)
@@ -111,7 +113,10 @@ namespace Horizon.Areas.Store.Services.Reports
             var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
             foreach( var storeItem in storeWithStoreItemLst )
             {
-                var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id).ToListAsync();
+                var purchases = await _db.Purchasings
+                        .Where(obj => obj.StoreItemId == storeItem.Id
+                                   && obj.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
+                                   && obj.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj=>obj.StoreItemsRaw)
                     .Where(obj => obj.StoreItemId == storeItem.Id&&obj.StoreItemsRaw.RawItemTypeId ==1).ToListAsync();
                 foreach( var purchase in purchases )

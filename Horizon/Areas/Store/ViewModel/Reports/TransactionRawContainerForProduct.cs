@@ -1,4 +1,6 @@
 ﻿using Horizon.Areas.Store.ViewModel.ItemRawReport;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Horizon.Areas.Store.ViewModel.Reports
 {
@@ -14,8 +16,11 @@ namespace Horizon.Areas.Store.ViewModel.Reports
     }
     public class SearchForProductVM
     {
-        public int StoreItemId { get; set; } 
-        public string StartDate { get; set; } 
+
+        public int StoreItemId { get; set; } = 0;
+        [Required]
+        public string StartDate { get; set; }
+        [Required]
         public string EndDate { get; set; } 
     }
 }
