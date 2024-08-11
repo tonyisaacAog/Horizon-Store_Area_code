@@ -47,19 +47,38 @@ namespace Horizon.Areas.Store.Controllers.Reports
 
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollect()
         {
-            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectInGeneral();
+            var storeItemBalance = new AmountNotCollectReportContainer();
             return View(storeItemBalance);
         }
+        [HttpGet]
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectFromPurchase()
         {
-            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchase();
-            return View(storeItemBalance);
+            var result = new AmountNotCollectReportContainer();
+            return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectFromPurchase([FromForm] SearchForProductVM search)
+        {
+            var result = new AmountNotCollectReportContainer();
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchase(search);
+            result.Search = search;
+            result.Items = storeItemBalance;
+            return View(result);
         }
         public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectPurchQty()
         {
-            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchaseQty();
-            return View(storeItemBalance);
-        } 
+            var result = new AmountNotCollectReportContainer();
+            return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetAmountBalanceStoreItemNotCollectPurchQty([FromForm] SearchForProductVM search)
+        {
+            var result = new AmountNotCollectReportContainer();
+            var storeItemBalance = await _reportManager.GetAmountBalanceStoreItemNotCollectFromPurchaseQty(search);
+            result.Search = search;
+            result.Items = storeItemBalance;
+            return View(result);
+        }
         public async Task<IActionResult> ItemRawIndex(int Id)
         {
             var card = await _reportManager.GetDataStoreItemRaw(Id);
@@ -85,9 +104,10 @@ namespace Horizon.Areas.Store.Controllers.Reports
             return View(new TransactionRawContainerForProduct());
         }
         [HttpPost]
-        public async Task<IActionResult> ItemRawForProduct([FromForm] SearchForProductVM search)
+        public async Task<IActionResult> ItemRawForProduct([FromForm]SearchForProductVM search)
         {
             var result = await _reportManager.GetTransactionItemRawForManufactProduct(search);
+            
             return View(result);
         }
     }

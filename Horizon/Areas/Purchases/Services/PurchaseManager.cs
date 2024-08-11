@@ -3,6 +3,7 @@ using Data.Services;
 using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Purchases.ViewModel;
+using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
 using Horizon.Areas.Store.Services;
 using Horizon.Areas.Store.ViewModel.Main;
 using Horizon.Areas.Store.ViewModel.Transaction;
@@ -108,7 +109,16 @@ namespace Horizon.Areas.Purchases.Services
             {
                 throw new Exception("لا يمكن حفظ فاتورة مشتريات بدون اضافة مواد خام للفاتورة");
             }
+            // check purchase order
             var purchaseOrder = await _db.PurchaseOrders.FirstOrDefaultAsync(obj => obj.Id == vm.PurchaseOrderId);
+            if(purchaseOrder == null ) { throw new Exception("امر الانتاج غير موجود"); }
+            if(purchaseOrder.IsStoreInStock == true) { throw new Exception("امر الانتاج تم تفريغه"); }
+            var purchaseOrderDeails = await _db.PurchaseOrderDetails.FirstOrDefaultAsync(obj => obj.PurchaseOrderId == vm.PurchaseOrderId&&obj.StoreItemId == vm.StoreItem.Id);
+            if( purchaseOrderDeails == null ) { throw new Exception("المنتج الخام غير موجود فى امر الانتاج"); }
+            if( purchaseOrderDeails.IsCreatedASPurchasing==true ) { throw new Exception("المنتج الخام تم تفريغة امر الانتاج وتم عمل اذن اضافة بالمنتج"); }
+            if( purchaseOrderDeails.StoreItemAmount != vm.StoreItem.Quantity ) { throw new Exception("الكمية المضافة فى اذن اضافة خامات ليست كما هى فى امر الانتاج"); }
+
+
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
             NewPurchase.SupplierId = purchaseOrder.SupplierId;
             NewPurchase.PurchaseOrderId = purchaseOrder.Id;
@@ -116,7 +126,21 @@ namespace Horizon.Areas.Purchases.Services
             NewPurchase.PriceItemsRaw = vm.PurchaseInfo.PriceItemsRaw;
             NewPurchase.AmountStoreItem = vm.StoreItem.Quantity;
             await _db.AddAsync(NewPurchase);
+
+            //update item in purchase order 
+            purchaseOrderDeails.IsCreatedASPurchasing = true;
+            _db.Update(purchaseOrderDeails);
             await _db.SaveChangesAsync();
+
+            //update purchase order if all item collected convert it to true in is Store in Stock
+            var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
+            if( !exist )
+            {
+                purchaseOrder.IsStoreInStock = true;
+                _db.Update(purchaseOrder);
+                await _db.SaveChangesAsync();
+            }
+
             await _purchaseTransactionManager.DoPurchaseTransactionsForProduct(vm, NewPurchase.Id);
             return vm;
         }
@@ -131,9 +155,10 @@ namespace Horizon.Areas.Purchases.Services
         public async Task<PurchaseContainer> DetailsPurchase(int purchasesId)
         {
             PurchaseContainer purchaseContainer = new PurchaseContainer();
-            var purchase = _db.Purchasings.Include(s => s.Supplier).FirstOrDefault(p => p.Id == purchasesId);
+            var purchase = _db.Purchasings.Include(s => s.Supplier).Include(obj=>obj.PurchaseOrder).FirstOrDefault(p => p.Id == purchasesId);
             purchaseContainer.Supplier = _mapper.Map<SupplierVM>(purchase?.Supplier);
             purchaseContainer.PurchaseInfo = _mapper.Map<PurchaseInfoVM>(purchase);
+            purchaseContainer.PurchaseOrder = _mapper.Map<PurchaseOrderVM>(purchase?.PurchaseOrder);
             purchaseContainer.PurchaseDetails = await _purchaseTransactionManager.GetPurchasesDetails(purchasesId);
             return purchaseContainer;
         }

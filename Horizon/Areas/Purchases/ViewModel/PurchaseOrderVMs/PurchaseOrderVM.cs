@@ -24,7 +24,7 @@ namespace Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs
                 .ForMember(x => x.Date, y => y.MapFrom(obj => obj.PurchaseOrderDate.ToEgyptionDate()));
             configuration.CreateMap<PurchaseOrder, PurchaseOrderVM>()
                 .ForMember(x => x.PurchaseOrderDate, y => y.MapFrom(obj => obj.Date.ToEgyptianDate()))
-                .ForMember(x => x.SupplierName, y => y.MapFrom(obj => obj.Supplier.SupplierName));
+                .ForMember(x => x.SupplierName, y => y.MapFrom(obj => obj.Supplier.SupplierName??"N/A"));
 
         }
     }

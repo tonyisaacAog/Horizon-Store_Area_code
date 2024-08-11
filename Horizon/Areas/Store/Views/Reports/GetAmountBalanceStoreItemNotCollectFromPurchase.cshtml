@@ -1,13 +1,49 @@
-﻿@model List<StoreItemAmountNotCollectReportVM>
+﻿@model AmountNotCollectReportContainer
 @{
     var title = "ارصدة المنتجات الغير مجمعة";
     ViewData["Title"] = title;
-    string data = JsonConvert.SerializeObject(Model);
+    string data = JsonConvert.SerializeObject(Model.Items);
 }
 
 @section PageHeading{
     <partial name="_PageTitle" model="@title" />
 }
+
+<card title=@title addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <form asp-controller="Reports" asp-action="GetAmountBalanceStoreItemNotCollectFromPurchase" method="post">
+        <div class="row justify-content-center aling-items-center">
+            <div class="col-12">
+                @Html.Editor("StoreItemId","StoreItemsList",new
+                    {
+                        htmlAttributes = new
+                        {
+                            @name = "StoreItemId",
+                            @id = "StoreItemId",
+                            @class = "form-select"
+                        }
+                    })
+            </div>
+           @*  <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label">تاريخ البداية</label>
+                    <input class=" smallDate form-control" value="@Model.Search.StartDate" name="StartDate" id="StartDate" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label">تاريخ النهاية</label>
+                    <input class=" smallDate form-control" value="@Model.Search.EndDate" name="EndDate" id="EndDate" />
+                </div>
+            </div> *@
+            <div class="col-12 text-center mt-2">
+                <button type="submit" class="btn btn-primary  w-25 mx-auto">بحث</button>
+            </div>
+        </div>
+
+    </form>
+</card>
+
 
 
 

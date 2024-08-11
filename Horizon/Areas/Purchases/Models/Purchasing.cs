@@ -31,7 +31,7 @@ namespace Horizon.Areas.Purchases.Models
         public int? StoreItemId { get; set; }
         public decimal PriceItemsRaw { get; set; }
         public int AmountStoreItem { get; set; }
-
+        public string? Notes { get; set; }
         public override string ToString()
         {
             return $"اسم العميل :{Supplier?.SupplierName} | تاريخ الفاتورة : {PurchasingDate.ToEgyptianDate()} | رقم الفاتورة : {InvoiceNum}";

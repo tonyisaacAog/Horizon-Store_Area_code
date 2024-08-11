@@ -9,6 +9,7 @@ namespace Horizon.Areas.Purchases.Models
     {
         public decimal StoreItemAmount { get; set; }
         public string? Notes { get; set; }
+        public bool IsCreatedASPurchasing { get; set; } = false;
         public int StoreItemId { get; set; }
         [ForeignKey(nameof(StoreItemId))]
         public StoreItem StoreItem { get; set; }

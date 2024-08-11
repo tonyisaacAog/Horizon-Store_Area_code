@@ -535,6 +535,9 @@ namespace Horizon.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsCreatedASPurchasing")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -597,6 +600,9 @@ namespace Horizon.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PriceItemsRaw")
                         .HasColumnType("decimal(18,2)");
@@ -682,6 +688,23 @@ namespace Horizon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Finance_PurchasingModule_Supplier");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3867),
+                            Email = "",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3864),
+                            ModifiedBy = "",
+                            Phone1 = "",
+                            Phone2 = "",
+                            Phone3 = "",
+                            SupplierName = "مورد عام",
+                            SupplierNameAr = "مورد عام"
+                        });
                 });
 
             modelBuilder.Entity("Horizon.Areas.Sales.Models.Client", b =>
@@ -739,6 +762,23 @@ namespace Horizon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Finance_SalesModule_Client");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClientName = "عميل عام",
+                            ClientNameAr = "عميل عام",
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3832),
+                            Email = "",
+                            IsDeleted = false,
+                            LastModified = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3828),
+                            ModifiedBy = "",
+                            Phone1 = "",
+                            Phone2 = "",
+                            Phone3 = ""
+                        });
                 });
 
             modelBuilder.Entity("Horizon.Areas.Sales.Models.Sale", b =>
@@ -1008,9 +1048,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3406),
+                            DateCreated = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3555),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 4, 13, 19, 24, 763, DateTimeKind.Local).AddTicks(3363),
+                            LastModified = new DateTime(2024, 8, 10, 13, 32, 58, 31, DateTimeKind.Local).AddTicks(3510),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });

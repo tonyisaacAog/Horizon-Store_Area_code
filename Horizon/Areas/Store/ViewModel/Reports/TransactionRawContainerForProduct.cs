@@ -14,8 +14,8 @@ namespace Horizon.Areas.Store.ViewModel.Reports
     }
     public class SearchForProductVM
     {
-        public int StoreItemId { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public int StoreItemId { get; set; } 
+        public string StartDate { get; set; } 
+        public string EndDate { get; set; } 
     }
 }

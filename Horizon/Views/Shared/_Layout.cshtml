@@ -64,31 +64,44 @@
                     <div class="nav">
 
 
-                        <div class="sb-sidenav-menu-heading">العملاء والمواردين</div>
-                        <a class="nav-link" href="~/Sales/Client/Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            قائمة العملاء
-                        </a>
-                        <a class="nav-link" href="~/Purchases/Supplier/Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            قائمة الموردين
-                        </a>
 
-
-                        <a class="nav-link collapsed" href="#"
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
                            data-bs-toggle="collapse"
-                           data-bs-target="#ProductSettings"
-                           aria-expanded="false"
+                           data-bs-target="#ClientAndSupplierSettings"
+                           aria-expanded="false" style="text-decoration:none"
                            aria-controls="pagesCollapseAuth">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
+                            العملاء والمواردين
+                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="ClientAndSupplierSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="~/Sales/Client/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    قائمة العملاء
+                                </a>
+                                <a class="nav-link" href="~/Purchases/Supplier/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    قائمة الموردين
+                                </a>
+                            </nav>
+                        </div>
+
+
+
+
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#PurchaseOrderSettings"
+                           aria-expanded="false" style="text-decoration:none"
+                           aria-controls="pagesCollapseAuth">
                             امر الانتاج
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="ProductSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                        <div class="collapse" id="PurchaseOrderSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="~/Purchases/PurchaseOrder/ManagePurchaseOrder">
                                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                     امر انتاج جديد
+                                    انشاء امر انتاج
                                 </a>
                                 <a class="nav-link" href="~/Purchases/PurchaseOrder/Index">
                                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -96,38 +109,46 @@
                                 </a>
                             </nav>
                         </div>
-                      
 
-                        <div class="sb-sidenav-menu-heading">اوامر الشغل</div>
-                        
-                        <a class="nav-link" href="~/Orders/Order/ManageOrderForPerson">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            انشاء امر شغل
-                        </a>
-                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            امر شغل - جديد
-                        </a>
-                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Process">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            امر شغل - يتم المعالجة
-                        </a>
-                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Done">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            امر شغل - تم التجهيز
-                        </a>
-                        <a class="nav-link" href="~/Orders/Order/ProcessIndex">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            تحت التنفيذ
-                        </a>
 
-                        <div class="sb-sidenav-menu-heading">المخازن</div>
-                        <a class="nav-link collapsed" href="#"
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#OrderSettings"
+                           aria-expanded="false" style="text-decoration:none"
+                           aria-controls="pagesCollapseAuth">
+                            اوامر الشغل
+                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="OrderSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="~/Orders/Order/ManageOrderForPerson">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    انشاء امر شغل
+                                </a>
+                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    امر شغل - جديد
+                                </a>
+                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Process">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    امر شغل - يتم المعالجة
+                                </a>
+                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Done">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    امر شغل - تم التجهيز
+                                </a>
+                                <a class="nav-link" href="~/Orders/Order/ProcessIndex">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    تحت التنفيذ
+                                </a>
+                            </nav>
+                        </div>
+
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
                            data-bs-toggle="collapse"
                            data-bs-target="#ProductSettings"
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
                             المنتجات
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
@@ -148,12 +169,11 @@
                                 </a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#"
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
                            data-bs-toggle="collapse"
                            data-bs-target="#StoreSettings"
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
                             اعدادات المخزن
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
@@ -184,54 +204,64 @@
                         </div>
 
 
-                        <div class="sb-sidenav-menu-heading">الفواتير</div>
-                        <a class="nav-link" href="~/Purchases/Home/Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            فواتير تخزين المستلزمات
-                        </a>
-                        <a class="nav-link" href="~/Sales/Home/Index">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            فواتير صرف منتج
-                        </a>
 
-                        <div class="sb-sidenav-menu-heading">التقارير</div>
-                        <a class="nav-link collapsed" href="#"
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
                            data-bs-toggle="collapse"
-                           data-bs-target="#ClientReports"
+                           data-bs-target="#BillSettings"
+                           aria-expanded="false" style="text-decoration:none"
+                           aria-controls="pagesCollapseAuth">
+                            الاذون
+                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="BillSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="~/Purchases/Home/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    اذون خامات ومستلزمات عامة
+                                </a>
+                                <a class="nav-link" href="~/Sales/Home/Index">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    اذون صرف المنتجات
+                                </a>
+                            </nav>
+                        </div>
+
+
+                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ReportSettings"
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
                             التقارير
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="ClientReports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                        <div class="collapse" id="ReportSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                
-                                <a class="nav-link" href="~/Store/Reports/ItemRawForProduct">تقرير كارت صنف المنتج </a>
-                                <a class="nav-link" href="~/Sales/Reports/SalesBetweenDate">تقرير مبيعات المنتج </a>
-                                <a class="nav-link" href="~/Purchases/Reports/PurchaesBetweenDate">تقرير مشتريات المسلتزمات </a>
+
+                                <a class="nav-link" href="~/Store/Reports/ItemRawForProduct"> كارت صنف المنتج </a>
+                                <a class="nav-link" href="~/Sales/Reports/SalesBetweenDate"> اذون صرف المنتجات  </a>
+                                <a class="nav-link" href="~/Purchases/Reports/PurchaesBetweenDate">اذون الخامات والمسلتزمات </a>
                                 <a class="nav-link" href="~/Manufacturing/Reports/ManufacturingReport"> تقرير تجميع منتج</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemInStore">تقرير جرد المنتجات</a>
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemInStore">تقرير جرد المخازن للمنتجات </a>
                                 <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItem">تقرير ارصدة المنتجات</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemRaw">تقرير ارصدة المستلزمات</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollect">تقرير ارصدة منتجات غير مجمعة</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectFromPurchase">تقرير ارصدة منتجات غير مجمعة (سعر الصاج)</a>
                                 <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectPurchQty">تقرير ارصدة منتجات (سعر الصاج)</a>
-                                
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemRaw">تقرير ارصدة الخامات والمستلزمات</a>
+                                @* <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollect">تقرير ارصدة منتجات غير مجمعة</a> *@
+                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectFromPurchase"> تقرير ارصدة منتجات غير مجمعة (سعر الصاج)</a>
+
                             </nav>
                         </div>
 
 
                         <a class="sb-sidenav-menu-heading nav-link collapsed" href="#"
                            data-bs-toggle="collapse"
-                           data-bs-target="#Users"
+                           data-bs-target="#UserSettings"
                            aria-expanded="false"
                            aria-controls="pagesCollapseAuth">
-                            <div class="sb-nav-link-icon"><i class="fab fa-product-hunt"></i></div>
                             المستخدمين
                             <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="Users" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                        <div class="collapse" id="UserSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="~/Settings/UserAdmin/UserManagment">المستخدمين</a>
                                 <a class="nav-link" href="~/Settings/UserAdmin/RoleManagement">الصلاحيات</a>
@@ -254,7 +284,7 @@
                                 data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
-                @await RenderSectionAsync("PageHeading", required: false)
+                @await RenderSectionAsync("PageHeading",required: false)
 
 
                 <div class="container-fluid p-4">
@@ -291,7 +321,7 @@
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js" crossorigin="anonymous"></script>
 
 
-   @*  <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+    @*  <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
@@ -345,7 +375,7 @@
 
         });
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts",required: false)
 
 </body>
 </html>

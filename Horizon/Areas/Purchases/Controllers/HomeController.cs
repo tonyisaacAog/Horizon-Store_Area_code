@@ -1,6 +1,8 @@
 ﻿using Horizon.Areas.Purchases.Services;
 using Horizon.Areas.Purchases.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Horizon.Areas.Purchases.Controllers
 {
@@ -8,10 +10,13 @@ namespace Horizon.Areas.Purchases.Controllers
     public class HomeController : Controller
     {
         private readonly PurchaseManager _purchaseManager;
+        private readonly PurchaseOrderManager _purchaseOrderManager;
 
-        public HomeController(PurchaseManager purchaseManager)
+        public HomeController(PurchaseManager purchaseManager,PurchaseOrderManager purchaseOrderManager)
         {
             _purchaseManager = purchaseManager;
+            _purchaseOrderManager = purchaseOrderManager;
+
         }
 
         public async Task<IActionResult> Index()
@@ -44,7 +49,16 @@ namespace Horizon.Areas.Purchases.Controllers
 
         //code for create purchases for specific product 
         public async Task<IActionResult> ManagePurchaseForProduct(int Id)
-      => View(await _purchaseManager.NewPurchaseForProduct(Id));
+        {
+            var purchaseOrders = await _purchaseOrderManager.GetAllNotStoreInStockContainStoreItem(Id);
+            ViewBag.PurchaseOrders = purchaseOrders
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.PurchaseOrderNumber + " " + x.SupplierName
+                }).ToArray();
+            return View(await _purchaseManager.NewPurchaseForProduct(Id));
+        }
         public async Task<JsonResult> SavePurchaseForProduct([FromBody] PurchaseContainerForProduct vm)
         {
             var feedback = await _purchaseManager.SavePurchaseForProduct(vm);

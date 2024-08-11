@@ -1,6 +1,6 @@
 ﻿@model PurchaseContainer
 @{
-    var title = "تفاصيل فاتورة تخزين مستلزمات";
+    var title = "تفاصيل اذن اضافة خامات";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -18,13 +18,35 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>اسم المورد</label>  :
-                    <span data-bind="text:Supplier.SupplierName" ></span>
+                    <input class="form-control" readonly data-bind="value:Supplier.SupplierName" />
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
                     <label>التليفون</label>  :
-                    <span data-bind="text:Supplier.Phone1"  ></span>
+                    <input readonly class="form-control" data-bind="value:Supplier.Phone1"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</card>
+
+<card title="بيانات امر الانتاج" addational-class="fa-list-ol" 
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم امر الانتاج</label>  :
+                    <input class="form-control" readonly data-bind="value:PurchaseOrder.PurchaseOrderNumber"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ امر الانتاج</label>  :
+                    <input class="form-control" readonly  data-bind="value:PurchaseOrder.PurchaseOrderDate"/>
                 </div>
             </div>
 
@@ -82,7 +104,7 @@
                 <td></td>
                 <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
                 <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
+                <td><span  class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
             </tr>
         </tbody>
     </table>
@@ -95,14 +117,20 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    <label>تاريخ التخزين للمستلزمات</label>  :
-                    <span  data-bind="text:PurchaseInfo.PurchasingDate"><</span>
+                    <label>تاريخ الفاتورة</label>  :
+                    <span class="form-control" data-bind="text:PurchaseInfo.PurchasingDate"><</span>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label>رقم فاتورة المورد</label>  :
-                    <span data-bind="text:PurchaseInfo.InvoiceNum()==''?'غير متاح':PurchaseInfo.InvoiceNum"></span>
+                    <label>رقم الفاتورة </label>  :
+                    <span class="form-control"  data-bind="text:PurchaseInfo.InvoiceNum()==''?'غير متاح':PurchaseInfo.InvoiceNum"></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>ملاحظات</label>  :
+                    <textarea class="form-control" rows="5" readonly data-bind="text:PurchaseInfo.Notes"></textarea>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KhR2Vrd2mVJKzlfvaxWL8Y2L2833FnOEKH8igVEnAmdLofTl8PUisRvp8hJj+vRoM3edBHsX6ScKlm1LRLVduw==",
+  "dgSpecHash": "W5g5vqFpCpQ=",
   "success": true,
   "projectFilePath": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
   "expectedPackageFiles": [
@@ -281,5 +281,12 @@
     "C:\\Users\\anton\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\anton\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

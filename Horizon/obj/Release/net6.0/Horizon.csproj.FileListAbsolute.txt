@@ -682,7 +682,6 @@ D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\n
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\scopedcss\bundle\Horizon.styles.css
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\scopedcss\projectbundle\Horizon.bundle.scp.css
-D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.csproj.CopyComplete
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\refint\Horizon.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.pdb
@@ -692,3 +691,5 @@ D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\n
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\refs\Interop.MSDATASRC.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Interop.MSDATASRC.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.csproj.ResolveComReference.cache
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.sourcelink.json
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.csproj.Up2Date

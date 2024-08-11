@@ -4,7 +4,7 @@
 
 @model dynamic
 @{
-    var currencies = dbContext.PurchaseOrders.Include(obj=>obj.Supplier)
+    var currencies = dbContext.PurchaseOrders.Where(obj=>obj.IsStoreInStock==false).Include(obj=>obj.Supplier)
         .Select(x => new SelectListItem
         {
             Value = x.Id.ToString(),

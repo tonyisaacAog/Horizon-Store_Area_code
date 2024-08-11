@@ -9,7 +9,7 @@ namespace Horizon.Areas.Purchases.ViewModel
     {
         
         [Required, StringLength(100)]
-        public string SupplierName { get; set; }
+        public string SupplierName { get; set; } 
 
         [Required, StringLength(100)]
         public string SupplierNameAr { get; set; }

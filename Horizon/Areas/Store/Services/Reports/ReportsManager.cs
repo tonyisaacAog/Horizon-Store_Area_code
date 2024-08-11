@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Finance.CurrentAssetModule.Store.Model.Raw;
 using Finance.CurrentAssetModule.Store.Model.Settings;
+using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Store.Models.Raw;
 using Horizon.Areas.Store.Models.Settings;
 using Horizon.Areas.Store.ViewModel.ItemRawReport;
@@ -46,10 +47,14 @@ namespace Horizon.Areas.Store.Services.Reports
             return storeItemRawBalanceVM;
         }
 
-        public async Task<List<StoreItemAmountInStoreReportsVM>> GetAmountBalanceStoreItemInStore()
+        public async Task<List<StoreItemAmountInStoreReportsVM>> GetAmountBalanceStoreItemInStore(int storeLocationId=0)
         {
-            var storeWithStoreItem = await _db.StoreLocationsBalance.Include(obj => obj.StoreItemDetails).Include(obj => obj.Locations).ToListAsync();
-            var storeItemBalanceVM = _mapper.Map<List<StoreItemAmountInStoreReportsVM>>(storeWithStoreItem);
+            var storeWithStoreItem = _db.StoreLocationsBalance.Include(obj => obj.StoreItemDetails).Include(obj => obj.Locations).AsQueryable();
+
+            if( storeLocationId > 0 )
+                storeWithStoreItem = storeWithStoreItem.Where(obj => obj.LocationId == storeLocationId);
+                
+            var storeItemBalanceVM = _mapper.Map<List<StoreItemAmountInStoreReportsVM>>((await storeWithStoreItem.ToListAsync()));
             return storeItemBalanceVM;
         }
         public async Task<List<StoreItemAmountReportsVM>> GetAmountBalanceStoreItem()
@@ -71,11 +76,14 @@ namespace Horizon.Areas.Store.Services.Reports
             return storeItemNotCollectContainer;
         }
 
-         public async Task<List<StoreItemAmountNotCollectReportVM>> GetAmountBalanceStoreItemNotCollectFromPurchaseQty()
+         public async Task<List<StoreItemAmountNotCollectReportVM>> GetAmountBalanceStoreItemNotCollectFromPurchaseQty(SearchForProductVM searchvm)
         {
             var storeItemNotCollectContainer = new List<StoreItemAmountNotCollectReportVM>();
-            var storeWithStoreItem = await _db.StoreItems.ToListAsync();
-            foreach (var storeItem in storeWithStoreItem)
+            var storeWithStoreItem = _db.StoreItems.AsQueryable();
+            if( searchvm.StoreItemId > 0 )
+                storeWithStoreItem = storeWithStoreItem.Where(obj => obj.Id == searchvm.StoreItemId);
+            var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
+            foreach (var storeItem in storeWithStoreItemLst )
             {
                 var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj => obj.StoreItemsRaw)
@@ -94,11 +102,14 @@ namespace Horizon.Areas.Store.Services.Reports
             }
             return storeItemNotCollectContainer;
         }
-        public async Task<List<StoreItemAmountNotCollectReportVM>> GetAmountBalanceStoreItemNotCollectFromPurchase()
+        public async Task<List<StoreItemAmountNotCollectReportVM>> GetAmountBalanceStoreItemNotCollectFromPurchase(SearchForProductVM searchvm)
         {
             var storeItemNotCollectContainer = new List<StoreItemAmountNotCollectReportVM>();
-            var storeWithStoreItem = await _db.StoreItems.ToListAsync();
-            foreach( var storeItem in storeWithStoreItem )
+            var storeWithStoreItem = _db.StoreItems.AsQueryable();
+            if( searchvm.StoreItemId > 0 )
+                storeWithStoreItem = storeWithStoreItem.Where(obj => obj.Id == searchvm.StoreItemId);
+            var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
+            foreach( var storeItem in storeWithStoreItemLst )
             {
                 var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj=>obj.StoreItemsRaw)

@@ -1,0 +1,147 @@
+﻿@using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
+@model PurchaseOrderVM
+@{
+    var title = " امر انتاج ";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<partial name="_Messages" />
+
+@section PageHeading {
+    <partial name="_PageTitle" model="@title" />
+
+}
+
+
+
+<card title="بيانات امر الانتاج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>اسم المورد</label>
+                    <span data-bind="text:SupplierName" class="form-control"></span>
+                    @* @Html.Editor("Id","SupplierList",new
+                        {
+                            htmlAttributes = new
+                            {
+                                @data_bind = "value:SupplierId",
+                                @class = "form-select",
+                                @id = "SupplierId",
+                                @disabled = "disabled"
+                            }
+                        }) *@
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>رقم امر الانتاح</label>
+                    <span data-bind="text:PurchaseOrderNumber" class="form-control"></span>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>تاريخ امر الانتاح</label>
+                    <span data-bind="text:PurchaseOrderDate" class="form-control"></span>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>الكمية</label>
+                    <span disabled data-bind="text:TotalAmount" class="form-control"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+<card title="تفاصيل امر الانتاج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-light text-dark">
+
+            <tr>
+                <th>
+                    المنتج
+                </th>
+
+                <th style="width:10%">
+                    الكمية
+                </th>
+                <th>
+                    ملاحظات
+                </th>
+
+                @*     <th>
+                السعر الإجمالي
+                </th> *@
+
+            </tr>
+
+        </thead>
+        <tbody data-bind="foreach:PurchaseOrderDetails">
+            <tr data-bind="visible:RecordStatus()!=2">
+                <td>
+                    @* @Html.Editor("Id","StoreItemsList",new
+                        {
+                            htmlAttributes = new
+                            {
+                                @data_bind = "value:StoreItemId",
+                                @class = "form-select",
+                                @disabled = "disabled"
+                            }
+                        }) *@
+                    <span class="form-control" data-bind="text:StoreItemName"></span>
+
+                </td>
+
+                <td>
+                    <span class="form-control" data-bind="text:StoreItemAmount"></span>
+                </td>
+
+                <td>
+                    <textarea rows="1" readonly class="form-control" data-bind="text:Notes"></textarea>
+                </td>
+
+            </tr>
+        </tbody>
+
+    </table>
+</card>
+
+
+
+
+
+@section Scripts {
+    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
+    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
+    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
+    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
+    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
+    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
+    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
+    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
+    <script src="~/APP/PurchaseOrders/PurchaseOrderValidateRules.js" asp-append-version="true"></script>
+    <script src="~/APP/PurchaseOrders/PurchaseOrderContainer.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+        var purchaseOrder = new PurchaseOrderContainer(@Html.Raw(data));
+        ko.applyBindings(purchaseOrder);
+        ko.bindingHandlers.select2 = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                $(element).select2();
+            }
+        }
+        $("#SupplierId").select2();
+    </script>
+
+
+}

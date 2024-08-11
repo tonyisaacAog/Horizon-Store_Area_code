@@ -27,8 +27,12 @@ namespace Horizon.Areas.Purchases.Services
         }
         public async Task<List<PurchaseOrderVM>> GetAll()
             => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders.Include(s => s.Supplier).ToListAsync());
+        public async Task<List<PurchaseOrderVM>> GetAllNotStoreInStock()
+            => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders.Include(s => s.Supplier).Where(obj=>obj.IsStoreInStock==false).ToListAsync());
+        public async Task<List<PurchaseOrderVM>> GetAllNotStoreInStockContainStoreItem(int StoreItemId)
+          => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrderDetails.Include(obj=>obj.PurchaseOrder).ThenInclude(obj=>obj.Supplier).Where(obj=>obj.StoreItemId == StoreItemId&& obj.IsCreatedASPurchasing==false).Select(obj=>obj.PurchaseOrder).ToListAsync());
         public async Task<PurchaseOrderVM> PurchaseOrderDetails(int id)
-            =>  _mapper.Map<PurchaseOrderVM>(await _db.PurchaseOrders.Include(obj=>obj.PurchaseOrderDetails).FirstOrDefaultAsync(obj => obj.Id == id));
+            =>  _mapper.Map<PurchaseOrderVM>(await _db.PurchaseOrders.Include(obj=>obj.Supplier).Include(obj=>obj.PurchaseOrderDetails).ThenInclude(obj=>obj.StoreItem).FirstOrDefaultAsync(obj => obj.Id == id));
         public async Task<FeedBackWithMessages> SavePurchaseOrder(PurchaseOrderVM vm)
           => await _purchaseOrderSaveManager.SaveTransactionAsync(SavePurchaseOrderFunc, vm);
         private async Task<PurchaseOrderVM> SavePurchaseOrderFunc(PurchaseOrderVM vm)
@@ -46,6 +50,10 @@ namespace Horizon.Areas.Purchases.Services
 
         private async Task UpdatePurchaseOrder(PurchaseOrderVM vm)
         {
+
+            if( vm.IsStoreInStock ) throw new Exception("تم تفريغ امر الانتاج لايمكن التعديل عليه ");
+            var check = _db.PurchaseOrderDetails.Where(obj => obj.PurchaseOrderId == vm.Id).Any(obj => obj.IsCreatedASPurchasing == true);
+            if( check ) throw new Exception("لا يمكن التعديل على امر الانتاج لان يتم تفريغه");
             if (vm.PurchaseOrderDetails.Where(obj => obj.RecordStatus != RecordStatus.Deleted).Count() <= 0)
             {
                 throw new Exception("لا يمكن حفظ بيانات امر الانتاج يجب اضافة بيانات");

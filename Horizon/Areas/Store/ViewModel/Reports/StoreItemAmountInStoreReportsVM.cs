@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Horizon.Areas.Store.ViewModel.Reports
 {
+    
     public class StoreItemAmountInStoreReportsVM : IHaveCustomMappings
     {
         public int LocationId { get; set; }

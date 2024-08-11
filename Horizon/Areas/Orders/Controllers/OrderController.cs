@@ -162,8 +162,8 @@ namespace Horizon.Areas.Orders.Controllers
 
                 Model.Parameters.Add(new ParameterLstReportVM
                 {
-                    NoOrderF = $"ادارة المبيعات  {Model.Order.NoOfOrder}",
-                    NoOrderT = $"نموذج رقم   {Model.Order.NoOfOrder}",
+                    NoOrderF = $"ادارة المبيعات QF 8.2.7",
+                    NoOrderT = $"نموذج رقم QF 8.2.7",
                     Owner = "امانى",
                     ReceivedName = "ماجد",
                     DateFooter = DateTime.Today.ToString("dd/MM/yyyy"),

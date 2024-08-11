@@ -30,6 +30,8 @@ namespace Horizon.Areas.Purchases.Controllers
                 {
                     return Redirect("/Purchases/PurchaseOrder/Index");
                 }
+                if(details.IsStoreInStock ==true|| details.PurchaseOrderDetails.Any(obj=>obj.IsCreatedASPurchasing ==true))
+                { return View("Details",details); }
                 return View(details);
             }
             return View(new PurchaseOrderVM());
