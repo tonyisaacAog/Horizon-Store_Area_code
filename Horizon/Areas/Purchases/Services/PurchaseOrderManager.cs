@@ -63,7 +63,7 @@ namespace Horizon.Areas.Purchases.Services
             purchaseOrder.Date = vm.PurchaseOrderDate.ToEgyptionDate();
             purchaseOrder.TotalAmount = vm.TotalAmount;
             purchaseOrder.SupplierId = vm.SupplierId;
-            purchaseOrder.PurchaseOrderNumber = vm.PurchaseOrderNumber;
+            //purchaseOrder.PurchaseOrderNumber = vm.PurchaseOrderNumber;
             _db.Update(purchaseOrder);
             await _db.SaveChangesAsync();
             await AddDetailsForPurchaseOrder(purchaseOrder.Id, vm.PurchaseOrderDetails);
@@ -78,6 +78,8 @@ namespace Horizon.Areas.Purchases.Services
             var NewPurchaseOrder = _mapper.Map<PurchaseOrder>(vm);
             NewPurchaseOrder.PurchaseOrderDetails = null;
             await _db.AddAsync(NewPurchaseOrder);
+            await _db.SaveChangesAsync();
+            PurchaseOrder.GenerateSerial(NewPurchaseOrder);
             await _db.SaveChangesAsync();
             await AddDetailsForPurchaseOrder(NewPurchaseOrder.Id, vm.PurchaseOrderDetails);
         }
@@ -119,5 +121,7 @@ namespace Horizon.Areas.Purchases.Services
             }
             await _db.SaveChangesAsync();
         }
+
+    
     }
 }

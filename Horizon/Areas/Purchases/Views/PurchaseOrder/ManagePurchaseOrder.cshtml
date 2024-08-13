@@ -8,7 +8,7 @@
 
 <partial name="_Messages" />
 
-@section PageHeading{
+@section PageHeading {
     <partial name="_PageTitle" model="@title" />
 
 }
@@ -23,24 +23,27 @@
                 <div class="form-group">
                     <label>اسم المورد</label>
 
-                    @Html.Editor("Id","SupplierList", new
-                    {
-                    htmlAttributes = new
-                    {
-                    @data_bind = "value:SupplierId,select2",
-                    @class = "form-select",
-                    @id="SupplierId"
-                    }
-                    })
+                    @Html.Editor("Id","SupplierList",new
+                        {
+                            htmlAttributes = new
+                            {
+                                @data_bind = "value:SupplierId,select2",
+                                @class = "form-select",
+                                @id = "SupplierId"
+                            }
+                        })
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label>رقم امر الانتاح</label>
-                    <input data-bind="value:PurchaseOrderNumber" class="form-control" />
+                    <label>الكمية</label>
+                    <input disabled data-bind="value:TotalAmount" class="form-control" />
                 </div>
             </div>
 
+        </div>
+
+        <div class="row">
             <div class="col-6">
                 <div class="form-group">
                     <label>تاريخ امر الانتاح</label>
@@ -50,19 +53,22 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>الكمية</label>
-                    <input disabled data-bind="value:TotalAmount" class="form-control" />
+                    <label>تاريخ توريد امر الانتاح</label>
+                    <input data-bind="value:DeliveryDate" class="form-control smallDate" />
                 </div>
-            </div>
 
+
+            </div>
         </div>
+
+
     </div>
 </card>
 
 <card title="تفاصيل امر الانتاج" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <table class="table table-bordered table-striped table-hover">
-      
+
         <thead class="bg-light text-dark">
 
             <tr>
@@ -72,15 +78,15 @@
 
                 <th style="width:10%">
                     الكمية
-                </th>     
-                <th >
-                   ملاحظات
+                </th>
+                <th>
+                    ملاحظات
                 </th>
 
-            @*     <th>
-                    السعر الإجمالي
+                @*     <th>
+                السعر الإجمالي
                 </th> *@
-                <th>
+                <th style="width:10%">
                     <button class="btn btn-dark" data-bind="click:AddItem">
                         <span class="fa fa-plus"></span>
                     </button>
@@ -91,14 +97,14 @@
         <tbody data-bind="foreach:PurchaseOrderDetails">
             <tr data-bind="visible:RecordStatus()!=2">
                 <td>
-                    @Html.Editor("Id","StoreItemsList", new
-                    {
+                    @Html.Editor("Id","StoreItemsList",new
+                        {
                             htmlAttributes = new
                             {
                                 @data_bind = "value:StoreItemId,event:{change:$parent.UpdateItem},select2",
                                 @class = "form-select",
                             }
-                    })
+                        })
                 </td>
 
                 <td>
@@ -108,8 +114,8 @@
                 <td>
                     <textarea rows="1" class="form-control" data-bind="value:Notes,event:{change:$parent.ChangeItem}"></textarea>
                 </td>
-        @*         <td>
-                    <span data-bind="numericText:TotalAmount"></span>
+                @*         <td>
+                <span data-bind="numericText:TotalAmount"></span>
                 </td> *@
                 <td>
                     <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
@@ -118,21 +124,84 @@
                 </td>
             </tr>
         </tbody>
-       @*  <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
-            </tr>
+        @*  <tbody>
+        <tr>
+        <td></td>
+        <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+        <td><b>الاجمالي</b></td>
+        <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
+        </tr>
         </tbody> *@
     </table>
 </card>
 
 
 
+
+<card title="ملاحظات امر الانتاج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead class="bg-light text-dark">
+
+                        <tr>
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                ملاحظات
+                            </th>
+
+                            <th style="width:10%">
+                                <div class="col-6">
+                                    <button class="btn btn-dark" data-bind="click:AddNotes">
+                                        <span class="fa fa-plus"></span>
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody data-bind="foreach:Notes">
+                        <tr>
+                            <td>-</td>
+                            <td>
+                                <textarea rows="1" class="form-control" data-bind="value:Note"></textarea>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-danger" data-bind="click:$parent.RemoveNotes">
+                                    <span class="fa fa-minus"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    @*  <tbody>
+                    <tr>
+                    <td></td>
+                    <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
+                    <td><b>الاجمالي</b></td>
+                    <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
+                    </tr>
+                    </tbody> *@
+                </table>
+            </div>
+
+        </div>
+    </div>
+</card>
+
+
 <card-footer>
     <partial name="_SaveButton" />
+    @if (Model.Id > 0)
+    {
+        <a data-bind="attr:{href:'/Purchases/PurchaseOrder/PrintPurchaseOrder/'+Id() }" class="btn btn-sm btn-secondary">طباعة امر الانتاج</a>
+    }
 </card-footer>
 
 @section Scripts {

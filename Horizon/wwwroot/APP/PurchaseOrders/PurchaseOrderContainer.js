@@ -15,10 +15,21 @@ const Mapping = {
             return new PurchaseOrderDetails(options.data);
         }
     },
+    'PurchaseOrderNotes': {
+        key: function (ro) {
+            return ko.utils.unwrapObservable(ro.Id);
+        },
+        create: function (options) {
+            return new PurchaseOrderNotes(options.data);
+        }
+    },
 };
 
 
-
+const PurchaseOrderNotes = function (data) {
+    var self = this;
+    ko.mapping.fromJS(data, Mapping, self);
+}
 
 const PurchaseOrderDetails = function (data) {
     var self = this;
@@ -62,7 +73,13 @@ const PurchaseOrderContainer = function (data) {
 
     ///////////////   function for parent   ////////////////////////
 
-
+    self.AddNotes = function () {
+        let note = { Id:0, Note: "" };
+        self.Notes.push(new PurchaseOrderNotes(note));
+    }
+    self.RemoveNotes = function (item) {
+        self.Notes.remove(item);
+    }
  
     self.AddItem = function () {
         let newLine = {

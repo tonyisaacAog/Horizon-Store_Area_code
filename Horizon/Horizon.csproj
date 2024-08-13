@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <None Remove="Areas\Orders\BoldReports\OrderReport.rdlc" />
+    <None Remove="Areas\Purchases\BoldReports\PurchaseOrder.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +44,10 @@
     <Content Include="Areas\Orders\BoldReports\OrderReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Purchases\BoldReports\PurchaseOrder.rdlc" />
   </ItemGroup>
 
   <ItemGroup>

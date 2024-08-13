@@ -1,9 +1,9 @@
 ﻿const ValidatePurchaseOrder = function (self) {
 
 
-    self.PurchaseOrderNumber.extend({
+    self.DeliveryDate.extend({
         required: {
-            params: true, message: "برجاء ادخال رقم امر الانتاج "
+            params: true, message: "برجاء ادخال تاريخ التوريد "
         }
     });
 

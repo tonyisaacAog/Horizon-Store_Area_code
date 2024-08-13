@@ -11,54 +11,58 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="Order">
+    <DataSet Name="Parameters">
       <Query>
         <DataSourceName>OrderReportingDS</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="ClientName">
-          <DataField>ClientName</DataField>
+        <Field Name="NoPurchaseOrder">
+          <DataField>NoPurchaseOrder</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OrderDate">
-          <DataField>OrderDate</DataField>
+        <Field Name="PurchaseOrderDate">
+          <DataField>PurchaseOrderDate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="DeliveryOrder">
-          <DataField>DeliveryOrder</DataField>
+        <Field Name="Recevier">
+          <DataField>Recevier</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Notes">
-          <DataField>Notes</DataField>
+        <Field Name="DeliveryDate">
+          <DataField>DeliveryDate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Signature">
+          <DataField>Signature</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NoNotes">
+          <DataField>NoNotes</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>OrderReportingDS</rd:DataSetName>
         <rd:SchemaPath>D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\OrderReportingDS.xsd</rd:SchemaPath>
-        <rd:TableName>Order</rd:TableName>
+        <rd:TableName>Parameters</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="StoreItems">
+    <DataSet Name="PurchaseOrderDetails">
       <Query>
         <DataSourceName>OrderReportingDS</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
+        <Field Name="ItemName">
+          <DataField>ItemName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Quantity">
@@ -69,17 +73,21 @@
           <DataField>Notes</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>OrderReportingDS</rd:DataSetName>
         <rd:SchemaPath>D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\OrderReportingDS.xsd</rd:SchemaPath>
-        <rd:TableName>StoreItems</rd:TableName>
+        <rd:TableName>PurchaseOrderDetails</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="OrderConfigures">
+    <DataSet Name="PurchaseOrderNotes">
       <Query>
         <DataSourceName>OrderReportingDS</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -89,59 +97,15 @@
           <DataField>Id</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
+        <Field Name="Note">
+          <DataField>Note</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>OrderReportingDS</rd:DataSetName>
         <rd:SchemaPath>D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\OrderReportingDS.xsd</rd:SchemaPath>
-        <rd:TableName>OrderConfigures</rd:TableName>
-        <rd:TableAdapterFillMethod />
-        <rd:TableAdapterGetDataMethod />
-        <rd:TableAdapterName />
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="ParamterLst">
-      <Query>
-        <DataSourceName>OrderReportingDS</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="NoOrderT">
-          <DataField>NoOrderT</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NoOrderF">
-          <DataField>NoOrderF</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Owner">
-          <DataField>Owner</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ReceivedName">
-          <DataField>ReceivedName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DateHeader">
-          <DataField>DateHeader</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DateFooter">
-          <DataField>DateFooter</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>OrderReportingDS</rd:DataSetName>
-        <rd:SchemaPath>D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\OrderReportingDS.xsd</rd:SchemaPath>
-        <rd:TableName>Paramters</rd:TableName>
+        <rd:TableName>PurchaseOrderNotes</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />
@@ -171,9 +135,9 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox8</rd:DefaultName>
-                <Top>0.07056cm</Top>
+                <Top>0cm</Top>
                 <Left>0.00002cm</Left>
-                <Height>2.59348cm</Height>
+                <Height>2.28316cm</Height>
                 <Width>6.31cm</Width>
                 <Style>
                   <Border>
@@ -193,7 +157,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>ادارة المبيعات</Value>
+                        <Value>ادارة المشتريات</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -207,28 +171,19 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox8</rd:DefaultName>
-                <Top>0.07056cm</Top>
-                <Left>6.3453cm</Left>
-                <Height>1.21764cm</Height>
-                <Width>6.74791cm</Width>
+                <Top>0cm</Top>
+                <Left>6.77192cm</Left>
+                <Height>2.28316cm</Height>
+                <Width>6.80389cm</Width>
                 <ZIndex>1</ZIndex>
                 <Style>
                   <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <TopBorder>
                     <Style>Solid</Style>
-                  </TopBorder>
+                  </Border>
                   <BottomBorder>
-                    <Style>None</Style>
+                    <Style>Solid</Style>
                   </BottomBorder>
-                  <LeftBorder>
-                    <Style>None</Style>
-                  </LeftBorder>
-                  <RightBorder>
-                    <Style>None</Style>
-                  </RightBorder>
-                  <VerticalAlign>Bottom</VerticalAlign>
+                  <VerticalAlign>Middle</VerticalAlign>
                   <PaddingLeft>2pt</PaddingLeft>
                   <PaddingRight>2pt</PaddingRight>
                   <PaddingTop>2pt</PaddingTop>
@@ -272,7 +227,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>ادارة المبيعات</Value>
+                        <Value>ادارة المشتريات</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -286,9 +241,9 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox8</rd:DefaultName>
-                <Top>0.07056cm</Top>
-                <Left>13.12849cm</Left>
-                <Height>2.59348cm</Height>
+                <Top>0cm</Top>
+                <Left>14.04924cm</Left>
+                <Height>2.28316cm</Height>
                 <Width>6.25708cm</Width>
                 <ZIndex>2</ZIndex>
                 <Style>
@@ -302,64 +257,15 @@
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-              <Textbox Name="Textbox38">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>=First(Fields!NoOrderT.Value, "ParamterLst")</Value>
-                        <Style>
-                          <FontSize>11pt</FontSize>
-                          <FontWeight>Bold</FontWeight>
-                          <Language>ar-EG</Language>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Center</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox8</rd:DefaultName>
-                <Top>1.46459cm</Top>
-                <Left>6.3453cm</Left>
-                <Height>1.19945cm</Height>
-                <Width>6.74791cm</Width>
-                <ZIndex>3</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <TopBorder>
-                    <Style>None</Style>
-                  </TopBorder>
-                  <BottomBorder>
-                    <Style>Solid</Style>
-                  </BottomBorder>
-                  <LeftBorder>
-                    <Style>None</Style>
-                  </LeftBorder>
-                  <RightBorder>
-                    <Style>None</Style>
-                  </RightBorder>
-                  <VerticalAlign>Top</VerticalAlign>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
               <Image Name="Image1">
                 <Source>Embedded</Source>
                 <Value>MGLogo1</Value>
                 <Sizing>Fit</Sizing>
-                <Top>0.43039cm</Top>
+                <Top>0.20108cm</Top>
                 <Left>0.36454cm</Left>
                 <Height>1.92333cm</Height>
                 <Width>5.48098cm</Width>
-                <ZIndex>4</ZIndex>
+                <ZIndex>3</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -368,13 +274,13 @@
               </Image>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>0.25258cm</Top>
-            <Left>0.19262cm</Left>
-            <Height>2.73106cm</Height>
-            <Width>19.49493cm</Width>
+            <Top>0.32314cm</Top>
+            <Left>0.28787cm</Left>
+            <Height>2.31126cm</Height>
+            <Width>20.30632cm</Width>
             <Style>
               <Border>
-                <Style>None</Style>
+                <Style>Solid</Style>
               </Border>
             </Style>
           </Rectangle>
@@ -387,8 +293,9 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>اسم العميل :</Value>
+                        <Value>=First(Fields!Recevier.Value, "Parameters")</Value>
                         <Style>
+                          <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
                           <Language>ar-EG</Language>
                         </Style>
@@ -400,46 +307,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.21111cm</Top>
-                <Left>17.50294cm</Left>
+                <Top>0.16171cm</Top>
+                <Left>13.96505cm</Left>
                 <Height>0.6cm</Height>
-                <Width>1.88263cm</Width>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Middle</VerticalAlign>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox12">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>=First(Fields!ClientName.Value, "Order")</Value>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                          <Language>ar-EG</Language>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Right</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.21111cm</Top>
-                <Left>10.95216cm</Left>
-                <Height>0.6cm</Height>
-                <Width>6.12413cm</Width>
-                <ZIndex>1</ZIndex>
+                <Width>5.96075cm</Width>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -460,6 +331,7 @@
                       <TextRun>
                         <Value>التاريخ :</Value>
                         <Style>
+                          <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
                           <Language>ar-EG</Language>
                         </Style>
@@ -471,11 +343,11 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.21111cm</Top>
-                <Left>6.04304cm</Left>
+                <Top>0.16171cm</Top>
+                <Left>5.98663cm</Left>
                 <Height>0.6cm</Height>
                 <Width>1.44876cm</Width>
-                <ZIndex>2</ZIndex>
+                <ZIndex>1</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -494,8 +366,9 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!DateHeader.Value, "ParamterLst")</Value>
+                        <Value>=First(Fields!PurchaseOrderDate.Value, "Parameters")</Value>
                         <Style>
+                          <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
                           <Language>ar-EG</Language>
                         </Style>
@@ -507,83 +380,48 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.21111cm</Top>
-                <Left>0.36454cm</Left>
+                <Top>0.16171cm</Top>
+                <Left>0.32248cm</Left>
                 <Height>0.6cm</Height>
                 <Width>5.52304cm</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox12">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>تحية طيبة وبعد .....،</Value>
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                          <Language>ar-EG</Language>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Right</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox11</rd:DefaultName>
+                <Top>0.95221cm</Top>
+                <Left>12.71447cm</Left>
+                <Height>0.6cm</Height>
+                <Width>5.96075cm</Width>
                 <ZIndex>3</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Middle</VerticalAlign>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox15">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>ميعاد التسليم :</Value>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                          <Language>ar-EG</Language>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Right</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.97573cm</Top>
-                <Left>17.50294cm</Left>
-                <Height>0.6cm</Height>
-                <Width>1.88263cm</Width>
-                <ZIndex>4</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Middle</VerticalAlign>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox16">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>=First(Fields!DeliveryOrder.Value, "Order")</Value>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                          <Language>ar-EG</Language>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Right</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.97573cm</Top>
-                <Left>10.95216cm</Left>
-                <Height>0.6cm</Height>
-                <Width>6.12413cm</Width>
-                <ZIndex>5</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -597,10 +435,10 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>3.16003cm</Top>
-            <Left>0.19262cm</Left>
-            <Height>1.74153cm</Height>
-            <Width>19.49493cm</Width>
+            <Top>3.90793cm</Top>
+            <Left>0.28787cm</Left>
+            <Height>1.68508cm</Height>
+            <Width>20.31246cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -612,16 +450,16 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>8.91728cm</Width>
+                  <Width>7.63054cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.60752cm</Width>
+                  <Width>3.38559cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>7.05273cm</Width>
+                  <Width>8.17452cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.91741cm</Width>
+                  <Width>1.12179cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -639,14 +477,14 @@
                                 <TextRun>
                                   <Value>ملاحظات</Value>
                                   <Style>
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Language>ar-EG</Language>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -654,7 +492,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -676,14 +514,14 @@
                                 <TextRun>
                                   <Value>الكمية</Value>
                                   <Style>
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Language>ar-EG</Language>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -691,7 +529,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -713,14 +551,14 @@
                                 <TextRun>
                                   <Value>البيان</Value>
                                   <Style>
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Language>ar-EG</Language>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -728,7 +566,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Dashed</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -750,13 +588,13 @@
                                 <TextRun>
                                   <Value>م</Value>
                                   <Style>
-                                    <FontSize>11pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -764,7 +602,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -806,7 +644,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -834,7 +672,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -842,7 +680,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -855,14 +693,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Name">
+                        <Textbox Name="ItemName">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Name.Value</Value>
+                                  <Value>=Fields!ItemName.Value</Value>
                                   <Style>
                                     <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -875,11 +713,11 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Name</rd:DefaultName>
+                          <rd:DefaultName>ItemName</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -907,7 +745,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -915,7 +753,7 @@
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>Dotted</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -949,29 +787,17 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <LayoutDirection>RTL</LayoutDirection>
-            <DataSetName>StoreItems</DataSetName>
-            <Top>5.10617cm</Top>
-            <Left>0.19262cm</Left>
+            <DataSetName>PurchaseOrderDetails</DataSetName>
+            <Top>6.58867cm</Top>
+            <Left>0.28173cm</Left>
             <Height>1.2cm</Height>
-            <Width>19.49494cm</Width>
+            <Width>20.31244cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
                 <Style>Dashed</Style>
               </Border>
-              <TopBorder>
-                <Style>Dashed</Style>
-              </TopBorder>
-              <BottomBorder>
-                <Style>Dashed</Style>
-              </BottomBorder>
-              <LeftBorder>
-                <Style>Dashed</Style>
-              </LeftBorder>
-              <RightBorder>
-                <Style>Dashed</Style>
-              </RightBorder>
               <FontSize>12pt</FontSize>
               <TextAlign>Center</TextAlign>
               <PaddingLeft>1pt</PaddingLeft>
@@ -982,426 +808,14 @@
           </Tablix>
           <Rectangle Name="Rectangle3">
             <ReportItems>
-              <Textbox Name="Textbox28">
+              <Textbox Name="Textbox15">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>الاكسسوارات</Value>
-                        <Style>
-                          <FontSize>12pt</FontSize>
-                          <FontWeight>Bold</FontWeight>
-                          <Language>ar-EG</Language>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Center</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox28</rd:DefaultName>
-                <Top>0cm</Top>
-                <Left>0cm</Left>
-                <Height>0.6cm</Height>
-                <Width>19.50107cm</Width>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-            </ReportItems>
-            <KeepTogether>true</KeepTogether>
-            <Top>6.51431cm</Top>
-            <Left>0.18648cm</Left>
-            <Height>0.6cm</Height>
-            <Width>19.50107cm</Width>
-            <ZIndex>3</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Rectangle>
-          <Tablix Name="Tablix3">
-            <TablixBody>
-              <TablixColumns>
-                <TablixColumn>
-                  <Width>7.42616cm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>3.18121cm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>7.97014cm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.91741cm</Width>
-                </TablixColumn>
-              </TablixColumns>
-              <TablixRows>
-                <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox29">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>ملاحظات</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox30">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>الكمية</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox26</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox31">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>البيان</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox22</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox32">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>م</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox24</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox33">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox21</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox34">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Quantity.Value</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox27</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox35">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Name.Value</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Language>ar-EG</Language>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox23</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox36">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Id.Value</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox25</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Dotted</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-              </TablixRows>
-            </TablixBody>
-            <TablixColumnHierarchy>
-              <TablixMembers>
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-              </TablixMembers>
-            </TablixColumnHierarchy>
-            <TablixRowHierarchy>
-              <TablixMembers>
-                <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
-                </TablixMember>
-                <TablixMember>
-                  <Group Name="Details2" />
-                </TablixMember>
-              </TablixMembers>
-            </TablixRowHierarchy>
-            <LayoutDirection>RTL</LayoutDirection>
-            <DataSetName>OrderConfigures</DataSetName>
-            <Top>7.2907cm</Top>
-            <Left>0.19264cm</Left>
-            <Height>1.2cm</Height>
-            <Width>19.49492cm</Width>
-            <ZIndex>4</ZIndex>
-            <Style>
-              <Border>
-                <Color>LightGrey</Color>
-                <Style>Dotted</Style>
-              </Border>
-              <FontSize>12pt</FontSize>
-              <TextAlign>Center</TextAlign>
-              <PaddingLeft>1pt</PaddingLeft>
-              <PaddingRight>1pt</PaddingRight>
-              <PaddingTop>1pt</PaddingTop>
-              <PaddingBottom>1pt</PaddingBottom>
-            </Style>
-          </Tablix>
-          <Rectangle Name="Rectangle4">
-            <ReportItems>
-              <Textbox Name="Textbox17">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>اسم مستلم امر الشغل  :</Value>
+                        <Value>يرجى التكرم بتصنيع الاتي :</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1415,10 +829,108 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.06828cm</Top>
-                <Left>15.51729cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>3.80527cm</Width>
+                <Top>0cm</Top>
+                <Left>0.37068cm</Left>
+                <Height>0.6cm</Height>
+                <Width>19.56126cm</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <KeepTogether>true</KeepTogether>
+            <Top>5.84756cm</Top>
+            <Left>0.28173cm</Left>
+            <Height>0.6cm</Height>
+            <Width>20.31246cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Textbox Name="Textbox38">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!NoPurchaseOrder.Value, "Parameters")</Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <TextDecoration>Underline</TextDecoration>
+                      <Language>ar-EG</Language>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox8</rd:DefaultName>
+            <Top>2.86723cm</Top>
+            <Left>7.05979cm</Left>
+            <Height>0.81139cm</Height>
+            <Width>6.80389cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <TopBorder>
+                <Style>None</Style>
+              </TopBorder>
+              <LeftBorder>
+                <Style>None</Style>
+              </LeftBorder>
+              <RightBorder>
+                <Style>None</Style>
+              </RightBorder>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Rectangle Name="Rectangle4">
+            <ReportItems>
+              <Textbox Name="Textbox17">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>ميعاد التوريد :</Value>
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                          <Language>ar-EG</Language>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Right</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox11</rd:DefaultName>
+                <Top>0.20757cm</Top>
+                <Left>16.91661cm</Left>
+                <Height>0.6cm</Height>
+                <Width>3.01533cm</Width>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -1437,7 +949,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!ReceivedName.Value, "ParamterLst")</Value>
+                        <Value>=First(Fields!DeliveryDate.Value, "Parameters")</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1451,10 +963,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.06828cm</Top>
-                <Left>9.70492cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>5.67831cm</Width>
+                <Top>0.20757cm</Top>
+                <Left>11.21718cm</Left>
+                <Height>0.6cm</Height>
+                <Width>5.52304cm</Width>
                 <ZIndex>1</ZIndex>
                 <Style>
                   <Border>
@@ -1474,7 +986,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>التوقيع  :</Value>
+                        <Value>الاسم :</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1488,10 +1000,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.06828cm</Top>
-                <Left>6.25335cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>2.02515cm</Width>
+                <Top>1.2869cm</Top>
+                <Left>16.91661cm</Left>
+                <Height>0.6cm</Height>
+                <Width>3.01533cm</Width>
                 <ZIndex>2</ZIndex>
                 <Style>
                   <Border>
@@ -1504,14 +1016,14 @@
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-              <Textbox Name="Textbox37">
+              <Textbox Name="Textbox21">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!Owner.Value, "ParamterLst")</Value>
+                        <Value>=First(Fields!Name.Value, "Parameters")</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1525,10 +1037,10 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.06828cm</Top>
-                <Left>0.20814cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>5.88666cm</Width>
+                <Top>1.2869cm</Top>
+                <Left>11.21718cm</Left>
+                <Height>0.6cm</Height>
+                <Width>5.52304cm</Width>
                 <ZIndex>3</ZIndex>
                 <Style>
                   <Border>
@@ -1541,29 +1053,14 @@
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-            </ReportItems>
-            <KeepTogether>true</KeepTogether>
-            <Top>8.63056cm</Top>
-            <Left>0.19261cm</Left>
-            <Height>1.02891cm</Height>
-            <Width>19.49494cm</Width>
-            <ZIndex>5</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Rectangle>
-          <Rectangle Name="Rectangle5">
-            <ReportItems>
-              <Textbox Name="Textbox39">
+              <Textbox Name="Textbox23">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!NoOrderF.Value, "ParamterLst")</Value>
+                        <Value>التوقيع :</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1577,10 +1074,11 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.127cm</Top>
-                <Left>13.33619cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>5.9925cm</Width>
+                <Top>1.97055cm</Top>
+                <Left>16.91661cm</Left>
+                <Height>0.6cm</Height>
+                <Width>3.01533cm</Width>
+                <ZIndex>4</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -1592,14 +1090,14 @@
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-              <Textbox Name="Textbox40">
+              <Textbox Name="Textbox25">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>=First(Fields!DateFooter.Value, "ParamterLst")</Value>
+                        <Value>=First(Fields!Signature.Value, "Parameters")</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1608,16 +1106,16 @@
                       </TextRun>
                     </TextRuns>
                     <Style>
-                      <TextAlign>Center</TextAlign>
+                      <TextAlign>Right</TextAlign>
                     </Style>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.127cm</Top>
-                <Left>6.67808cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>5.80117cm</Width>
-                <ZIndex>1</ZIndex>
+                <Top>1.97055cm</Top>
+                <Left>11.21718cm</Left>
+                <Height>0.6cm</Height>
+                <Width>5.52304cm</Width>
+                <ZIndex>5</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -1629,14 +1127,14 @@
                   <PaddingBottom>2pt</PaddingBottom>
                 </Style>
               </Textbox>
-              <Textbox Name="Textbox41">
+              <Textbox Name="Textbox27">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>ISO 9001:2015</Value>
+                        <Value>يعتمد ؛</Value>
                         <Style>
                           <FontSize>12pt</FontSize>
                           <FontWeight>Bold</FontWeight>
@@ -1645,16 +1143,16 @@
                       </TextRun>
                     </TextRuns>
                     <Style>
-                      <TextAlign>Left</TextAlign>
+                      <TextAlign>Right</TextAlign>
                     </Style>
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox11</rd:DefaultName>
-                <Top>0.127cm</Top>
-                <Left>0.30718cm</Left>
-                <Height>0.86014cm</Height>
-                <Width>5.48098cm</Width>
-                <ZIndex>2</ZIndex>
+                <Top>1.2869cm</Top>
+                <Left>1.01093cm</Left>
+                <Height>0.6cm</Height>
+                <Width>3.01533cm</Width>
+                <ZIndex>6</ZIndex>
                 <Style>
                   <Border>
                     <Style>None</Style>
@@ -1668,37 +1166,209 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>10.15336cm</Top>
-            <Left>0.18648cm</Left>
-            <Height>1.12416cm</Height>
-            <Width>19.50108cm</Width>
-            <ZIndex>6</ZIndex>
+            <Top>7.96506cm</Top>
+            <Left>0.28173cm</Left>
+            <Height>2.81396cm</Height>
+            <Width>20.31246cm</Width>
+            <ZIndex>5</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <TopBorder>
-                <Style>Solid</Style>
-              </TopBorder>
             </Style>
           </Rectangle>
+          <Rectangle Name="Rectangle5">
+            <ReportItems>
+              <Textbox Name="Textbox16">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>أولويات التصنيع :</Value>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Language>ar-EG</Language>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Right</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox11</rd:DefaultName>
+                <Top>0cm</Top>
+                <Left>0.37068cm</Left>
+                <Height>0.6cm</Height>
+                <Width>19.56126cm</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <KeepTogether>true</KeepTogether>
+            <Top>10.97439cm</Top>
+            <Left>0.28173cm</Left>
+            <Height>0.6cm</Height>
+            <Width>20.31246cm</Width>
+            <ZIndex>6</ZIndex>
+            <Visibility>
+              <Hidden>=(First(Fields!NoNotes.Value, "Parameters")="true")?True:False</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Tablix Name="Tablix3">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>19.08316cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.84877cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ItemName2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Note.Value</Value>
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Language>ar-EG</Language>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ItemName</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Id2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>-</Value>
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Id</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Details2" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <LayoutDirection>RTL</LayoutDirection>
+            <DataSetName>PurchaseOrderNotes</DataSetName>
+            <Top>11.81739cm</Top>
+            <Left>0.28174cm</Left>
+            <Height>0.6cm</Height>
+            <Width>19.93193cm</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <FontSize>12pt</FontSize>
+              <TextAlign>Center</TextAlign>
+              <PaddingLeft>1pt</PaddingLeft>
+              <PaddingRight>1pt</PaddingRight>
+              <PaddingTop>1pt</PaddingTop>
+              <PaddingBottom>1pt</PaddingBottom>
+            </Style>
+          </Tablix>
         </ReportItems>
-        <Height>11.27752cm</Height>
+        <Height>12.87913cm</Height>
         <Style>
           <Border>
             <Style>Solid</Style>
-            <Width>1.5pt</Width>
           </Border>
         </Style>
       </Body>
-      <Width>19.84231cm</Width>
+      <Width>20.9112cm</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
-        <LeftMargin>0.5cm</LeftMargin>
-        <RightMargin>0.5cm</RightMargin>
-        <TopMargin>0.5cm</TopMargin>
-        <BottomMargin>0.5cm</BottomMargin>
+        <LeftMargin>0cm</LeftMargin>
+        <RightMargin>0cm</RightMargin>
+        <TopMargin>0cm</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
         <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style>
           <Border>
