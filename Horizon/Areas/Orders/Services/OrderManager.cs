@@ -84,6 +84,16 @@ namespace Horizon.Areas.Orders.Services
             return _mapper.Map<OrderVM>(await _db.OrderDetails.Include(obj => obj.Order).ThenInclude(obj => obj.Client)
                 .Where(obj => obj.Id == detailsId).Select(obj => obj.Order).FirstOrDefaultAsync());
         }
+        public async Task<OrderContainer> GetOrderWithDetailsById(int orderId)
+        {
+            var vmContainer = new OrderContainer();
+            var orderWithDEtails = await _db.Orders.Include(obj => obj.OrderDetails).Include(obj => obj.Client)
+                .Where(obj => obj.Id == orderId).FirstOrDefaultAsync();
+            vmContainer.Client = _mapper.Map<ClientVM>(orderWithDEtails.Client);
+            vmContainer.OrderDetail = _mapper.Map<List<OrderDetailsVM>>(orderWithDEtails.OrderDetails);
+            vmContainer.Order = _mapper.Map<OrderVM>(orderWithDEtails);
+            return vmContainer;
+        }
         public async Task ChangeOrderSatus(int orderId,OrderStatus orderStatus)
         {
             var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == orderId);

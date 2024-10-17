@@ -59,6 +59,12 @@ namespace Horizon.Areas.Purchases.Controllers
                 }).ToArray();
             return View(await _purchaseManager.NewPurchaseForProduct(Id));
         }
+        //public async Task<IActionResult> ManagePurchaseRawForProduct(int Id)
+        //{
+           
+        //    return View(await _purchaseManager.NewPurchaseStoreRawForProduct(Id));
+        //}
+        
         public async Task<JsonResult> SavePurchaseForProduct([FromBody] PurchaseContainerForProduct vm)
         {
             var feedback = await _purchaseManager.SavePurchaseForProduct(vm);

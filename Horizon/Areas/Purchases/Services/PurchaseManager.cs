@@ -97,6 +97,29 @@ namespace Horizon.Areas.Purchases.Services
             vm.PurchaseDetails.AddRange(PurchaseLst);
             return vm;
         }
+        public async Task<PurchaseContainerForProduct> NewPurchaseStoreRawForProduct(int ProductId)
+        {
+            var vm = new PurchaseContainerForProduct();
+            var PurchaseLst = new List<PurchaseStoreTransactionVM>();
+            var productConfiguration = await _itemConfigurationManager.GetDataStoreItem(ProductId,
+                x => x.StoreItemsRaw.RawItemTypeId != 1 && x.StoreItemId == ProductId);
+            vm.StoreItem = productConfiguration.StoreItemVM;
+            foreach( var item in productConfiguration.ItemConfigurationVMs )
+            {
+                PurchaseStoreTransactionVM PurchaseTransaction = new PurchaseStoreTransactionVM()
+                {
+                    ConfigueQty = item.MinimumAmount,
+                    StoreItemId = item.StoreItemRawId,
+                    StoreItemName = item.StoreItemsRawName,
+                    Qty = 0,
+                    UnitPrice = 1,
+                };
+                PurchaseLst.Add(PurchaseTransaction);
+            }
+            vm.PurchaseDetails.AddRange(PurchaseLst);
+            return vm;
+        }
+        
 
 
         public async Task<FeedBackWithMessages> SavePurchaseForProduct(PurchaseContainerForProduct vm)

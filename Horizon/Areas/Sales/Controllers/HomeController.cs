@@ -26,6 +26,12 @@ namespace Horizon.Areas.Sales.Controllers
         public async Task<IActionResult> ManageSales(int Id)
             => View(await _SalesManager.NewSales(Id));
 
+        public async Task<IActionResult> ManageSalesForOrder(int Id)
+        {
+            var vm = await _SalesManager.NewSalesForOrder(Id);
+            return View(vm);
+        }
+
         public async Task<IActionResult> DetailsSales(int Id)
         {
             var salesDetails = await _SalesManager.DetailsSales(Id);

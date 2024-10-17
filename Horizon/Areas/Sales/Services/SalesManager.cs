@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Data.Services;
+using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Areas.Sales.Models;
 using Horizon.Areas.Sales.ViewModel;
@@ -19,13 +20,15 @@ namespace Horizon.Areas.Sales.Services
         private readonly GenericSettingsManager<Client, ClientVM> _ClientManager;
         private readonly StoreTransDetailsManager _salesTransactionDetailsManager;
         private readonly StoreTransactionManager _saleTransactionManager;
+        private readonly OrderManager _orderManager;
 
         public SalesManager(ApplicationDbContext db,
             IMapper mapper,
             SaveManager<SalesContainer> SalesSaveManager,
             GenericSettingsManager<Client, ClientVM> ClientManager,
             StoreTransDetailsManager salesTransactionDetailsManager,
-            StoreTransactionManager saleTransactionManager)
+            StoreTransactionManager saleTransactionManager,
+            OrderManager orderManager)
         {
             _db = db;
             _mapper = mapper;
@@ -33,6 +36,7 @@ namespace Horizon.Areas.Sales.Services
             _ClientManager = ClientManager;
             _salesTransactionDetailsManager = salesTransactionDetailsManager;
             _saleTransactionManager = saleTransactionManager;
+            _orderManager = orderManager;
         }
 
         public async Task<List<SaleVM>> GetAll()
@@ -42,6 +46,26 @@ namespace Horizon.Areas.Sales.Services
         {
             var vm = new SalesContainer();
             vm.Client = await _ClientManager.CheckAndReturn(ClientId);
+            return vm;
+        }
+
+        public async Task<SalesContainer> NewSalesForOrder(int OrderId)
+        {
+            var vm = new SalesContainer();
+            var order = await _orderManager.GetOrderWithDetailsById(OrderId);
+            vm.Client = order.Client;
+            order.OrderDetail.ForEach(line =>
+            {
+                vm.SaleDetails.Add(new Store.ViewModel.Transaction.SaleStoreTransactionVM
+                {
+                    Id = line.Id,
+                    QTY = line.QTY,
+                    UnitPrice = line.UnitPrice,
+                    TransType = Finance.CurrentAssetModule.Store.Model.Settings.StoreTransTypeEnum.Sale,
+                    StoreItemId =line.ProductId,
+                    StoreItemName = line.ProductName
+                });
+            });
             return vm;
         }
 

@@ -40,6 +40,7 @@
                     <a data-bind="attr:{href:'/Orders/Order/OrderDetails/'+Id() }" class="btn btn-sm btn-info">تفاصيل</a>
                     <a data-bind="attr:{href:'/Orders/Order/PrintOrder/'+Id() }" class="btn btn-sm btn-success">طباعة</a>
                     <a data-bind="visible:OrderStatus()==0,attr:{href:'/Orders/Order/StartProcessOrder/'+Id() }" class="btn btn-sm btn-primary">معالجة امر الشغل</a>
+                    <a data-bind="visible:OrderStatus()==2,attr:{href:'/Sales/Home/ManageSalesForOrder/'+Id() }" class="btn btn-sm btn-secondary">اذن استلام لامر الشغل</a>
 
                 </td>
                 
