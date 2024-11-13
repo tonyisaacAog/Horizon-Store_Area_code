@@ -160,7 +160,8 @@
                     @id="PurchaseOrderId"
                     }
                     }) *@
-                    <select id="PurchaseOrderId" asp-items="ViewBag.PurchaseOrders" class="form-select" data-bind="value:PurchaseOrderId">
+                    <select id="PurchaseOrderId" asp-items="ViewBag.PurchaseOrders" class="form-select" data-bind="value:PurchaseOrderId,event:{change:UpdateNumberOfRack}">
+                    <option></option>
                     </select>
                 </div>
             </div>

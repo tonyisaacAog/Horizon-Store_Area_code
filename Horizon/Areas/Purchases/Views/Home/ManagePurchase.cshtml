@@ -1,6 +1,6 @@
 ﻿@model PurchaseContainer
 @{
-    var title = "عملية طلب تخزين مستلزمات جديدة";
+    var title = "اذن اضافة مستلزمات جديدة";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -43,7 +43,7 @@
 
             <tr>
                 <th>
-                    المنتج
+                    العنصر
                 </th>
 
                 <th>
@@ -67,7 +67,7 @@
             <tr>
                 <td>
                     <div>
-                        @Html.Editor("StoreItemId","StoreItemRawWithoutMentalList", new
+                        @Html.Editor("StoreItemId","StoreItemRawList", new
                         {
                         htmlAttributes = new
                         {
@@ -105,6 +105,89 @@
                 <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
                 <td><b>الاجمالي</b></td>
                 <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</card>
+
+
+<card title="تفاصيل عملية تخزين المستلزمات لمنتج" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    المنتج
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th style="width:15%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+                <th>
+                    <button class="btn btn-dark" data-bind="click:AddStoreItem">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: PurchaseStoreItemDetails">
+            <tr>
+                <td>
+                    <div>
+                        @Html.Editor("Id","StoreItemsList",new
+
+                            {
+
+                                htmlAttributes = new
+
+                                {
+
+                                    @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateStoreItem}",
+
+                                    @class = "form-select",
+
+                                }
+
+                            })
+
+                    </div>
+                </td>
+
+                <td>
+                    <input type="text" class="form-control" data-bind="value:Qty" />
+                </td>
+
+                <td>
+                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
+                </td>
+                <td>
+                    <span data-bind="numericText:TotalAmount"></span>
+                </td>
+                <td>
+                    <button class="btn btn-danger" data-bind="click:$parent.RemoveStoreItem">
+                        <span class="fa fa-minus"></span>
+                    </button>
+
+                </td>
+            </tr>
+
+        </tbody>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalAmount"></span></td>
                 <td></td>
             </tr>
         </tbody>

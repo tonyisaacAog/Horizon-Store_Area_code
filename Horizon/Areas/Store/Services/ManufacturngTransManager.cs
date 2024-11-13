@@ -90,8 +90,6 @@ namespace Horizon.Areas.Store.Services
             }
             
         }
-
-
         private async Task<decimal> CalcTotalWithrd(StoreTransactionsRaw item,decimal usedQty)
         {
             var restOld = item.RestQty;

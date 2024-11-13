@@ -38,6 +38,7 @@ namespace Horizon.Areas.Store.Models.Raw
         //For Purchasing
         public int? PurchaseId { get; set; }
         public int? ManfacturingId { get; set; }
+        public int? SaleId { get; set; }
 
         public void UpdateRestQty(decimal value,bool Plus)
         {

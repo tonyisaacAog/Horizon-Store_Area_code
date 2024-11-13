@@ -1,6 +1,7 @@
 ﻿using BaseEntities;
 using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Purchases.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +21,7 @@ namespace Horizon.Areas.Sales.Models
         public DateTime? SalesDate { get; set; }
         [StringLength(50)]
         public string? InvoiceNum { get; set; }
+        public IEnumerable<SaleDetails> SaleDetails { get; set; } 
 
     }
 }

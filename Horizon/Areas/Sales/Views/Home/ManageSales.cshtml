@@ -1,6 +1,6 @@
 ﻿@model SalesContainer
 @{
-    var title = "عملية صرف منتج جديدة";
+    var title = "عملية استلام منتج جديدة";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -33,6 +33,80 @@
         </div>
     </div>
 
+</card>
+
+<card title="تفاصيل عملية صرف لمواد خام" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    العنصر
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th style="width:15%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+                <th>
+                    <button class="btn btn-dark" data-bind="click:AddItemRaw">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: SaleItemRawDetails">
+            <tr>
+                <td>
+                    @Html.Editor("StoreItemId","StoreItemRawList",new
+
+                        {
+
+                            htmlAttributes = new
+                            {
+                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItemRaw}",
+                                @class = "form-select",
+                            }
+
+                        })
+                </td>
+
+                <td>
+                    <input type="text" class="form-control" data-bind="value:QTY" />
+                </td>
+
+                <td>
+                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
+                </td>
+                <td>
+                    <span data-bind="numericText:TotalAmount"></span>
+                </td>
+                <td>
+                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItemRaw">
+                        <span class="fa fa-minus"></span>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
 </card>
 
 <card title="تفاصيل عملية صرف للمنتجات" addational-class="fa-list-ol"
@@ -99,7 +173,7 @@
                 <td></td>
                 <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
                 <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:SaleInfo.TotalAmount"></span></td>
+                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
                 <td></td>
             </tr>
         </tbody>

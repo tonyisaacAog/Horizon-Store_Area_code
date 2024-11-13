@@ -1,6 +1,6 @@
 ﻿@model List<SaleVM>
 @{
-    var title = "اذون صرف المنتجات";
+    var title = "اذون استلام المنتجات";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -32,7 +32,9 @@
                 <td><span data-bind="text:TotalAmount"></span></td>
                 <td><span data-bind="text:ClientName"></span></td>
                 <td>
-                    <a data-bind="attr:{href:'/Sales/Home/DetailsSales/'+Id() }" class="btn btn-sm btn-info">تفاصيل اذن الصرف</a>
+                    <a data-bind="attr:{href:'/Sales/Home/DetailsSales/'+Id() }" class="btn btn-sm btn-info">تفاصيل اذن اصتلام</a>
+                    <a data-bind="attr:{href:'/Sales/Home/PrintSalesInvoice/'+Id() }" class="btn btn-sm btn-secondary">طباعة اذن الاستلام</a>
+                    
                 </td>
 
             </tr>

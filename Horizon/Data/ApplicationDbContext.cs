@@ -28,6 +28,7 @@ namespace Horizon.Data
         }
 
         public DbSet<Purchasing>  Purchasings{ get; set; }
+        public DbSet<PurchasingDetails> PurchasingDetails { get; set; }
         public DbSet<PurchaseOrder>  PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderDetails> PurchaseOrderDetails { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -46,6 +47,7 @@ namespace Horizon.Data
         public DbSet<ManufacturingBatch> ManufacturingBatch { get; set; }
         public DbSet<Client>  Clients { get; set; }
         public DbSet<Sale>  Sales { get; set; }
+        public DbSet<SaleDetails> SaleDetails { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }

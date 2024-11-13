@@ -8,7 +8,7 @@ using Finance.CurrentAssetModule.Stores.Model.Main;
 namespace Horizon.Areas.Purchases.Models
 {
     [Table("Finance_PurchasingModule_Purchasing")]
-    public class Purchasing:BaseEntity
+    public class Purchasing : BaseEntity
     {
         public int SupplierId { get; set; }
         [ForeignKey("SupplierId")]
@@ -32,6 +32,7 @@ namespace Horizon.Areas.Purchases.Models
         public decimal PriceItemsRaw { get; set; }
         public int AmountStoreItem { get; set; }
         public string? Notes { get; set; }
+        public IEnumerable<PurchasingDetails> PurchasingDetails{get;set;}
         public override string ToString()
         {
             return $"اسم العميل :{Supplier?.SupplierName} | تاريخ الفاتورة : {PurchasingDate.ToEgyptianDate()} | رقم الفاتورة : {InvoiceNum}";

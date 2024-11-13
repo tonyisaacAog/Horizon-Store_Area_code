@@ -15,6 +15,14 @@ const Mapping = {
             return new PurchaseOrderDetails(options.data);
         }
     },
+    'PurchaseOrderItemRawDetails': {
+        key: function (ro) {
+            return ko.utils.unwrapObservable(ro.Id);
+        },
+        create: function (options) {
+            return new PurchaseOrderDetails(options.data);
+        }
+    },
     'PurchaseOrderNotes': {
         key: function (ro) {
             return ko.utils.unwrapObservable(ro.Id);
@@ -37,7 +45,12 @@ const PurchaseOrderDetails = function (data) {
     
     ValidatePurchaseOrderDetails(self)
 }
+const PurchaseOrderItemRawDetails = function (data) {
+    var self = this;
+    ko.mapping.fromJS(data, Mapping, self);
 
+    ValidatePurchaseOrderDetails(self)
+}
 
 const PurchaseOrderContainer = function (data) {
     var self = this;
@@ -67,7 +80,7 @@ const PurchaseOrderContainer = function (data) {
 
     self.TotalAmount = ko.pureComputed(function () {
 
-        return GetTotalFromArray(self.PurchaseOrderDetails().filter(obj => obj.RecordStatus() != RecordStatus.Deleted), "StoreItemAmount");
+        return 0;//GetTotalFromArray(self.PurchaseOrderDetails().filter(obj => obj.RecordStatus() != RecordStatus.Deleted), "StoreItemAmount");
     });
 
 
@@ -147,6 +160,68 @@ const PurchaseOrderContainer = function (data) {
     }
 
     /* end func */
+
+
+
+
+    self.AddItemRaw = function () {
+        let newLine = {
+            Id: 0,
+            StoreItemId: 0,
+            StoreItemAmount: 0,
+            Notes: null,
+            RecordStatus: RecordStatus.Added
+        }
+        self.PurchaseOrderItemRawDetails.push(new PurchaseOrderItemRawDetails(newLine));
+    }
+    self.RemoveItemRaw = function (item) {
+        if (item != null && item.RecordStatus() == RecordStatus.Added)
+            self.PurchaseOrderDetails.remove(item);
+        if (item != null && item.RecordStatus() != RecordStatus.Added)
+            item.RecordStatus(RecordStatus.Deleted);
+    }
+    self.UpdateItemRaw = function (item) {
+        let RawItemInList =
+            self.PurchaseOrderItemRawDetails().filter(x => x.StoreItemId() ===
+                item.StoreItemId());
+        if (RawItemInList?.length <= 1 && item.RecordStatus() != RecordStatus.Deleted) {
+            if (item.RecordStatus() !== RecordStatus.Added)
+                item.RecordStatus(RecordStatus.Updated);
+        }
+        else if (RawItemInList?.length > 1 && item.RecordStatus() == RecordStatus.Added && RawItemInList[0].RecordStatus() == RecordStatus.Deleted) {
+
+
+            console.log(ko.toJS(self.PurchaseOrderItemRawDetails()));
+
+            self.PurchaseOrderItemRawDetails.remove(item);
+            self.PurchaseOrderItemRawDetails().map(x => {
+                if (x.StoreItemId() === item.StoreItemId()) {
+                    x.RecordStatus(RecordStatus.Updated);
+                }
+            });
+            console.log(ko.toJS(self.PurchaseOrderItemRawDetails()));
+
+        }
+        else {
+            self.PurchaseOrderItemRawDetails.remove(item);
+            self.Messages.removeAll();
+            self.Messages.push("تم اختيار هذا العنصر من قبل");
+            $('#message').modal('show');
+        }
+
+    }
+    self.ChangeItemRaw = function (item) {
+        console.log(item)
+        let RawItemInList =
+            self.PurchaseOrderItemRawDetails().filter(x => x.StoreItemId() ===
+                item.StoreItemId());
+        if (RawItemInList?.length <= 1) {
+            if (item.RecordStatus() !== RecordStatus.Added)
+                item.RecordStatus(RecordStatus.Updated);
+        }
+
+
+    }
 
     self.Save = function () {
         self.Messages.removeAll();

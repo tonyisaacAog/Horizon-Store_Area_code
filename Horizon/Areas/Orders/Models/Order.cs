@@ -23,6 +23,7 @@ namespace Horizon.Areas.Orders.Models
         public DateTime DeliveryOrder { get; set; }
         public bool IsProcess { get; set; } = false;
         public OrderStatus OrderStatus { get; set; }
+        public bool IsInvoiceSale { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
         
         public static void GenerateSerial(Order order)

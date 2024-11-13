@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Finance.CurrentAssetModule.Store.Model.Raw;
+using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Store.Models.Raw;
 using MyInfrastructure.Mapping;
 
@@ -21,6 +22,10 @@ namespace Horizon.Areas.Store.ViewModel.Transaction
             configuration.CreateMap<StoreTransactionsRaw, PurchaseStoreTransactionVM>()
                 .ForMember(x=>x.StoreItemName,y=>y.MapFrom(s=>s.StoreItems.ItemName))
                 .ForMember(x => x.UnitPrice, y => y.MapFrom(s => s.UnitPrice.HasValue?s.UnitPrice.Value:0));
+
+
+
         }
     }
+
 }

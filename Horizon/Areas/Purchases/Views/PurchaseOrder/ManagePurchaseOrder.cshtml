@@ -19,7 +19,7 @@
       text-color-class="text-white" header-class="bg-primary">
     <div class="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <div class="form-group">
                     <label>اسم المورد</label>
 
@@ -34,12 +34,12 @@
                         })
                 </div>
             </div>
-            <div class="col-6">
+        @*     <div class="col-6">
                 <div class="form-group">
                     <label>الكمية</label>
                     <input disabled data-bind="value:TotalAmount" class="form-control" />
                 </div>
-            </div>
+            </div> *@
 
         </div>
 
@@ -65,7 +65,7 @@
     </div>
 </card>
 
-<card title="تفاصيل امر الانتاج" addational-class="fa-list-ol"
+<card title="تفاصيل المنتجات" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <table class="table table-bordered table-striped table-hover">
 
@@ -135,6 +135,74 @@
     </table>
 </card>
 
+<card title="تفاصيل المواد خام" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-light text-dark">
+
+            <tr>
+                <th>
+                    العنصر
+                </th>
+
+                <th style="width:10%">
+                    الكمية
+                </th>
+               
+
+                <th>
+                    الملاحظات
+                </th>
+                <th style="width:10%">
+                    <button class="btn btn-dark" data-bind="click:AddItemRaw">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: PurchaseOrderItemRawDetails">
+            <tr>
+                <td>
+                    @Html.Editor("StoreItemId","StoreItemRawList",new
+
+                        {
+
+                            htmlAttributes = new
+                            {
+                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItemRaw}",
+                                @class = "form-select",
+                            }
+
+                        })
+                </td>
+
+                <td>
+                    <input type="text" class="form-control" data-bind="value:StoreItemAmount,event:{change:$parent.ChangeItemRaw}" />
+                </td>
+
+                <td>
+                    <textarea rows="1" class="form-control" data-bind="value:Notes,event:{change:$parent.ChangeItemRaw}"></textarea>
+                </td>
+                <td>
+                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItemRaw">
+                        <span class="fa fa-minus"></span>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+      @*   <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
+                <td></td>
+            </tr>
+        </tbody> *@
+    </table>
+</card>
 
 
 

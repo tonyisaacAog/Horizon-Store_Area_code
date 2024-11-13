@@ -82,6 +82,7 @@ namespace Horizon.Areas.Store.Services
                 StoreTransDetails.AmountBalanceAfter = product.Balance;
                 StoreTransDetails.StoreTransId = StoreTransId;
                 StoreTransDetails.QTY = item.QTY;
+                StoreTransDetails.Id = 0;
                 StoreTransDetailsList.Add(StoreTransDetails);
             }
             await _db.AddRangeAsync(StoreTransDetailsList);

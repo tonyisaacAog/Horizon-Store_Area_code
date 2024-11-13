@@ -10,7 +10,7 @@ namespace Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs
 {
     public class PurchaseOrderVM : BaseId, IHaveCustomMappings
     {
-        public PurchaseOrderVM() { PurchaseOrderDetails = new List<PurchaseOrderDetailsVM>(); Notes = new(); }
+        public PurchaseOrderVM() { PurchaseOrderDetails = new List<PurchaseOrderDetailsVM>(); Notes = new(); PurchaseOrderItemRawDetails = new(); }
         public string? PurchaseOrderNumber { get; set; }
         public string PurchaseOrderDate { get; set; }
         public string DeliveryDate { get; set; }
@@ -21,6 +21,7 @@ namespace Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs
         public int SupplierId { get; set; }
         public string? SupplierName { get; set; }
         public List<PurchaseOrderDetailsVM> PurchaseOrderDetails { get; set; }
+        public List<PurchaseOrderDetailsVM> PurchaseOrderItemRawDetails { get; set; }
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<PurchaseOrderVM,PurchaseOrder>()

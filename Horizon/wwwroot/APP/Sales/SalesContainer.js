@@ -7,10 +7,27 @@
             return new SaleDetails(options.data);
         }
     },
-
+    SaleItemRawDetails: {
+        key: function (ro) {
+            return ko.utils.unwrapObservable(ro.Id);
+        },
+        create: function (options) {
+            return new SaleItemRawDetails(options.data);
+        }
+    }
 };
 
 const SaleDetails = function (data) {
+    var self = this;
+    ko.mapping.fromJS(data, Mapping, self);
+    self.TotalAmount = ko.pureComputed(function () {
+        return parseFloat(self.QTY()) * parseFloat(self.UnitPrice());
+    });
+    ValidateSaleDetails(self);
+
+}
+
+const SaleItemRawDetails = function (data) {
     var self = this;
     ko.mapping.fromJS(data, Mapping, self);
     self.TotalAmount = ko.pureComputed(function () {
@@ -27,10 +44,24 @@ const Sales = function (data) {
     self.TotalQTY = ko.pureComputed(function () {
         return GetTotalFromArray(self.SaleDetails(), "QTY");
     });
+    self.ItemRawTotalQTY = ko.pureComputed(function () {
+        return GetTotalFromArray(self.SaleItemRawDetails(), "QTY");
+    });
 
-    self.SaleInfo.TotalAmount = ko.pureComputed({
+
+    self.TotalAmount = ko.pureComputed({
         read: function () {
             return GetTotalFromArray(self.SaleDetails(), "QTY");
+        },
+        write: function (value) {
+            return value;
+        },
+        owner: self
+    });
+
+    self.ItemRawTotalAmount = ko.pureComputed({
+        read: function () {
+            return GetTotalFromArray(self.SaleItemRawDetails(), "QTY");
         },
         write: function (value) {
             return value;
@@ -50,13 +81,10 @@ const Sales = function (data) {
         }
         self.SaleDetails.push(new SaleDetails(newLine));
     }
-
-
     self.RemoveItem = function (item) {
         if (item != null)
             self.SaleDetails.remove(item);
     }
-
     self.UpdateItem = function (item) {
         console.log(item)
         console.log(item.Id())
@@ -77,6 +105,37 @@ const Sales = function (data) {
     }
 
 
+    self.AddItemRaw = function () {
+        let newLine = {
+            Id: 0,
+            StoreItemId: 0,
+            QTY: 0,
+            UnitPrice: 0
+        }
+        self.SaleItemRawDetails.push(new SaleItemRawDetails(newLine));
+    }
+    self.RemoveItemRaw = function (item) {
+        if (item != null)
+            self.SaleItemRawDetails.remove(item);
+    }
+    self.UpdateItemRaw = function (item) {
+        console.log(item)
+        console.log(item.Id())
+        let StoreItemInList =
+            self.SaleItemRawDetails().filter(x => x.StoreItemId() === item.StoreItemId());
+        console.log(StoreItemInList)
+        console.log("out if")
+        if (StoreItemInList?.length > 1) {
+            console.log("in if")
+            self.Messages.removeAll();
+            self.Messages.push("هذا العنصر تم اضافته");
+            $('#message').modal('show');
+            self.SaleItemRawDetails.remove(item);
+            return;
+
+        }
+
+    }
     self.Save = function () {
         self.Messages.removeAll();
         let errs = ko.validation.group(self, { deep: true, live: true });

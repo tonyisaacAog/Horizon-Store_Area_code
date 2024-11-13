@@ -12,9 +12,9 @@ namespace Horizon.Areas.Purchases.ViewModel
     {
         public int Id { get; set; }
         public decimal TotalAmount { get; set; }
-        public string PurchasingDate { get; set; }
+        public string PurchasingDate { get; set; } = DateTime.Now.ToEgyptianDate();
         [StringLength(50)]
-        public string? InvoiceNum { get; set; }
+        public string? InvoiceNum { get; set; } 
         public int? StoreItemId { get; set; }
         public decimal PriceItemsRaw { get; set; }
         public int AmountStoreItem { get; set; }

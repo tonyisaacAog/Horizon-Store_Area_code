@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BoldReports.Linq;
 using Data.Services;
 using Finance.CurrentAssetModule.Stores.Model.Main;
 using Horizon.Areas.Purchases.Models;
@@ -59,21 +60,43 @@ namespace Horizon.Areas.Purchases.Services
 
         private async Task<PurchaseContainer> SavePurchaseFunc(PurchaseContainer vm)
         {
-            if (vm.PurchaseDetails.Count <= 0)
+            if (vm.PurchaseDetails.Count <= 0 && vm.PurchaseStoreItemDetails.Count <= 0 )
             {
-                throw new Exception("لا يمكن حفظ فاتورة مشتريات بدون اضافة مواد خام للفاتورة");
+                throw new Exception("لا يمكن حفظ فاتورة مشتريات بدون اضافة مواد خام او منتجات للفاتورة");
             }
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
             NewPurchase.SupplierId = vm.Supplier.Id;
             await _db.AddAsync(NewPurchase);
             await _db.SaveChangesAsync();
+            await SaveDetailsForPurchasing(NewPurchase.Id,vm);
             await _purchaseTransactionManager.DoPurchaseTransactions(vm, NewPurchase.Id);
+            await _purchaseTransactionManager.DoPurchaseTransactionsForProduct(vm,NewPurchase.Id);
             return vm;
         }
 
-
-
-
+        private async Task SaveDetailsForPurchasing(int id,PurchaseContainer vm)
+        {
+            var detailStoreItemRaw = vm.PurchaseDetails.Select(obj => new PurchasingDetails
+            {
+                StoreItemsRawId = obj.StoreItemId,
+                Amount = obj.Qty,
+                UnitPrice = obj.UnitPrice,
+                TotalSales = obj.Qty * obj.UnitPrice,
+                PurchasingId = id,
+                DetailType = DetailType.Item
+            });
+            var detailStoreItem  = vm.PurchaseStoreItemDetails.Select(obj => new PurchasingDetails
+            {
+                StoreItemId = obj.StoreItemId,
+                Amount = obj.Qty,
+                UnitPrice = obj.UnitPrice,
+                TotalSales =   obj.UnitPrice,
+                PurchasingId = id,
+                DetailType = DetailType.Product
+            });
+            await _db.AddRangeAsync(detailStoreItemRaw);
+            await _db.AddRangeAsync(detailStoreItem);
+        }
 
         public async Task<PurchaseContainerForProduct> NewPurchaseForProduct(int ProductId)
         {
@@ -185,6 +208,22 @@ namespace Horizon.Areas.Purchases.Services
             purchaseContainer.PurchaseDetails = await _purchaseTransactionManager.GetPurchasesDetails(purchasesId);
             return purchaseContainer;
         }
+
+        public async Task<PurchaseContainer> GetDetailsPurchase(int purchasesId)
+        {
+            PurchaseContainer purchaseContainer = new PurchaseContainer();
+            var purchase = _db.Purchasings.Include(s => s.Supplier).FirstOrDefault(p => p.Id == purchasesId);
+            purchaseContainer.Supplier = _mapper.Map<SupplierVM>(purchase?.Supplier);
+            purchaseContainer.PurchaseInfo = _mapper.Map<PurchaseInfoVM>(purchase);
+            purchaseContainer.PurchaseInfo.InvoiceNum = string.IsNullOrEmpty(purchase.InvoiceNum) ? "NA" : purchase.InvoiceNum;
+            purchaseContainer.PurchaseDetails = await _db.PurchasingDetails.Include(obj => obj.StoreItemsRaw).Where(obj => obj.StoreItemsRaw!=null&& obj.DetailType == DetailType.Item && obj.PurchasingId == purchasesId)
+                .Select(obj => new PurchaseStoreTransactionVM { Id = obj.Id,Qty = obj.Amount,StoreItemId = (int)obj.StoreItemsRawId,UnitPrice = obj.UnitPrice,StoreItemName = obj.StoreItemsRaw.ItemName }).ToListAsync();
+            purchaseContainer.PurchaseStoreItemDetails = await _db.PurchasingDetails.Include(obj => obj.StoreItem).Where(obj => obj.StoreItem!=null&& obj.DetailType == DetailType.Product && obj.PurchasingId == purchasesId)
+                .Select(obj => new PurchaseStoreTransactionVM { Id = obj.Id,Qty = obj.Amount,StoreItemId = (int)obj.StoreItemId,UnitPrice = obj.UnitPrice, StoreItemName = obj.StoreItem.ProductName }).ToListAsync();
+            return purchaseContainer;
+        }
+
+
 
 
 

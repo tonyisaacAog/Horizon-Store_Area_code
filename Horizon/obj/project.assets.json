@@ -14638,11 +14638,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
+      "projectUniqueName": "d:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
       "projectName": "Horizon",
-      "projectPath": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
+      "projectPath": "d:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
       "packagesPath": "C:\\Users\\anton\\.nuget\\packages\\",
-      "outputPath": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\obj\\",
+      "outputPath": "d:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

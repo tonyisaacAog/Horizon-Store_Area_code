@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Data.Services;
 using Horizon.Areas.Orders.Services;
+using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Areas.Sales.Models;
 using Horizon.Areas.Sales.ViewModel;
@@ -21,6 +22,7 @@ namespace Horizon.Areas.Sales.Services
         private readonly StoreTransDetailsManager _salesTransactionDetailsManager;
         private readonly StoreTransactionManager _saleTransactionManager;
         private readonly OrderManager _orderManager;
+
 
         public SalesManager(ApplicationDbContext db,
             IMapper mapper,
@@ -73,7 +75,9 @@ namespace Horizon.Areas.Sales.Services
         {
             SalesContainer salesContainer = new SalesContainer();
 
-            var sale =  _db.Sales.Include(s => s.Client).FirstOrDefault(p => p.Id == salesId);
+            var sale =  _db.Sales.Include(obj=>obj.SaleDetails).ThenInclude(obj=>obj.StoreItem)
+                                 .Include(obj => obj.SaleDetails).ThenInclude(obj => obj.StoreItemsRaw)
+                                 .Include(s => s.Client).FirstOrDefault(p => p.Id == salesId);
 
             var trans = _db.StoreTransactions.FirstOrDefault(p => p.SourceId == salesId && p.DestinationId == sale.ClientId);
 
@@ -85,7 +89,23 @@ namespace Horizon.Areas.Sales.Services
 
             salesContainer.SaleInfo.StoreLocationName = storeLocationame?.LocationName;
 
-            salesContainer.SaleDetails = await _salesTransactionDetailsManager.GetSalesDetails(salesId);
+            salesContainer.SaleDetails = sale.SaleDetails.Where(obj => obj.DetailType == DetailType.Product).Select(obj => new Store.ViewModel.Transaction.SaleStoreTransactionVM
+            {
+                Id = obj.Id,
+                StoreItemId = (int)obj.StoreItemId,
+                StoreItemName = obj.StoreItem.ProductNameAr,
+                QTY = Convert.ToInt32(obj.Amount),
+                UnitPrice = obj.UnitPrice,
+            }).ToList();
+            salesContainer.SaleItemRawDetails = sale.SaleDetails.Where(obj => obj.DetailType == DetailType.Item).Select(obj => new Store.ViewModel.Transaction.SaleStoreTransactionVM
+            {
+                Id = obj.Id,
+                StoreItemId = (int)obj.StoreItemsRawId,
+                StoreItemName = obj.StoreItemsRaw.ItemNameAr,
+                QTY = Convert.ToInt32(obj.Amount),
+                UnitPrice = obj.UnitPrice,
+            }).ToList();
+            //await _salesTransactionDetailsManager.GetSalesDetails(salesId);
 
             return salesContainer;
         }
@@ -104,13 +124,47 @@ namespace Horizon.Areas.Sales.Services
 
             await _db.SaveChangesAsync();
 
+            await SaveDetailsForSale(NewSales.Id,vm);
             var StoreTransId = await _saleTransactionManager.DoStoreTransSales(vm, NewSales.Id);
 
             await _salesTransactionDetailsManager.DoSaleTransactionsDetails(vm, StoreTransId);
+            await _saleTransactionManager.DoItemRawTransactions((vm, NewSales.Id));
+
+            if( vm.IsSaleFromOrder )
+            {
+                var order = await _orderManager.ConvertOrderToSaleInvoice(vm.OrderId);
+                if( !order.Done )
+                {
+                    throw new Exception(order.Messages.FirstOrDefault());
+                }
+            }
 
             return vm;
         }
 
+        private async Task SaveDetailsForSale(int id,SalesContainer vm)
+        {
+            var detailStoreItemRaw = vm.SaleItemRawDetails.Select(obj => new SaleDetails
+            {
+                StoreItemsRawId = obj.StoreItemId,
+                Amount = obj.QTY,
+                UnitPrice = obj.UnitPrice,
+                TotalSales = obj.QTY * obj.UnitPrice,
+                SaleId = id,
+                DetailType = DetailType.Item
+            });
+            var detailStoreItem = vm.SaleDetails.Select(obj => new SaleDetails
+            {
+                StoreItemId = obj.StoreItemId,
+                Amount = obj.QTY,
+                UnitPrice = obj.UnitPrice,
+                TotalSales = obj.QTY * obj.UnitPrice,
+                SaleId = id,
+                DetailType = DetailType.Product
+            });
+            await _db.AddRangeAsync(detailStoreItemRaw);
+            await _db.AddRangeAsync(detailStoreItem);
+        }
 
     }
 

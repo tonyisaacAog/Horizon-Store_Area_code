@@ -4,6 +4,10 @@
 
     partial class OrderReportingDS
     {
+        partial class InvoiceDataTable
+        {
+        }
+
         partial class ParametersDataTable
         {
         }

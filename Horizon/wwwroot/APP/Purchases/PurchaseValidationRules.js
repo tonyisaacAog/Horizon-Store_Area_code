@@ -21,7 +21,7 @@ const ValidatePurchaseDetails = function (self) {
 
     self.StoreItemId.extend({
         required: {
-            params: true, message: "برجاء اختيار المنتج"
+            params: true, message: "برجاء اختيار العنصر"
         }
     });
     self.Qty.extend({
@@ -42,5 +42,31 @@ const ValidatePurchaseDetails = function (self) {
   
 
 
-    
+
+const ValidatePurchaseStoreItemDetails = function (self) {
+
+    self.StoreItemId.extend({
+        required: {
+            params: true, message: "برجاء اختيار المنتج"
+        }
+    });
+    self.Qty.extend({
+        required: {
+            params: true, message: "برجاء اضافة الكمية"
+        },
+        number: true,
+        min: 0.1
+    })
+    self.UnitPrice.extend({
+        required: {
+            params: true, message: "برجاء اضافة السعر"
+        },
+        number: true,
+        min: 0.1
+    })
+}
+
+
+
+
 

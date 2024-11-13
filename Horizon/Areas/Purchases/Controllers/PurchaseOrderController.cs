@@ -24,7 +24,11 @@ namespace Horizon.Areas.Purchases.Controllers
             var purchaseOrder = await _purchaseOrderManager.GetAll();
             return View(purchaseOrder);
         }
-
+        public async Task<JsonResult> GetPurchaseOrder(int id)
+        {
+            var details = await _purchaseOrderManager.PurchaseOrderDetails(id);
+            return Json(new { data = details.PurchaseOrderDetails });
+        }
         public async Task<IActionResult> ManagePurchaseOrder(int id)
         {
             if( id > 0 )
@@ -95,7 +99,8 @@ namespace Horizon.Areas.Purchases.Controllers
 
                 var Model = await _purchaseOrderManager.PurchaseOrderDetails(id);
 
-                var PurchaseOrderDetails = Model.PurchaseOrderDetails.Select((obj,index) => new PurchaseOrderDetailsReports { Id = index + 1,ItemName = obj.StoreItemName,Notes = obj.Notes,Quantity = obj.StoreItemAmount });
+                var PurchaseOrderDetails = Model.PurchaseOrderDetails.Select((obj,index) => new PurchaseOrderDetailsReports { Id = index + 1,ItemName = obj.StoreItemName,Notes = obj.Notes,Quantity = obj.StoreItemAmount }).ToList();
+                 PurchaseOrderDetails.AddRange(Model.PurchaseOrderItemRawDetails.Select((obj,index) => new PurchaseOrderDetailsReports { Id = index + 1,ItemName = obj.StoreItemName,Notes = obj.Notes,Quantity = obj.StoreItemAmount }));
                 var PurchaseOrderNotes = Model.Notes.Select((obj,index) => new PurchaseOrderNotesReports { Id = index,Note = obj.Note });
                 var paramters = new PurchaseOrderParamsReport { DeliveryDate = Model.DeliveryDate,Name = "",NoPurchaseOrder = $"امر انتاج رقم ( {Model.PurchaseOrderNumber} )",PurchaseOrderDate = Model.PurchaseOrderDate,Recevier = $"السادة / {Model.SupplierName}",Signature = "",NoNotes = PurchaseOrderNotes.Count() == 0? true:false };
                 writer.DataSources.Add(new ReportDataSource { Name = "Parameters",Value = new List<PurchaseOrderParamsReport> { paramters } });

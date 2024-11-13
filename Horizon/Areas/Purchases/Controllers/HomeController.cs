@@ -31,6 +31,11 @@ namespace Horizon.Areas.Purchases.Controllers
             var purchaseDetails = await _purchaseManager.DetailsPurchase(Id);
             return View(purchaseDetails);
         }
+        public async Task<IActionResult> GetDetailsPurchase(int Id)
+        {
+            var purchaseDetails = await _purchaseManager.GetDetailsPurchase(Id);
+            return View(purchaseDetails);
+        }
 
         public async Task<IActionResult> ManagePurchase( int Id)
         => View(await _purchaseManager.NewPurchase(Id));

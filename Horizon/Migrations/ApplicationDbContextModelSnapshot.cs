@@ -333,6 +333,9 @@ namespace Horizon.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsInvoiceSale")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsProcess")
                         .HasColumnType("bit");
 
@@ -541,6 +544,9 @@ namespace Horizon.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DetailType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsCreatedASPurchasing")
                         .HasColumnType("bit");
 
@@ -563,7 +569,10 @@ namespace Horizon.Migrations
                     b.Property<decimal>("StoreItemAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("StoreItemId")
+                    b.Property<int?>("StoreItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreItemsRawId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -571,6 +580,8 @@ namespace Horizon.Migrations
                     b.HasIndex("PurchaseOrderId");
 
                     b.HasIndex("StoreItemId");
+
+                    b.HasIndex("StoreItemsRawId");
 
                     b.ToTable("Finance_PurchasingModule_PurchaseOrderDetails");
                 });
@@ -639,6 +650,126 @@ namespace Horizon.Migrations
                     b.ToTable("Finance_PurchasingModule_Purchasing");
                 });
 
+            modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchasingDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DetailType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PurchasingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreItemsRawId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalSales")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchasingId");
+
+                    b.HasIndex("StoreItemId");
+
+                    b.HasIndex("StoreItemsRawId");
+
+                    b.ToTable("Finance_PurchasingModule_PurchasingDetails");
+                });
+
+            modelBuilder.Entity("Horizon.Areas.Purchases.Models.SaleDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DetailType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SaleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreItemsRawId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalSales")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleId");
+
+                    b.HasIndex("StoreItemId");
+
+                    b.HasIndex("StoreItemsRawId");
+
+                    b.ToTable("Finance_PurchasingModule_SaleDetails");
+                });
+
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -700,10 +831,10 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4707),
+                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(8001),
                             Email = "",
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4704),
+                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7996),
                             ModifiedBy = "",
                             Phone1 = "",
                             Phone2 = "",
@@ -776,10 +907,10 @@ namespace Horizon.Migrations
                             ClientName = "عميل عام",
                             ClientNameAr = "عميل عام",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4591),
+                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7950),
                             Email = "",
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4587),
+                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7943),
                             ModifiedBy = "",
                             Phone1 = "",
                             Phone2 = "",
@@ -955,6 +1086,9 @@ namespace Horizon.Migrations
                     b.Property<decimal>("RestQty")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("SaleId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StoreItemId")
                         .HasColumnType("int");
 
@@ -1054,9 +1188,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4316),
+                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7631),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 8, 13, 0, 18, 41, 325, DateTimeKind.Local).AddTicks(4270),
+                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7577),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
@@ -1492,13 +1626,17 @@ namespace Horizon.Migrations
 
                     b.HasOne("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", "StoreItem")
                         .WithMany()
-                        .HasForeignKey("StoreItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StoreItemId");
+
+                    b.HasOne("Horizon.Areas.Store.Models.Settings.StoreItemsRaw", "StoreItemsRaw")
+                        .WithMany()
+                        .HasForeignKey("StoreItemsRawId");
 
                     b.Navigation("PurchaseOrder");
 
                     b.Navigation("StoreItem");
+
+                    b.Navigation("StoreItemsRaw");
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Purchasing", b =>
@@ -1522,6 +1660,52 @@ namespace Horizon.Migrations
                     b.Navigation("StoreItem");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchasingDetails", b =>
+                {
+                    b.HasOne("Horizon.Areas.Purchases.Models.Purchasing", "Purchasing")
+                        .WithMany("PurchasingDetails")
+                        .HasForeignKey("PurchasingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", "StoreItem")
+                        .WithMany()
+                        .HasForeignKey("StoreItemId");
+
+                    b.HasOne("Horizon.Areas.Store.Models.Settings.StoreItemsRaw", "StoreItemsRaw")
+                        .WithMany()
+                        .HasForeignKey("StoreItemsRawId");
+
+                    b.Navigation("Purchasing");
+
+                    b.Navigation("StoreItem");
+
+                    b.Navigation("StoreItemsRaw");
+                });
+
+            modelBuilder.Entity("Horizon.Areas.Purchases.Models.SaleDetails", b =>
+                {
+                    b.HasOne("Horizon.Areas.Sales.Models.Sale", "Sale")
+                        .WithMany("SaleDetails")
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", "StoreItem")
+                        .WithMany()
+                        .HasForeignKey("StoreItemId");
+
+                    b.HasOne("Horizon.Areas.Store.Models.Settings.StoreItemsRaw", "StoreItemsRaw")
+                        .WithMany()
+                        .HasForeignKey("StoreItemsRawId");
+
+                    b.Navigation("Sale");
+
+                    b.Navigation("StoreItem");
+
+                    b.Navigation("StoreItemsRaw");
                 });
 
             modelBuilder.Entity("Horizon.Areas.Sales.Models.Sale", b =>
@@ -1645,6 +1829,16 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderDetails");
+                });
+
+            modelBuilder.Entity("Horizon.Areas.Purchases.Models.Purchasing", b =>
+                {
+                    b.Navigation("PurchasingDetails");
+                });
+
+            modelBuilder.Entity("Horizon.Areas.Sales.Models.Sale", b =>
+                {
+                    b.Navigation("SaleDetails");
                 });
 #pragma warning restore 612, 618
         }

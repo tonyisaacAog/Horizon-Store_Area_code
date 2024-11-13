@@ -40,7 +40,7 @@ const ValidatePurchaseDetails = function (self) {
 
     self.StoreItemId.extend({
         required: {
-            params: true, message: "برجاء اختيار المنتج"
+            params: true, message: "برجاء اختيار العنصر"
         }
     });
     self.Qty.extend({
@@ -58,6 +58,7 @@ const ValidatePurchaseDetails = function (self) {
         min: 0.1
     })
 }
+
 
 
 

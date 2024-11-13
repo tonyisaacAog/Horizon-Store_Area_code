@@ -73,6 +73,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SaleInvoice.rdlc" />
     <None Include="OrderReportingDS.xsc">
       <DependentUpon>OrderReportingDS.xsd</DependentUpon>
     </None>

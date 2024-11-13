@@ -11,11 +11,13 @@ namespace Horizon.Areas.Purchases.ViewModel
             Supplier = new();
             PurchaseInfo = new();
             PurchaseDetails = new();
+            PurchaseStoreItemDetails = new();
             PurchaseOrder = new();
         }
         public SupplierVM Supplier { get; set; }
         public PurchaseOrderVM? PurchaseOrder { get; set; }
         public PurchaseInfoVM PurchaseInfo { get; set; }
         public List<PurchaseStoreTransactionVM> PurchaseDetails { get; set; }
+        public List<PurchaseStoreTransactionVM> PurchaseStoreItemDetails { get; set; }
     }
 }

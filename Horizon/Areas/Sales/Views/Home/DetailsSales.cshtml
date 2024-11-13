@@ -33,6 +33,61 @@
 
 </card>
 
+<card title="تفاصيل عملية صرف مواد خام" addational-class="fa-list-ol"
+      text-color-class="text-white" header-class="bg-primary">
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="bg-primary text-white">
+
+            <tr>
+                <th>
+                    اسم العنصر
+                </th>
+
+                <th>
+                    الكمية
+                </th>
+                <th style="width:15%">
+                    سعر الوحدة
+                </th>
+
+                <th>
+                    السعر الإجمالي
+                </th>
+
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: SaleItemRawDetails">
+            <tr>
+                <td>
+                    <span data-bind="text:StoreItemName"></span>
+                </td>
+
+                <td>
+                    <span data-bind="text:QTY"></span>
+                </td>
+
+                <td>
+                    <span data-bind="text:UnitPrice"></span>
+                </td>
+                <td>
+                    <span data-bind="text:TotalAmount"></span>
+                </td>
+
+            </tr>
+
+        </tbody>
+        <tbody>
+            <tr>
+                <td></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
+                <td><b>الاجمالي</b></td>
+                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</card>
+
 <card title="تفاصيل عملية صرف المنتجات" addational-class="fa-list-ol"
       text-color-class="text-white" header-class="bg-primary">
     <table class="table table-bordered table-striped table-hover">

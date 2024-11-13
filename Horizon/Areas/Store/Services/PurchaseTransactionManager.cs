@@ -25,12 +25,30 @@ namespace Horizon.Areas.Store.Services
 
         public async Task DoPurchaseTransactions (PurchaseContainer vm , int PurchaseId)
         {
-            await DoPurchaseTransactionGeneral(vm.PurchaseInfo, vm.PurchaseDetails, PurchaseId);
+            await DoPurchaseTransactionGeneral(vm.PurchaseDetails, PurchaseId);
         }
 
         public async Task DoPurchaseTransactionsForProduct(PurchaseContainerForProduct vm, int PurchaseId)
         {
-            await DoPurchaseTransactionGeneral(vm.PurchaseInfo, vm.PurchaseDetails, PurchaseId);
+            await DoPurchaseTransactionGeneral(vm.PurchaseDetails, PurchaseId);
+        }
+
+        public async Task DoPurchaseTransactionsForProduct(PurchaseContainer vm,int PurchaseId)
+        {
+            var StoreItemRawList = new List<PurchaseStoreTransactionVM>();
+            vm.PurchaseStoreItemDetails.ForEach(item =>
+            {
+                var configurationProduct = _db.ItemConfgurations.Where(obj => obj.StoreItemId == item.StoreItemId).ToList();
+                var storeItemRaws = configurationProduct.Select(obj => new PurchaseStoreTransactionVM
+                {
+                    StoreItemId = obj.StoreItemRawId,
+                    Qty = obj.MinimumAmount * item.Qty,
+                    UnitPrice = 1,
+                    TransType = item.TransType
+                });
+                StoreItemRawList.AddRange(storeItemRaws);
+            });
+            await DoPurchaseTransactionGeneral(StoreItemRawList,PurchaseId);
         }
 
 
@@ -41,9 +59,9 @@ namespace Horizon.Areas.Store.Services
                 (await _db.StoreTransactionsRaw.Where(t => t.PurchaseId == purchasesId).Include(itemRaw=>itemRaw.StoreItems).ToListAsync());
         }
 
-        private async Task DoPurchaseTransactionGeneral(PurchaseInfoVM PurchaseInfo, List<PurchaseStoreTransactionVM> PurchaseDetails,int PurchaseId)
+        private async Task DoPurchaseTransactionGeneral(List<PurchaseStoreTransactionVM> PurchaseDetails,int PurchaseId)
         {
-            var TransDate = PurchaseInfo.PurchasingDate.ToEgyptionDate();
+            var TransDate = DateTime.Now;
             var StoreTransList = new List<StoreTransactionsRaw>();
             foreach (var item in PurchaseDetails)
             {
@@ -65,6 +83,9 @@ namespace Horizon.Areas.Store.Services
             await _db.AddRangeAsync(StoreTransList);
             await _db.SaveChangesAsync();
         }
+
+       
+
 
 
     }

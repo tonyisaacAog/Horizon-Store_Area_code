@@ -21,7 +21,7 @@ namespace Horizon.Areas.Orders.ViewModel
         public string DeliveryOrder { get; set; } = string.Empty;
         public OrderStatus OrderStatus { get; set; }
         public bool IsProcess { get; set; } = false;
-
+        public bool IsInvoiceSale { get; set; }
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<Order, OrderVM>()

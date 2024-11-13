@@ -46,6 +46,35 @@ const Purchase = function (data) {
             element.Qty(element.ConfigueQty() * self.StoreItem.Quantity());
         }));
     }
+    self.UpdateNumberOfRack = function () {
+
+            $.ajax({
+                url: "/Purchases/PurchaseOrder/GetPurchaseOrder/" + self.PurchaseOrderId(),
+                type: "GET",
+                success: function (data) {
+                    console.log(data);
+                    var item = data.data.filter(function (obj) {
+                        return obj.StoreItemId == self.StoreItem.Id();
+                    });
+                    console.log(item);
+                    if (item.length > 0) {
+                        var quantity = item[0].StoreItemAmount;
+                        console.log(quantity);
+                        self.StoreItem.Quantity(quantity);
+                        self.UpdateTotalRaw();
+                    } else {
+                        console.log("Item not found");
+                        $("#PurchaseOrderId").val(null).trigger('change');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error occurred:", status, error);
+                    $("#PurchaseOrderId").val(null).trigger('change');
+                }
+            });
+        
+ 
+    }
 
     self.AddItem = function () {
      
