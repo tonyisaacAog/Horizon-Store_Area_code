@@ -692,3 +692,4 @@ D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\Horizon.genruntimeconfig.cache
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\ref\Horizon.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Debug\net6.0\Areas\Orders\BoldReports\OrderReport.rdlc
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\Horizon.sourcelink.json
