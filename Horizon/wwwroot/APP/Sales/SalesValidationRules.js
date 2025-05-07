@@ -16,9 +16,17 @@
     self.SaleDetails.extend({
         validation: {
             validator: function (val) {
-                return val.length >= 1; // Replace 5 with your desired minimum length
+                return val.length >= 1 || self.SaleItemRawDetails().length>=1; // Replace 5 with your desired minimum length
             },
-            message: "يجب وضع المنتجات التى تريد بيعها " // Replace with your desired error message
+            message: "يجب وضع المنتجات او العناصر التى تريد بيعها " // Replace with your desired error message
+        }
+    });
+    self.SaleItemRawDetails.extend({
+        validation: {
+            validator: function (val) {
+                return val.length >= 1 || self.SaleDetails().length >= 1; // Replace 5 with your desired minimum length
+            },
+            message: "يجب وضع المنتجات او العناصر التى تريد بيعها " // Replace with your desired error message
         }
     });
 }

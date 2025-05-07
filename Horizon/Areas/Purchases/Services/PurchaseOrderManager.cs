@@ -97,7 +97,8 @@ namespace Horizon.Areas.Purchases.Services
             var purchaseOrder = await _db.PurchaseOrders.FirstOrDefaultAsync(obj => obj.Id == vm.Id);
             if (purchaseOrder == null) throw new Exception("امر الانتاج عير موجود");
             purchaseOrder.Date = vm.PurchaseOrderDate.ToEgyptionDate();
-            purchaseOrder.TotalAmount = vm.TotalAmount;
+            purchaseOrder.TotalAmount = vm.PurchaseOrderDetails.Sum(obj=>obj.StoreItemAmount) + 
+                                        vm.PurchaseOrderItemRawDetails.Sum(obj => obj.StoreItemAmount);
             purchaseOrder.SupplierId = vm.SupplierId;
             purchaseOrder.Notes = JsonConvert.SerializeObject(vm.Notes);
             //purchaseOrder.PurchaseOrderNumber = vm.PurchaseOrderNumber;

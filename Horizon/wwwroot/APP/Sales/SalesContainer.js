@@ -51,7 +51,7 @@ const Sales = function (data) {
 
     self.TotalAmount = ko.pureComputed({
         read: function () {
-            return GetTotalFromArray(self.SaleDetails(), "QTY");
+            return GetTotalFromArray(self.SaleDetails(), "TotalAmount");
         },
         write: function (value) {
             return value;
@@ -61,7 +61,7 @@ const Sales = function (data) {
 
     self.ItemRawTotalAmount = ko.pureComputed({
         read: function () {
-            return GetTotalFromArray(self.SaleItemRawDetails(), "QTY");
+            return GetTotalFromArray(self.SaleItemRawDetails(), "TotalAmount");
         },
         write: function (value) {
             return value;

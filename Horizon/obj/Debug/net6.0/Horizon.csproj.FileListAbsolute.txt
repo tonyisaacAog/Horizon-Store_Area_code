@@ -1387,3 +1387,7 @@ C:\Users\Kareem\Desktop\Project Company\Horizon_Store_Area_code\Horizon-Store_Ar
 C:\Users\Kareem\Desktop\Project Company\Horizon_Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\ref\Horizon.dll
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\Horizon.sourcelink.json
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\Horizon.csproj.Up2Date
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Debug\net6.0\Horizon.staticwebassets.endpoints.json
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\staticwebassets.build.endpoints.json
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\staticwebassets\msbuild.Horizon.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt

@@ -85,17 +85,18 @@ namespace Horizon.Areas.Store.Services.Reports
             var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
             foreach (var storeItem in storeWithStoreItemLst )
             {
-                var purchases = await _db.Purchasings.Where(obj => obj.StoreItemId == storeItem.Id
-                                   && obj.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
-                                   && obj.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
+                var purchases = await _db.PurchasingDetails.Include(obj => obj.Purchasing)
+                       .Where(obj => obj.StoreItemId == storeItem.Id
+                                  && obj.Purchasing.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
+                                  && obj.Purchasing.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj => obj.StoreItemsRaw)
                     .Where(obj => obj.StoreItemId == storeItem.Id && obj.StoreItemsRaw.RawItemTypeId == 1).ToListAsync();
                 foreach (var purchase in purchases)
                 {
-                    var storeTransForPurchase = await _db.StoreTransactionsRaw.Include(obj => obj.StoreItems).Where(obj => obj.PurchaseId == purchase.Id).ToListAsync();
+                    var storeTransForPurchase = await _db.StoreTransactionsRaw.Include(obj => obj.StoreItems).Where(obj => obj.PurchaseId == purchase.PurchasingId).ToListAsync();
                     var numberOfProduct = await GetNumProductCanMadeOfMatiaral(itemConfigurations, storeTransForPurchase,true);
                     if (numberOfProduct > 0)
-                        storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName, StoreItemMainQuantity = numberOfProduct, PriceItemsRawPurchase = purchase.PriceItemsRaw });
+                        storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName, StoreItemMainQuantity = numberOfProduct, PriceItemsRawPurchase = purchase.TotalSales });
                 }
                 //if (purchases.Count == 0)
                 //{
@@ -113,18 +114,18 @@ namespace Horizon.Areas.Store.Services.Reports
             var storeWithStoreItemLst = await storeWithStoreItem.ToListAsync();
             foreach( var storeItem in storeWithStoreItemLst )
             {
-                var purchases = await _db.Purchasings
+                var purchases = await _db.PurchasingDetails.Include(obj=>obj.Purchasing)
                         .Where(obj => obj.StoreItemId == storeItem.Id
-                                   && obj.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
-                                   && obj.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
+                                   && obj.Purchasing.PurchasingDate.Value.Date >= searchvm.StartDate.ToEgyptionDate().Date
+                                   && obj.Purchasing.PurchasingDate.Value.Date < searchvm.EndDate.ToEgyptionDate().Date).ToListAsync();
                 var itemConfigurations = await _db.ItemConfgurations.Include(obj=>obj.StoreItemsRaw)
                     .Where(obj => obj.StoreItemId == storeItem.Id&&obj.StoreItemsRaw.RawItemTypeId ==1).ToListAsync();
                 foreach( var purchase in purchases )
                 {
-                    var storeTransForPurchase = await _db.StoreTransactionsRaw.Include(obj=>obj.StoreItems).Where(obj => obj.PurchaseId == purchase.Id).ToListAsync();
+                    var storeTransForPurchase = await _db.StoreTransactionsRaw.Include(obj=>obj.StoreItems).Where(obj => obj.PurchaseId == purchase.PurchasingId).ToListAsync();
                     var numberOfProduct = await GetNumProductCanMadeOfMatiaral(itemConfigurations,storeTransForPurchase);
                     if(numberOfProduct>0)
-                     storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName, StoreItemMainQuantity = numberOfProduct,PriceItemsRawPurchase = purchase.PriceItemsRaw });
+                     storeItemNotCollectContainer.Add(new StoreItemAmountNotCollectReportVM { StoreItemName = storeItem.ProductName, StoreItemMainQuantity = numberOfProduct,PriceItemsRawPurchase = purchase.TotalSales });
                 }
                 //if( purchases.Count == 0 )
                 //{

@@ -119,7 +119,8 @@ namespace Horizon.Areas.Sales.Services
             var NewSales = _mapper.Map<Sale>(vm.SaleInfo);
 
             NewSales.ClientId = vm.Client.Id;
-
+            NewSales.TotalAmount = vm.SaleDetails.Sum(obj => obj.UnitPrice * obj.QTY) + vm.SaleItemRawDetails.Sum(obj => obj.UnitPrice * obj.QTY);
+          
             await _db.AddAsync(NewSales);
 
             await _db.SaveChangesAsync();

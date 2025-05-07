@@ -30,9 +30,17 @@
     self.PurchaseOrderDetails.extend({
         validation: {
             validator: function (val) {
-                return val.length >= 1; // Replace 5 with your desired minimum length
+                return val.length >= 1 || self.PurchaseOrderItemRawDetails().length>=1; // Replace 5 with your desired minimum length
             },
-            message: "امر الانتاج يجب ان يحوى على الاقل منتج واحد." // Replace with your desired error message
+            message: "امر الانتاج يجب ان يحوى على الاقل منتج واحد او عنصر." // Replace with your desired error message
+        }
+    });
+    self.PurchaseOrderItemRawDetails.extend({
+        validation: {
+            validator: function (val) {
+                return val.length >= 1 || self.PurchaseOrderDetails().length>=1; // Replace 5 with your desired minimum length
+            },
+            message: "امر الانتاج يجب ان يحوى على الاقل منتج واحد او عنصر." // Replace with your desired error message
         }
     });
 

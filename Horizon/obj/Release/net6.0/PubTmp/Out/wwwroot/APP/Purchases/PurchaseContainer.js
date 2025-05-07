@@ -7,6 +7,14 @@
             return new PurchaseDetails(options.data);
         }
     },
+    'PurchaseStoreItemDetails': {
+        key: function (ro) {
+            return ko.utils.unwrapObservable(ro.Id);
+        },
+        create: function (options) {
+            return new PurchaseStoreItemDetails(options.data);
+        }
+    }
 
 };
 
@@ -19,6 +27,16 @@ const PurchaseDetails = function (data) {
     });
 }
 
+const PurchaseStoreItemDetails = function (data) {
+    var self = this;
+    ko.mapping.fromJS(data, Mapping, self);
+    ValidatePurchaseStoreItemDetails(self);
+    self.TotalAmount = ko.pureComputed(function () {
+        return    parseFloat(self.UnitPrice());
+    });
+}
+
+
 const Purchase = function (data) {
     var self = this;
     ko.mapping.fromJS(data, Mapping, self);
@@ -26,6 +44,16 @@ const Purchase = function (data) {
     self.Messages = ko.observableArray([]);
     self.TotalQTY = ko.pureComputed(function () {
         return GetTotalFromArray(self.PurchaseDetails(), "Qty");
+    });
+    self.TotalAmount = ko.pureComputed(function () {
+        return GetTotalFromArray(self.PurchaseDetails(), "TotalAmount");
+    });
+
+    self.StoreItemTotalQTY = ko.pureComputed(function () {
+        return GetTotalFromArray(self.PurchaseStoreItemDetails(), "Qty");
+    });
+    self.StoreItemTotalAmount = ko.pureComputed(function () {
+        return GetTotalFromArray(self.PurchaseStoreItemDetails(), "TotalAmount");
     });
 
     self.PurchaseInfo.TotalAmount = ko.pureComputed({
@@ -37,9 +65,7 @@ const Purchase = function (data) {
         },
         owner: self
     });
-    self.TotalAmount = ko.pureComputed(function () {
-        return GetTotalFromArray(self.PurchaseDetails(), "TotalAmount");
-    });
+
     self.RemoveItem = function (item) {
         if(item !=null)
             self.PurchaseDetails.remove(item);
@@ -71,6 +97,39 @@ const Purchase = function (data) {
         } 
 
     }
+
+    self.RemoveStoreItem = function (item) {
+        if (item != null)
+            self.PurchaseStoreItemDetails.remove(item);
+    }
+    self.AddStoreItem = function () {
+        let newLine = {
+            Id: 0,
+            StoreItemId: 0,
+            Qty: 0,
+            UnitPrice: 0
+        }
+        self.PurchaseStoreItemDetails.push(new PurchaseStoreItemDetails(newLine));
+    }
+    self.UpdateStoreItem = function (item) {
+        console.log(item)
+        console.log(item.Id())
+        let RawItemInList =
+            self.PurchaseStoreItemDetails().filter(x => x.StoreItemId() === item.StoreItemId());
+        console.log(RawItemInList)
+        console.log("out if")
+        if (RawItemInList?.length > 1) {
+            console.log("in if")
+            self.Messages.removeAll();
+            self.Messages.push("هذا العنصر تم اضافته");
+            $('#message').modal('show');
+            self.PurchaseStoreItemDetails.remove(item);
+            return;
+
+        }
+
+    }
+
 
     self.Save = function () {
         self.Messages.removeAll();

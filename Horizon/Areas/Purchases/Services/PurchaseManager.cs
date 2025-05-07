@@ -66,6 +66,7 @@ namespace Horizon.Areas.Purchases.Services
             }
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
             NewPurchase.SupplierId = vm.Supplier.Id;
+            NewPurchase.TotalAmount = vm.PurchaseDetails.Sum(obj => obj.Qty * obj.UnitPrice) + vm.PurchaseStoreItemDetails.Sum(obj => obj.UnitPrice);
             await _db.AddAsync(NewPurchase);
             await _db.SaveChangesAsync();
             await SaveDetailsForPurchasing(NewPurchase.Id,vm);
