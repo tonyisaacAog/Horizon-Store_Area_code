@@ -2,7 +2,7 @@
   "Files": [
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\obj\\Release\\net6.0\\scopedcss\\projectbundle\\Horizon.bundle.scp.css",
-      "PackagePath": "staticwebassets\\Horizon.bundle.scp.css"
+      "PackagePath": "staticwebassets\\Horizon.6x5329xw7o.bundle.scp.css"
     },
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\General\\General.js",
@@ -3971,6 +3971,10 @@
     {
       "Id": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\lib\\rtl\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\rtl\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.Horizon.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.Horizon.Microsoft.AspNetCore.StaticWebAssets.props",

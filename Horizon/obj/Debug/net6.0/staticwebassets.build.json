@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "amJCTRW52xLFEXEapVPRGy9zi1IyZ+DLyKtsetHSg64=",
+  "Hash": "GbNax5B1sC5hb0su+3M/x2sO76a2JEnXwGY7SKNbIis=",
   "Source": "Horizon",
   "BasePath": "_content/Horizon",
   "Mode": "Default",
@@ -1879,8 +1879,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "ejlbcfbyc7",
-      "Integrity": "ypkdfSrRsfgUcaRuu38EH6Hz8SgpMJUlSm/4aOXZr2o=",
+      "Fingerprint": "0j1kq8uj8p",
+      "Integrity": "vF68MZmGVWx1ydkMKE/3i2PnfWIlWs+CsgY3Ig52iW0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Purchases\\PurchaseContainer.js"
@@ -1900,8 +1900,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "mbo2jjjial",
-      "Integrity": "XkmApbTmu020mRpuQ6FF11ficvs9QD9gRiBp30tNh5o=",
+      "Fingerprint": "pnq1wy8rd4",
+      "Integrity": "NWUlcCyVHhh43aGRa3bRxOgrJh230Mp09vFxbAygT98=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Purchases\\PurchaseContainerForProduct.js"
@@ -1942,8 +1942,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "y5o5df32xl",
-      "Integrity": "loLPbaetTBYI2WtnOTUmLXGvBYU7Zgu5Qb9teI/cvvU=",
+      "Fingerprint": "nnc9cu5zlm",
+      "Integrity": "rYP7Mnu9xlS3kguPICT5FDNL8Qn2s5DRGD+QrVd9D6Q=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Purchases\\PurchaseValidationRules.js"
@@ -2047,8 +2047,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "t0kj5rz304",
-      "Integrity": "47JITBufmNuPijpzCEEASXmjev4eUPfvrncXSUC1Tnk=",
+      "Fingerprint": "409mvvy7sc",
+      "Integrity": "7O1rVBTOmTqoHHSzNx4vjoyoz0M15jl3roBKvSMchlQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Sales\\SalesContainer.js"
@@ -2068,8 +2068,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "gz2vjp80qr",
-      "Integrity": "JGj6P+5g+lSvrEEJ7/3ueP97lTTavOPQTKkJMj9ZNQg=",
+      "Fingerprint": "ztpp33fowb",
+      "Integrity": "Bw4zl71XaGIh90zhaKPrdPuYvkPI3TfCLRVO3LsNdp0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\APP\\Sales\\SalesValidationRules.js"
@@ -22257,7 +22257,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 07 Aug 2024 17:53:17 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22294,7 +22294,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 07 Aug 2024 17:53:17 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24143,7 +24143,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 12 Nov 2024 20:05:52 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24188,7 +24188,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 12 Nov 2024 20:05:52 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24225,7 +24225,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 22:06:26 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24270,7 +24270,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 22:06:26 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24285,7 +24285,7 @@
       ]
     },
     {
-      "Route": "APP/Purchases/PurchaseContainer.ejlbcfbyc7.js",
+      "Route": "APP/Purchases/PurchaseContainer.0j1kq8uj8p.js",
       "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Purchases\\PurchaseContainer.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -24295,7 +24295,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4553"
+          "Value": "4706"
         },
         {
           "Name": "Content-Type",
@@ -24303,11 +24303,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"ypkdfSrRsfgUcaRuu38EH6Hz8SgpMJUlSm/4aOXZr2o=\""
+          "Value": "\"vF68MZmGVWx1ydkMKE/3i2PnfWIlWs+CsgY3Ig52iW0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 14:51:37 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24317,7 +24317,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ejlbcfbyc7"
+          "Value": "0j1kq8uj8p"
         },
         {
           "Name": "label",
@@ -24325,7 +24325,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-ypkdfSrRsfgUcaRuu38EH6Hz8SgpMJUlSm/4aOXZr2o="
+          "Value": "sha256-vF68MZmGVWx1ydkMKE/3i2PnfWIlWs+CsgY3Ig52iW0="
         }
       ]
     },
@@ -24340,7 +24340,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4553"
+          "Value": "4706"
         },
         {
           "Name": "Content-Type",
@@ -24348,11 +24348,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"ypkdfSrRsfgUcaRuu38EH6Hz8SgpMJUlSm/4aOXZr2o=\""
+          "Value": "\"vF68MZmGVWx1ydkMKE/3i2PnfWIlWs+CsgY3Ig52iW0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 14:51:37 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24362,7 +24362,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-ypkdfSrRsfgUcaRuu38EH6Hz8SgpMJUlSm/4aOXZr2o="
+          "Value": "sha256-vF68MZmGVWx1ydkMKE/3i2PnfWIlWs+CsgY3Ig52iW0="
         }
       ]
     },
@@ -24377,7 +24377,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "3222"
+          "Value": "3295"
         },
         {
           "Name": "Content-Type",
@@ -24385,11 +24385,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"XkmApbTmu020mRpuQ6FF11ficvs9QD9gRiBp30tNh5o=\""
+          "Value": "\"NWUlcCyVHhh43aGRa3bRxOgrJh230Mp09vFxbAygT98=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 21 Oct 2024 18:17:31 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24399,12 +24399,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-XkmApbTmu020mRpuQ6FF11ficvs9QD9gRiBp30tNh5o="
+          "Value": "sha256-NWUlcCyVHhh43aGRa3bRxOgrJh230Mp09vFxbAygT98="
         }
       ]
     },
     {
-      "Route": "APP/Purchases/PurchaseContainerForProduct.mbo2jjjial.js",
+      "Route": "APP/Purchases/PurchaseContainerForProduct.pnq1wy8rd4.js",
       "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Purchases\\PurchaseContainerForProduct.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -24414,7 +24414,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "3222"
+          "Value": "3295"
         },
         {
           "Name": "Content-Type",
@@ -24422,11 +24422,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"XkmApbTmu020mRpuQ6FF11ficvs9QD9gRiBp30tNh5o=\""
+          "Value": "\"NWUlcCyVHhh43aGRa3bRxOgrJh230Mp09vFxbAygT98=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 21 Oct 2024 18:17:31 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24436,7 +24436,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "mbo2jjjial"
+          "Value": "pnq1wy8rd4"
         },
         {
           "Name": "label",
@@ -24444,7 +24444,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-XkmApbTmu020mRpuQ6FF11ficvs9QD9gRiBp30tNh5o="
+          "Value": "sha256-NWUlcCyVHhh43aGRa3bRxOgrJh230Mp09vFxbAygT98="
         }
       ]
     },
@@ -24471,7 +24471,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 12:07:11 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24516,7 +24516,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 12:07:11 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24541,7 +24541,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1701"
+          "Value": "1773"
         },
         {
           "Name": "Content-Type",
@@ -24549,11 +24549,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"loLPbaetTBYI2WtnOTUmLXGvBYU7Zgu5Qb9teI/cvvU=\""
+          "Value": "\"rYP7Mnu9xlS3kguPICT5FDNL8Qn2s5DRGD+QrVd9D6Q=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 12:07:11 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24563,12 +24563,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-loLPbaetTBYI2WtnOTUmLXGvBYU7Zgu5Qb9teI/cvvU="
+          "Value": "sha256-rYP7Mnu9xlS3kguPICT5FDNL8Qn2s5DRGD+QrVd9D6Q="
         }
       ]
     },
     {
-      "Route": "APP/Purchases/PurchaseValidationRules.y5o5df32xl.js",
+      "Route": "APP/Purchases/PurchaseValidationRules.nnc9cu5zlm.js",
       "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Purchases\\PurchaseValidationRules.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -24578,7 +24578,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1701"
+          "Value": "1773"
         },
         {
           "Name": "Content-Type",
@@ -24586,11 +24586,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"loLPbaetTBYI2WtnOTUmLXGvBYU7Zgu5Qb9teI/cvvU=\""
+          "Value": "\"rYP7Mnu9xlS3kguPICT5FDNL8Qn2s5DRGD+QrVd9D6Q=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 02 Nov 2024 12:07:11 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24600,7 +24600,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "y5o5df32xl"
+          "Value": "nnc9cu5zlm"
         },
         {
           "Name": "label",
@@ -24608,7 +24608,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-loLPbaetTBYI2WtnOTUmLXGvBYU7Zgu5Qb9teI/cvvU="
+          "Value": "sha256-rYP7Mnu9xlS3kguPICT5FDNL8Qn2s5DRGD+QrVd9D6Q="
         }
       ]
     },
@@ -24941,6 +24941,51 @@
       ]
     },
     {
+      "Route": "APP/Sales/SalesContainer.409mvvy7sc.js",
+      "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Sales\\SalesContainer.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4585"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7O1rVBTOmTqoHHSzNx4vjoyoz0M15jl3roBKvSMchlQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "409mvvy7sc"
+        },
+        {
+          "Name": "label",
+          "Value": "APP/Sales/SalesContainer.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-7O1rVBTOmTqoHHSzNx4vjoyoz0M15jl3roBKvSMchlQ="
+        }
+      ]
+    },
+    {
       "Route": "APP/Sales/SalesContainer.js",
       "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Sales\\SalesContainer.js",
       "Selectors": [],
@@ -24951,7 +24996,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4429"
+          "Value": "4585"
         },
         {
           "Name": "Content-Type",
@@ -24959,11 +25004,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"47JITBufmNuPijpzCEEASXmjev4eUPfvrncXSUC1Tnk=\""
+          "Value": "\"7O1rVBTOmTqoHHSzNx4vjoyoz0M15jl3roBKvSMchlQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 21:44:41 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -24973,97 +25018,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-47JITBufmNuPijpzCEEASXmjev4eUPfvrncXSUC1Tnk="
-        }
-      ]
-    },
-    {
-      "Route": "APP/Sales/SalesContainer.t0kj5rz304.js",
-      "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Sales\\SalesContainer.js",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "4429"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"47JITBufmNuPijpzCEEASXmjev4eUPfvrncXSUC1Tnk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 21:44:41 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "t0kj5rz304"
-        },
-        {
-          "Name": "label",
-          "Value": "APP/Sales/SalesContainer.js"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-47JITBufmNuPijpzCEEASXmjev4eUPfvrncXSUC1Tnk="
-        }
-      ]
-    },
-    {
-      "Route": "APP/Sales/SalesValidationRules.gz2vjp80qr.js",
-      "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Sales\\SalesValidationRules.js",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1702"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/javascript"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"JGj6P+5g+lSvrEEJ7/3ueP97lTTavOPQTKkJMj9ZNQg=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 22:02:21 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "gz2vjp80qr"
-        },
-        {
-          "Name": "label",
-          "Value": "APP/Sales/SalesValidationRules.js"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-JGj6P+5g+lSvrEEJ7/3ueP97lTTavOPQTKkJMj9ZNQg="
+          "Value": "sha256-7O1rVBTOmTqoHHSzNx4vjoyoz0M15jl3roBKvSMchlQ="
         }
       ]
     },
@@ -25078,7 +25033,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1702"
+          "Value": "1764"
         },
         {
           "Name": "Content-Type",
@@ -25086,11 +25041,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"JGj6P+5g+lSvrEEJ7/3ueP97lTTavOPQTKkJMj9ZNQg=\""
+          "Value": "\"Bw4zl71XaGIh90zhaKPrdPuYvkPI3TfCLRVO3LsNdp0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 16 Nov 2024 22:02:21 GMT"
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -25100,7 +25055,52 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-JGj6P+5g+lSvrEEJ7/3ueP97lTTavOPQTKkJMj9ZNQg="
+          "Value": "sha256-Bw4zl71XaGIh90zhaKPrdPuYvkPI3TfCLRVO3LsNdp0="
+        }
+      ]
+    },
+    {
+      "Route": "APP/Sales/SalesValidationRules.ztpp33fowb.js",
+      "AssetFile": "D:\\Company\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\wwwroot\\APP\\Sales\\SalesValidationRules.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1764"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Bw4zl71XaGIh90zhaKPrdPuYvkPI3TfCLRVO3LsNdp0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 07 May 2025 13:48:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ztpp33fowb"
+        },
+        {
+          "Name": "label",
+          "Value": "APP/Sales/SalesValidationRules.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Bw4zl71XaGIh90zhaKPrdPuYvkPI3TfCLRVO3LsNdp0="
         }
       ]
     },
