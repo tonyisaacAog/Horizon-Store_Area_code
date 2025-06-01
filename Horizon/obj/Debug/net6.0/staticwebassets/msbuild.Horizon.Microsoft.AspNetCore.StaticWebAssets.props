@@ -390,8 +390,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>1fs10gs07u</Fingerprint>
-      <Integrity>HUZw37Dbf+lXBKRevrD/bW2f37fJhmRhZnTc5LlOTeg=</Integrity>
+      <Fingerprint>4ucdvyuvu2</Fingerprint>
+      <Integrity>xJZu3IamIN3rumjN43XdZ/MGtlwVVwK84w2/OPT18QU=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\APP\Orders\OrderDetailsContainer.js'))</OriginalItemSpec>

@@ -1,3 +1,4 @@
+using EtaMiddleware;
 using Horizon.Areas.Settings.Models;
 using Horizon.Data;
 using Lamar.Microsoft.DependencyInjection;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,7 @@ builder.Host.UseLamar((context, registry) =>
 {
 
 
+    registry.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     registry.AddDbContext<ApplicationDbContext>(options =>
@@ -27,6 +30,7 @@ builder.Host.UseLamar((context, registry) =>
                                 .ContractResolver = new DefaultContractResolver());
 
 
+    //registry.AddAuthentication();
     registry.AddRazorPages().AddRazorRuntimeCompilation();
 
     registry.AddControllersWithViews(options =>
@@ -41,8 +45,8 @@ builder.Host.UseLamar((context, registry) =>
     });
 
 
-
-    registry.AddIdentity<ApplicationUser, IdentityRole>(options => {
+    builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options =>
+    {
         options.SignIn.RequireConfirmedAccount = false;
         options.SignIn.RequireConfirmedEmail = false;
         options.SignIn.RequireConfirmedPhoneNumber = false;
@@ -51,11 +55,13 @@ builder.Host.UseLamar((context, registry) =>
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
         options.Password.RequiredLength = 6;
-     
-    }).AddEntityFrameworkStores<ApplicationDbContext>()
-         .AddDefaultTokenProviders();
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
 
-
+ 
 
     registry.Scan(s =>
     {
@@ -68,6 +74,19 @@ builder.Host.UseLamar((context, registry) =>
 
 var app = builder.Build();
 
+
+
+//using( var scope = app.Services.CreateScope() )
+//{
+//    var services = scope.ServiceProvider;
+//    try
+//    {
+//        var context = services.GetRequiredService<ApplicationDbContext>(); // Replace with your DbContext
+//        context.Database.Migrate(); // This line aplies the latest migration to the database
+//        await DataBaseSeeder.SeedingRoles(services);
+//    }
+//    catch { }
+//}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -85,8 +104,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 
 app.UseEndpoints(endpoints =>

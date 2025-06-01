@@ -4,6 +4,7 @@ using Horizon.Areas.Orders.Models;
 using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Orders.ViewModel;
 using Horizon.Areas.Orders.ViewModel.Container;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -11,6 +12,7 @@ using MyInfrastructure.Filters;
 namespace Horizon.Areas.Orders.Controllers
 {
     [Area("Orders")]
+  
     public class OrderController : Controller
     {
         private readonly OrderManager _orderManager;

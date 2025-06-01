@@ -1,5 +1,6 @@
 ﻿using BaseEntities;
 using Horizon.Areas.Purchases.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 using Services;
