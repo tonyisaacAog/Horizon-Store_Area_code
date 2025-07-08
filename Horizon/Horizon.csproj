@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Purchases\Services\SupplierManager.cs" />
     <Compile Remove="Areas\Store\Controllers\StoreItemRawController2.cs" />
   </ItemGroup>
 

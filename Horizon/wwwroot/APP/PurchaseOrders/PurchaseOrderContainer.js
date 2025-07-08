@@ -175,6 +175,7 @@ const PurchaseOrderContainer = function (data) {
         self.PurchaseOrderItemRawDetails.push(new PurchaseOrderItemRawDetails(newLine));
     }
     self.RemoveItemRaw = function (item) {
+        console.log(item)
         if (item != null && item.RecordStatus() == RecordStatus.Added)
             self.PurchaseOrderDetails.remove(item);
         if (item != null && item.RecordStatus() != RecordStatus.Added)

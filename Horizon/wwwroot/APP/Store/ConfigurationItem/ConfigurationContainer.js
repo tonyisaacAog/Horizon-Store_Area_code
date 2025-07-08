@@ -20,7 +20,14 @@ const Mapping = {
 const ItemConfigurationVMs = function (data) {
     var self = this;
     ko.mapping.fromJS(data, Mapping, self);
-    ValidateConfigurationItem(self);   
+
+    // Ensure RecordStatus is observable if it's missing
+    if (!ko.isObservable(self.RecordStatus)) {
+        self.RecordStatus = ko.observable(data.RecordStatus ?? RecordStatus.UnChanged);
+    }
+
+    ValidateConfigurationItem(self);
+
     self.RemoveItem = function () {
         self.RecordStatus(RecordStatus.Deleted);
     }

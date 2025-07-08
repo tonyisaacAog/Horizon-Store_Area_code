@@ -4,73 +4,32 @@ using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
-using MyInfrastructure.Extensions;
-using MyInfrastructure.Model;
+using Services;
 
 namespace Horizon.Areas.Purchases.Services
 {
-    public class SupplierManager
+    public class SupplierManager : GenericSettingsManager<Supplier, SupplierVM>
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IMapper _mapper;
-        private readonly SaveManager<SupplierVM> _supplierSaveManager;
+        private readonly SaveManager<SupplierVM> _saveSupplierManager;
 
-        public SupplierManager(ApplicationDbContext db, IMapper mapper, 
-            SaveManager<SupplierVM> supplierSaveManager)
+        public SupplierManager(ApplicationDbContext db, IMapper mapper, SaveManager<SupplierVM> saveSupplierManager) : base(db, mapper, saveSupplierManager)
         {
-            _db = db;
-            _mapper = mapper;
-            _supplierSaveManager = supplierSaveManager;
+            _saveSupplierManager = saveSupplierManager;
         }
 
-        public async Task<List<SupplierVM>> GetAll()
-        => _mapper.Map<List<SupplierVM>>(await _db.Suppliers.ToListAsync());
-
-        public async Task<SupplierVM> CheckAndReturn(int Id)
+        public async Task<(List<SupplierVM> items, int totalCount)> SearchSuppliers(string term, int page, int pageSize)
         {
-            var exist = await CheckSupplierExist(Id);
-            return exist ? await GetById(Id) : throw new Exception("لا يوجد مورد متاح !");
+            var query = _db.Suppliers
+                   .Where(x => x.SupplierName.Contains(term))
+                   .OrderBy(x => x.SupplierName);
+
+            var totalCount = query.Count();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new SupplierVM { Id = x.Id, SupplierName = x.SupplierName })
+                .ToListAsync();
+            return (items, totalCount);
         }
-
-        public async Task<bool> CheckSupplierExist(int Id)
-            => await _db.Suppliers.AnyAsync(x => x.Id == Id);
-
-        public async Task<SupplierVM> GetById(int Id)
-            => _mapper.Map<SupplierVM>(await _db.Suppliers.FindAsync(Id));
-
-
-        public async Task<FeedBackWithMessages>  ManageSupplierData(SupplierVM supplier, bool ForDelete =false)
-        {
-            if(ForDelete)
-                return await _supplierSaveManager.SaveTransactionAsync(DeleteSupplierFunc, supplier);
-            if ( supplier.Id>0)
-                return await _supplierSaveManager.SaveTransactionAsync(UpdateSupplierFunc, supplier);
-            else
-                return await _supplierSaveManager.SaveTransactionAsync(AddNewSupplierFunc, supplier);
-        }
-        private async Task<SupplierVM> AddNewSupplierFunc (SupplierVM supplier)
-        {
-            var newSupplier = _mapper.Map<Supplier>(supplier);
-            await _db.AddAsync(newSupplier);
-            await _db.SaveChangesAsync();
-            return supplier;
-        }
-
-        private async Task<SupplierVM> UpdateSupplierFunc(SupplierVM supplier)
-        {
-            var newSupplier = _mapper.Map<Supplier>(supplier);
-            _db.Update(newSupplier);
-            await _db.SaveChangesAsync();
-            return supplier;
-        }
-
-        private async Task<SupplierVM> DeleteSupplierFunc(SupplierVM supplier)
-        {
-            var Supplier = await CheckAndReturn(supplier.Id);
-            _db.Remove(Supplier);
-            await _db.SaveChangesAsync();
-            return supplier;
-        }
-
     }
 }

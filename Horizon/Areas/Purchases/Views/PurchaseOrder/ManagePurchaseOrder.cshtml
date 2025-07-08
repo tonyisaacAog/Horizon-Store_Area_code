@@ -1,300 +1,547 @@
-﻿@using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
-@model PurchaseOrderVM
+﻿@model Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs.PurchaseOrderVM
 @{
-    var title = " امر انتاج ";
+    var title = "إدارة أمر الشراء";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        padding: 6px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        font-size: 1rem;
+    }
 
-<partial name="_Messages" />
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+            color: #495057;
+        }
 
-@section PageHeading {
-    <partial name="_PageTitle" model="@title" />
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 6px;
+        }
 
-}
-
-
-
-<card title="بيانات امر الانتاج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label>اسم المورد</label>
-
-                    @Html.Editor("Id","SupplierList",new
-                        {
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:SupplierId,select2",
-                                @class = "form-select",
-                                @id = "SupplierId"
-                            }
-                        })
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+<div id="app">
+    <card title="بيانات أمر الشراء" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>اسم المورد</label>
+                        <select id="supplier-select" class="form-select"></select>
+                    </div>
                 </div>
-            </div>
-        @*     <div class="col-6">
-                <div class="form-group">
-                    <label>الكمية</label>
-                    <input disabled data-bind="value:TotalAmount" class="form-control" />
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>تاريخ أمر الإنتاج</label>
+                        <input type="date" class="form-control" v-model="PurchaseOrderDate" />
+                    </div>
                 </div>
-            </div> *@
-
-        </div>
-
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ امر الانتاح</label>
-                    <input data-bind="value:PurchaseOrderDate" class="form-control smallDate" />
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>تاريخ التوريد</label>
+                        <input type="date" class="form-control" v-model="DeliveryDate" />
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ توريد امر الانتاح</label>
-                    <input data-bind="value:DeliveryDate" class="form-control smallDate" />
-                </div>
-
-
             </div>
         </div>
+    </card>
 
+    <card title="تفاصيل المنتجات" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="bg-light text-dark">
+                <tr>
+                    <th>المنتج</th>
+                    <th style="width:10%">الكمية</th>
+                    <th>ملاحظات</th>
+                    <th style="width:10%">
+                        <button class="btn btn-dark" @@click="addItem">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in PurchaseOrderDetails" :key="index" v-show="item.RecordStatus !== 2">
+                    <td>
+                        <select class="form-select product-select" :data-index="index"></select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" v-model="item.StoreItemAmount" @@change="updateItem(item)" />
+                    </td>
+                    <td>
+                        <textarea rows="1" class="form-control" v-model="item.Notes" @@change="updateItem(item)"></textarea>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @@click="removeItem(item)">
+                            <span class="fa fa-minus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </card>
 
-    </div>
-</card>
+    <card title="تفاصيل المواد خام" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="bg-light text-dark">
+                <tr>
+                    <th>العنصر</th>
+                    <th style="width:10%">الكمية</th>
+                    <th>الملاحظات</th>
+                    <th style="width:10%">
+                        <button class="btn btn-dark" @@click="addItemRaw">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in PurchaseOrderItemRawDetails" :key="index" v-show="item.RecordStatus !== 2">
+                    <td>
+                        <select class="form-select rawitem-select" :data-index="index"></select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" v-model="item.StoreItemAmount" @@change="updateItemRaw(item)" />
+                    </td>
+                    <td>
+                        <textarea rows="1" class="form-control" v-model="item.Notes" @@change="updateItemRaw(item)"></textarea>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @@click="removeItemRaw(item)">
+                            <span class="fa fa-minus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </card>
 
-<card title="تفاصيل المنتجات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-light text-dark">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th style="width:10%">
-                    الكمية
-                </th>
-                <th>
-                    ملاحظات
-                </th>
-
-                @*     <th>
-                السعر الإجمالي
-                </th> *@
-                <th style="width:10%">
-                    <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-
-        </thead>
-        <tbody data-bind="foreach:PurchaseOrderDetails">
-            <tr data-bind="visible:RecordStatus()!=2">
-                <td>
-                    @Html.Editor("Id","StoreItemsList",new
-                        {
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:StoreItemId,event:{change:$parent.UpdateItem},select2",
-                                @class = "form-select",
-                            }
-                        })
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:StoreItemAmount,event:{change:$parent.ChangeItem}" />
-                </td>
-
-                <td>
-                    <textarea rows="1" class="form-control" data-bind="value:Notes,event:{change:$parent.ChangeItem}"></textarea>
-                </td>
-                @*         <td>
-                <span data-bind="numericText:TotalAmount"></span>
-                </td> *@
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        @*  <tbody>
-        <tr>
-        <td></td>
-        <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-        <td><b>الاجمالي</b></td>
-        <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
-        </tr>
-        </tbody> *@
-    </table>
-</card>
-
-<card title="تفاصيل المواد خام" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-light text-dark">
-
-            <tr>
-                <th>
-                    العنصر
-                </th>
-
-                <th style="width:10%">
-                    الكمية
-                </th>
-               
-
-                <th>
-                    الملاحظات
-                </th>
-                <th style="width:10%">
-                    <button class="btn btn-dark" data-bind="click:AddItemRaw">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: PurchaseOrderItemRawDetails">
-            <tr>
-                <td>
-                    @Html.Editor("StoreItemId","StoreItemRawList",new
-
-                        {
-
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItemRaw}",
-                                @class = "form-select",
-                            }
-
-                        })
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:StoreItemAmount,event:{change:$parent.ChangeItemRaw}" />
-                </td>
-
-                <td>
-                    <textarea rows="1" class="form-control" data-bind="value:Notes,event:{change:$parent.ChangeItemRaw}"></textarea>
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItemRaw">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-
-        </tbody>
-      @*   <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
-                <td></td>
-            </tr>
-        </tbody> *@
-    </table>
-</card>
-
-
-
-<card title="ملاحظات امر الانتاج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-bordered table-striped table-hover">
-
-                    <thead class="bg-light text-dark">
-
-                        <tr>
-                            <th>
-                                #
-                            </th>
-
-                            <th>
-                                ملاحظات
-                            </th>
-
-                            <th style="width:10%">
-                                <div class="col-6">
-                                    <button class="btn btn-dark" data-bind="click:AddNotes">
+    <card title="ملاحظات أمر الشراء" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="bg-light text-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>ملاحظات</th>
+                                <th style="width:10%">
+                                    <button class="btn btn-dark" @@click="addNote">
                                         <span class="fa fa-plus"></span>
                                     </button>
-                                </div>
-                            </th>
-                        </tr>
-
-                    </thead>
-                    <tbody data-bind="foreach:Notes">
-                        <tr>
-                            <td>-</td>
-                            <td>
-                                <textarea rows="1" class="form-control" data-bind="value:Note"></textarea>
-                            </td>
-
-                            <td>
-                                <button class="btn btn-danger" data-bind="click:$parent.RemoveNotes">
-                                    <span class="fa fa-minus"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    @*  <tbody>
-                    <tr>
-                    <td></td>
-                    <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                    <td><b>الاجمالي</b></td>
-                    <td><span class="fw-bold" data-bind="numericText:Order.TotalAmount"></span></td>
-                    </tr>
-                    </tbody> *@
-                </table>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(note, idx) in Notes" :key="idx">
+                                <td>-</td>
+                                <td>
+                                    <textarea rows="1" class="form-control" v-model="note.Note"></textarea>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" @@click="removeNote(idx)">
+                                        <span class="fa fa-minus"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
         </div>
-    </div>
-</card>
+    </card>
 
-
-<card-footer>
-    <partial name="_SaveButton" />
-    @if (Model.Id > 0)
-    {
-        <a data-bind="attr:{href:'/Purchases/PurchaseOrder/PrintPurchaseOrder/'+Id() }" class="btn btn-sm btn-secondary">طباعة امر الانتاج</a>
-    }
-</card-footer>
+    <card-footer>
+        <button class="btn btn-success" @@click="save">حفظ</button>
+        <a v-if="Id > 0" :href="'/Purchases/PurchaseOrder/PrintPurchaseOrder/' + Id" class="btn btn-sm btn-secondary">طباعة امر الانتاج</a>
+    </card-footer>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/PurchaseOrders/PurchaseOrderValidateRules.js" asp-append-version="true"></script>
-    <script src="~/APP/PurchaseOrders/PurchaseOrderContainer.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+    <script>
+                     const rawData = @Html.Raw(data);
 
+        const app = Vue.createApp({
+            data() {
+                const formatDate = (dateStr) => {
+                    console.log(dateStr);
+                    if (!dateStr) return '';
+                    const parts = dateStr.split('/');
+                    if (parts.length !== 3) return '';
+                    const [day, month, year] = parts;
+                    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                };
+                return {
+                    Id: rawData.Id,
+                    PurchaseOrderNumber: rawData.PurchaseOrderNumber,
+                    PurchaseOrderDate: formatDate(rawData.PurchaseOrderDate),
+                    DeliveryDate: formatDate(rawData.DeliveryDate),
+                    SupplierId: rawData.SupplierId,
+                    SupplierName: rawData.SupplierName,
+                    TotalAmount: rawData.TotalAmount,
+                    PurchaseOrderDetails: rawData.PurchaseOrderDetails.map(item => ({ ...item })),
+                    PurchaseOrderItemRawDetails: rawData.PurchaseOrderItemRawDetails.map(item => ({ ...item })),
+                    Notes: rawData.Notes || []
+                };
+            },
+            methods: {
+                addItem() {
 
-    <script type="text/javascript">
-        var purchaseOrder = new PurchaseOrderContainer(@Html.Raw(data));
-        ko.applyBindings(purchaseOrder);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        const lastIndex = this.PurchaseOrderDetails.length - 1;
+            const lastItem = this.PurchaseOrderDetails[lastIndex];
+
+            if (lastItem && (
+                !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+                !lastItem.StoreItemAmount || lastItem.StoreItemAmount <= 0
+            )) {
+                alert("يرجى اختيار المنتج وإدخال كمية صحيحة قبل إضافة صف جديد.");
+
+                this.$nextTick(() => {
+                    const $select = $(`select.product-select[data-index="${lastIndex}"]`);
+                    if ($select.length) {
+                        $select.select2('open');
+                    }
+                });
+
+                return;
             }
+
+            const newItem = {
+                Id: 0,
+                StoreItemId: 0,
+                StoreItemName: '',
+                StoreItemAmount: 0,
+                Notes: '',
+                RecordStatus: 0
+            };
+
+            this.PurchaseOrderDetails.push(newItem);
+            this.$nextTick(() => this.initProductSelect2(this.PurchaseOrderDetails.length - 1));
+
+
+                },
+                removeItem(item) { item.RecordStatus = 2; },
+                updateItem(item) { 
+                    if (item.RecordStatus !== 0) item.RecordStatus = 1;
+                   
+                          const index = this.PurchaseOrderDetails.indexOf(item);
+        if (item.StoreItemId > 0 && item.StoreItemAmount > 0) {
+            $(`select.product-select[data-index="${index}"]`).closest('tr').removeClass('table-danger');
         }
-        $("#SupplierId").select2();
+                },
+                        updateItemRaw(item) {
+            if (item.RecordStatus !== 0) item.RecordStatus = 1;
+
+            const index = this.PurchaseOrderItemRawDetails.indexOf(item);
+            if (item.StoreItemId > 0 && item.StoreItemAmount > 0) {
+                $(`select.rawitem-select[data-index="${index}"]`).closest('tr').removeClass('table-danger');
+            }
+        },
+                addItemRaw() {
+                          const lastIndex = this.PurchaseOrderItemRawDetails.length - 1;
+        const lastItem = this.PurchaseOrderItemRawDetails[lastIndex];
+
+        if (lastItem && (
+            !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+            !lastItem.StoreItemAmount || lastItem.StoreItemAmount <= 0
+        )) {
+            alert("يرجى اختيار المادة الخام وإدخال كمية صحيحة قبل إضافة صف جديد.");
+
+            this.$nextTick(() => {
+                const $select = $(`select.rawitem-select[data-index="${lastIndex}"]`);
+                if ($select.length) {
+                    $select.select2('open');
+                }
+            });
+
+            return;
+        }
+
+        const newItem = {
+            Id: 0,
+            StoreItemId: 0,
+            StoreItemName: '',
+            StoreItemAmount: 0,
+            Notes: '',
+            RecordStatus: 0
+        };
+
+        this.PurchaseOrderItemRawDetails.push(newItem);
+        this.$nextTick(() => this.initRawItemSelect2(this.PurchaseOrderItemRawDetails.length - 1));
+                },
+
+                addNote() { 
+                    const lastNote = this.Notes[this.Notes.length - 1];
+                    if (!lastNote || (lastNote.Note && lastNote.Note.trim() !== '')) {
+                        this.Notes.push({ Id: 0, Note: '' });
+                    } else {
+                        alert("يرجى كتابة الملاحظة الحالية قبل إضافة ملاحظة جديدة.");
+                    }
+                },
+                removeNote(idx) { this.Notes.splice(idx, 1); },
+
+                initProductSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.product-select[data-index="${index}"]`);
+                    $select.select2({
+                        placeholder: "ابحث عن منتج...",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItems/SearchItems',
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data, params) => {
+                                params.page = params.page || 1;
+                                return {
+                                    results: data.items.map(x => ({ id: x.Id, text: x.ProductName })),
+                                    pagination: {
+                                        more: data.hasMore
+                                    }
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                               // Prevent duplicates
+        const duplicate = self.PurchaseOrderDetails.some((x, idx) =>
+            x.StoreItemId === selected.id && x.RecordStatus !== 2 && idx !== index);
+
+        if (duplicate) {
+            alert("هذا المنتج مضاف بالفعل.");
+            $(this).val(null).trigger('change');
+            return;
+        }
+
+                        const item = self.PurchaseOrderDetails[index];
+                        item.StoreItemId = selected.id;
+                        item.StoreItemName = selected.text;
+                        item.RecordStatus = item.Id === 0 ? 0 : 1;
+                    });
+                },
+
+                initRawItemSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.rawitem-select[data-index="${index}"]`);
+                    $select.select2({
+                        placeholder: "ابحث عن مادة خام...",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItemRaw/SearchRawItems',
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data, params) => {
+                                params.page = params.page || 1;
+                                return {
+                                    results: data.items.map(x => ({ id: x.Id, text: x.ItemName })),
+                                    pagination: {
+                                        more: data.hasMore
+                                    }
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                          const duplicate = self.PurchaseOrderItemRawDetails.some((x, idx) =>
+            x.StoreItemId === selected.id && x.RecordStatus !== 2 && idx !== index);
+
+        if (duplicate) {
+            alert("هذه المادة الخام مضافة بالفعل.");
+            $(this).val(null).trigger('change');
+            return;
+        }
+                        const item = self.PurchaseOrderItemRawDetails[index];
+                        item.StoreItemId = selected.id;
+                        item.StoreItemName = selected.text;
+                        item.RecordStatus = item.Id === 0 ? 0 : 1;
+                    });
+                },
+
+                initSupplierSelect() {
+                    const self = this;
+                    $('#supplier-select').select2({
+                        placeholder: "اختر المورد",
+                        allowClear: true,
+                        ajax: {
+                            url: '/Purchases/Supplier/GetSuppliers',
+                            dataType: 'json',
+                            delay: 300,
+                            processResults: data => ({
+                                results: data.items.map(x => ({ id: x.Id, text: x.SupplierName }))
+                            })
+                        }
+                    }).val(this.SupplierId).trigger('change')
+                    .on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        self.SupplierId = selected.id;
+                        self.SupplierName = selected.text;
+                    });
+                        if (this.SupplierId) {
+                            console.log(this.SupplierId)
+                            console.log(this.SupplierName)
+                                const option = new Option(this.SupplierName, this.SupplierId, true, true);
+                                $('#supplier-select').append(option).trigger('change');
+                            }
+                },
+        save() {
+            if (!this.SupplierId || this.SupplierId === 0) {
+                alert("من فضلك اختر المورد.");
+                return;
+            }
+
+            if (!this.PurchaseOrderDate) {
+                alert("يرجى إدخال تاريخ أمر الانتاج.");
+                return;
+            }
+
+            if (!this.DeliveryDate) {
+                alert("يرجى إدخال تاريخ التوريد.");
+                return;
+            }
+
+            if (new Date(this.DeliveryDate) < new Date(this.PurchaseOrderDate)) {
+                alert("تاريخ التوريد يجب أن يكون بعد أو مساوي لتاريخ أمر الشراء.");
+                return;
+            }
+
+            // ❗️ التحقق من المنتجات
+            const invalidProductIndex = this.PurchaseOrderDetails.findIndex((item, idx) =>
+                item.RecordStatus !== 2 && (
+                    !item.StoreItemId || item.StoreItemId === 0 ||
+                    !item.StoreItemAmount || item.StoreItemAmount <= 0
+                )
+            );
+
+            if (invalidProductIndex !== -1) {
+                alert(`السطر رقم ${invalidProductIndex + 1} في تفاصيل المنتجات غير مكتمل. يرجى اختيار المنتج وإدخال كمية صحيحة.`);
+                this.$nextTick(() => {
+                    const $select = $(`select.product-select[data-index="${invalidProductIndex}"]`);
+                    if ($select.length) {
+                        $select.select2('open');
+                        $select.closest('tr').addClass('table-danger');
+                    }
+                });
+                return;
+            }
+
+            // ❗️ التحقق من المواد الخام
+            const invalidRawIndex = this.PurchaseOrderItemRawDetails.findIndex((item, idx) =>
+                item.RecordStatus !== 2 && (
+                    !item.StoreItemId || item.StoreItemId === 0 ||
+                    !item.StoreItemAmount || item.StoreItemAmount <= 0
+                )
+            );
+
+            if (invalidRawIndex !== -1) {
+                alert(`السطر رقم ${invalidRawIndex + 1} في تفاصيل المواد الخام غير مكتمل. يرجى اختيار المادة الخام وإدخال كمية صحيحة.`);
+                this.$nextTick(() => {
+                    const $select = $(`select.rawitem-select[data-index="${invalidRawIndex}"]`);
+                    if ($select.length) {
+                        $select.select2('open');
+                        $select.closest('tr').addClass('table-danger');
+                    }
+                });
+                return;
+            }
+
+            // تأكد من وجود على الأقل منتج أو مادة خام واحدة صالحة
+            const hasValidLine =
+                this.PurchaseOrderDetails.some(x => x.RecordStatus !== 2 && x.StoreItemId > 0) ||
+                this.PurchaseOrderItemRawDetails.some(x => x.RecordStatus !== 2 && x.StoreItemId > 0);
+
+            if (!hasValidLine) {
+                alert("يجب إضافة منتج واحد أو مادة خام واحدة على الأقل.");
+                return;
+            }
+            const filteredNotes = this.Notes.filter(note => note.Note && note.Note.trim() !== '');
+
+            // 🟢 كل شيء تمام – تابع الحفظ
+            axios.post('/Purchases/PurchaseOrder/SavePurchaseOrder', {
+                Id: this.Id,
+                PurchaseOrderNumber: this.PurchaseOrderNumber,
+                PurchaseOrderDate: this.PurchaseOrderDate,
+                DeliveryDate: this.DeliveryDate,
+                SupplierId: this.SupplierId,
+                TotalAmount: this.TotalAmount,
+                PurchaseOrderDetails: this.PurchaseOrderDetails,
+                PurchaseOrderItemRawDetails: this.PurchaseOrderItemRawDetails,
+                Notes: filteredNotes
+            }).then((response) => {
+                alert('تم الحفظ بنجاح');
+                window.location = response.data.newLocation;
+            }).catch(err => {
+                alert('حدث خطأ أثناء الحفظ');
+                console.error(err);
+            });
+        }
+
+            },
+
+            mounted() {
+        // Initialize product lines with Select2 and old data
+           this.PurchaseOrderDetails.forEach((item, index) => {
+               this.$nextTick(() => {
+                   this.initProductSelect2(index);
+
+                   const $select = $(`select.product-select[data-index="${index}"]`);
+                   if (item.StoreItemId && item.StoreItemName) {
+                       const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                       $select.append(option).trigger('change');
+                   }
+                   $select.closest('tr').removeClass('table-danger');
+
+               });
+           });
+
+           // Initialize raw item lines with Select2 and old data
+           this.PurchaseOrderItemRawDetails.forEach((item, index) => {
+               this.$nextTick(() => {
+                   this.initRawItemSelect2(index);
+
+                   const $select = $(`select.rawitem-select[data-index="${index}"]`);
+                   if (item.StoreItemId && item.StoreItemName) {
+                       const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                       $select.append(option).trigger('change');
+                   }
+                   $select.closest('tr').removeClass('table-danger');
+
+               });
+           });
+
+           // Supplier select init + set old value
+           this.initSupplierSelect();
+
+            }
+        });
+
+        app.mount('#app');
+
+
     </script>
-
-
 }

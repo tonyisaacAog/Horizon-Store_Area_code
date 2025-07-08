@@ -85,5 +85,19 @@ namespace Horizon.Areas.Store.Controllers
             else
                 return Json(new { errors = feedback.Messages });
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SearchItems(string term, int page = 1, int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new { items = Array.Empty<object>(), hasMore = false });
+
+            var (items, totalCount) = await _settingsManager.GetStoreItemByName(term, page, pageSize);
+
+            bool hasMore = totalCount > page * pageSize;
+
+            return Json(new { items, hasMore });
+        }
     }
 }

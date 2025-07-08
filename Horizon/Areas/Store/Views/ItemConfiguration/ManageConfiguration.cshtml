@@ -5,126 +5,290 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        padding: 6px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        font-size: 1rem;
+    }
 
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+            color: #495057;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 6px;
+        }
+
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+
+<partial name="_Messages" />
+@section PageHeading {
+    <partial name="_PageTitle" model="@title" />
 }
 
-<card title="بيانات المنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم المنتج</label>
-                    <input data-bind="value:StoreItemVM.ProductName" disabled="disabled" class="form-control" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<div id="app">
+    <card title="بيانات المنتج" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-6" v-for="(value, label) in productInfo" :key="label">
+                    <div class="form-group">
+                        <label>{{ label }}</label>
+                        <input :value="value" disabled class="form-control" />
+                    </div>
                 </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>نوع المنتج</label>
-                    <input data-bind="value:StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>كود المنتج</label>
-                    <input data-bind="value:StoreItemVM.ItemCode" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>ماركة المنتج</label>
-                    <input data-bind="value:StoreItemVM.StoreBrandName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-group">
-                    <label>الكمية الاكبر التى يمكن انتاجها من المنتج من المستلزمات الموجود فى المخزن</label>
-                    <input data-bind="value:NumberProductCanMade" disabled="disabled" class="form-control text-center" />
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>الكمية الاكبر التى يمكن انتاجها من المنتج</label>
+                        <input :value="NumberProductCanMade" disabled class="form-control text-center" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </card>
 
+    <card title="تفاصيل المواد المستخدمة لتجميع المنتج" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>المادة الخام</th>
+                    <th>الكمية</th>
+                    <th>
+                        <button class="btn btn-dark" @@click="addItem">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in ItemConfigurationVMs" :key="index" v-show="item.RecordStatus !== 2">
+                    <td>
+                        <span v-if="item.Id !== 0">{{ item.StoreItemsRawName }}</span>
+                        <select v-else class="form-select raw-select" :data-index="index"></select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" v-model="item.MinimumAmount" @@change="updateItem(item)" />
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @@click="removeItem(item)">
+                            <span class="fa fa-minus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </card>
 
-    
-</card>
-
-<card title="تفاصيل المواد المستخدمة لتجميع المنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    المادة الخام
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: ItemConfigurationVMs">
-            <tr data-bind="visible:RecordStatus()!=2">
-                <td>
-                    @Html.Editor("Id","StoreItemRawList", new
-                    {
-                    htmlAttributes = new
-                    {
-                    @data_bind = "value:StoreItemRawId,select2,event:{change:$parent.UpdateItem}",
-                    @class = "form-select",
-                    }
-                    })
-                </td>
-                <td>
-                    <input type="text" class="form-control" data-bind="value:MinimumAmount,event:{change:$parent.UpdateItem}" />
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:RemoveItem">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-</card>
-<card-footer>
-    <partial name="_SaveButton" />
-</card-footer>
-
+    <card-footer>
+        <button class="btn btn-success" @@click="save">حفظ</button>
+    </card-footer>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Store/ConfigurationItem/ConfigurationValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Store/ConfigurationItem/ConfigurationContainer.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
 
+    <script>
+        const rawData = @Html.Raw(data);
 
-    <script type="text/javascript" asp-append-version="true">
-        var configuration = new ConfigureContainer(@Html.Raw(data));
-        ko.applyBindings(configuration);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
-            }
+        const app = Vue.createApp({
+            data() {
+                return {
+                    StoreItemVM: rawData.StoreItemVM,
+                    NumberProductCanMade: rawData.NumberProductCanMade,
+                    ItemConfigurationVMs: rawData.ItemConfigurationVMs.map(item => ({
+                        ...item,
+                        StoreItemsRawName: item.StoreItemsRawName || '',
+                        MinimumAmount: item.MinimumAmount || 0,
+                        RecordStatus: item.RecordStatus || 0
+                    }))
+                };
+            },
+            computed: {
+                productInfo() {
+                    return {
+                        'اسم المنتج': this.StoreItemVM.ProductName,
+                        'نوع المنتج': this.StoreItemVM.FamilyName,
+                        'كود المنتج': this.StoreItemVM.ItemCode,
+                        'ماركة المنتج': this.StoreItemVM.StoreBrandName
+                    };
+                }
+            },
+            methods: {
+                addItem() {
+                      
+                          const lastIndex = this.ItemConfigurationVMs.length - 1;
+        const lastItem = this.ItemConfigurationVMs[lastIndex];
+
+        // 🛑 شرط التحقق: إذا السطر فاضي أو ناقص ما تضفش صف جديد
+        if (lastItem && (
+            !lastItem.StoreItemRawId || lastItem.StoreItemRawId === 0 ||
+            !lastItem.MinimumAmount || lastItem.MinimumAmount <= 0
+        )) {
+            alert("يرجى اختيار المادة الخام وإدخال كمية صحيحة قبل إضافة صف جديد.");
+
+            // فتح select2 تلقائيًا للسطر الحالي
+            this.$nextTick(() => {
+                const $select = $(`select.raw-select[data-index="${lastIndex}"]`);
+                if ($select.length) {
+                    $select.select2('open');
+                }
+            });
+
+            return;
         }
+
+        // ✅ كل شيء تمام → ضف صف جديد
+        const newItem = {
+            Id: 0,
+            StoreItemId: this.StoreItemVM.Id,
+            StoreItemRawId: null,
+            StoreItemsRawName: '',
+            MinimumAmount: 0,
+            RecordStatus: 0
+        };
+
+        this.ItemConfigurationVMs.push(newItem);
+        this.$nextTick(() => this.initSelect2(this.ItemConfigurationVMs.length - 1));
+                },
+                removeItem(item) {
+                    item.RecordStatus = 2;
+                },
+                updateItem(item) {
+                    if (item.RecordStatus !== 0) {
+                        item.RecordStatus = 1;
+                    }
+                         const index = this.ItemConfigurationVMs.indexOf(item);
+        if (item.MinimumAmount > 0 && item.StoreItemRawId > 0) {
+            $(`tr:eq(${index + 1})`).removeClass('table-danger'); // +1 بسبب رأس الجدول
+        }
+                },
+                initSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.raw-select[data-index="${index}"]`);
+
+                    $select.select2({
+                        placeholder: "ابحث عن المادة الخام...",
+                        allowClear: true,
+                        ajax: {
+                            url: '/Store/StoreItemRaw/SearchRawItems',
+                            dataType: 'json',
+                            delay: 300,
+                            data: function (params) {
+                                return {
+                                    term: params.term,
+                                    page: params.page || 1,
+                                    pageSize: 10
+                                };
+                            },
+                            processResults: function (data, params) {
+                                params.page = params.page || 1;
+                                return {
+                                    results: data.items.map(x => ({ id: x.Id, text: x.ItemName })),
+                                    pagination: {
+                                        more: data.hasMore
+                                    }
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                               const selected = e.params.data;
+
+        const existingIndex = self.ItemConfigurationVMs.findIndex((x, i) =>
+            x.StoreItemRawId === selected.id
+        );
+
+        // ✅ Case 1: Item already exists and is not marked deleted
+        if (existingIndex !== -1 && self.ItemConfigurationVMs[existingIndex].RecordStatus !== 2 && existingIndex !== index) {
+            alert('تم اختيار نفس المادة الخام في صف آخر');
+            $select.val(null).trigger('change');
+            return;
+        }
+
+        // ✅ Case 2: Item was deleted before (RecordStatus === 2), bring it back
+        if (existingIndex !== -1 && self.ItemConfigurationVMs[existingIndex].RecordStatus === 2) {
+            const restoredItem = self.ItemConfigurationVMs[existingIndex];
+            restoredItem.RecordStatus = 1;
+            self.$forceUpdate();
+            $select.val(null).trigger('change');
+
+            alert('تم استعادة المادة الخام المحذوفة من قبل');
+            return;
+        }
+
+        const item = self.ItemConfigurationVMs[index];
+        item.StoreItemRawId = selected.id;
+        item.StoreItemsRawName = selected.text;
+        item.RecordStatus = item.Id === 0 ? 0 : 1;
+
+                    });
+                },
+
+                        save() {
+            // نبحث عن أول صف غير صالح (بدون مادة خام أو بدون كمية)
+            const invalidIndex = this.ItemConfigurationVMs.findIndex((item, idx) =>
+                item.RecordStatus !== 2 && (
+                    !item.StoreItemRawId || item.StoreItemRawId === 0 ||
+                    !item.MinimumAmount || item.MinimumAmount <= 0
+                )
+            );
+
+            if (invalidIndex !== -1) {
+                alert(`السطر رقم ${invalidIndex + 1} يحتوي على بيانات غير مكتملة. يرجى اختيار المادة الخام وإدخال كمية صحيحة.`);
+
+                // التمرير إلى السطر وإبراز الحقل
+                this.$nextTick(() => {
+                    const $select = $(`select.raw-select[data-index="${invalidIndex}"]`);
+                    if ($select.length) {
+                        $select.select2('open');
+                        $select.closest('tr').addClass('table-danger'); // تحديد الصف باللون الأحمر مثلاً
+                    }
+                });
+
+                return;
+            }
+
+            // ✅ الصفوف الصالحة فقط
+            const itemsToSend = this.ItemConfigurationVMs.filter(
+                x => x.RecordStatus !== 2 &&
+                    x.StoreItemRawId &&
+                    x.MinimumAmount > 0
+            );
+
+            axios.post('/Store/ItemConfiguration/SaveConfiguration', {
+                StoreItemVM: this.StoreItemVM,
+                ItemConfigurationVMs: itemsToSend
+            })
+            .then(res => {
+                alert('تم الحفظ بنجاح');
+                window.location.reload();
+            })
+            .catch(err => {
+                alert('حدث خطأ أثناء الحفظ');
+                console.error(err);
+            });
+        }
+
+            },
+            mounted() {
+                this.ItemConfigurationVMs.forEach((item, index) => {
+                    if (item.Id === 0) this.$nextTick(() => this.initSelect2(index));
+                });
+            }
+        });
+
+        app.mount('#app');
     </script>
-
-
 }

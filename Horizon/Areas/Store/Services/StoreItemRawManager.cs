@@ -12,6 +12,7 @@ using MyInfrastructure.Extensions;
 using MyInfrastructure.Filters;
 using MyInfrastructure.Model;
 using Services;
+using Syncfusion.DocIO.DLS;
 
 namespace Horizon.Areas.Store.Services
 {
@@ -128,6 +129,22 @@ namespace Horizon.Areas.Store.Services
             await _db.SaveChangesAsync();
         }
 
+
+
+        public async Task<(List<StoreItemRawVM> items,int totalCount)> GetStoreItemRawByName(string term,int page,int pageSize)
+        {
+            var query = _db.StoreItemsRaw
+                 .Where(x => x.ItemName.Contains(term))
+                 .OrderBy(x => x.ItemName);
+
+            var totalCount = query.Count();
+            var items = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new StoreItemRawVM { Id = x.Id, ItemName = x.ItemName })
+                .ToList();
+            return (items, totalCount);
+        }
 
 
     }

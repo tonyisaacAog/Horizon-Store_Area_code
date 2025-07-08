@@ -44,7 +44,7 @@ namespace Horizon.Areas.Purchases.Controllers
             }
             return View(new PurchaseOrderVM());
         }
-        [ModelValidationWithJsonFeedBackFilter]
+        [HttpPost]
         public async Task<JsonResult> SavePurchaseOrder([FromBody] PurchaseOrderVM vm)
         {
             var feedback = await _purchaseOrderManager.SavePurchaseOrder(vm);

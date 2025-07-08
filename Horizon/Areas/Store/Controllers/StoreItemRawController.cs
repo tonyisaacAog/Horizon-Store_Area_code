@@ -3,6 +3,7 @@ using Horizon.Areas.Store.ViewModel.Settings;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 using Services;
+using System.Threading.Tasks;
 
 namespace Horizon.Areas.Store.Controllers
 {
@@ -95,5 +96,20 @@ namespace Horizon.Areas.Store.Controllers
             else
                 return Json(new { errors = feedback.Messages });
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SearchRawItems(string term, int page = 1, int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new { items = Array.Empty<object>(), hasMore = false });
+
+            var (items, totalCount) = await _settingsManager.GetStoreItemRawByName(term,page,pageSize);
+
+            bool hasMore = totalCount > page * pageSize;
+
+            return Json(new { items, hasMore });
+        }
+
     }
 }

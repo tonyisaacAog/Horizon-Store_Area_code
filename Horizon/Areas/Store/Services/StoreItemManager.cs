@@ -88,5 +88,22 @@ namespace Horizon.Areas.Store.Services
             return details;
         }
 
+
+        public async Task<(List<StoreItemVM> items, int totalCount)> GetStoreItemByName(string term, int page, int pageSize)
+        {
+            var query = _db.StoreItems
+                 .Where(x => x.ProductName.Contains(term))
+                 .OrderBy(x => x.ProductName);
+
+            var totalCount = query.Count();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new StoreItemVM { Id = x.Id, ProductName = x.ProductName })
+                .ToListAsync();
+            return (items, totalCount);
+        }
+
+
     }
 }
