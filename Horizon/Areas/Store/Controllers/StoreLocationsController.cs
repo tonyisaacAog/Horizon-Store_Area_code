@@ -17,5 +17,19 @@ namespace Horizon.Areas.Store.Controllers
 
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Search()
+        {
+            var storelst = await _settingsManager.GetAll(); 
+            var data = storelst.Select(x => new
+            {
+                Id = x.Id,
+                Name = x.LocationName  
+            });
+
+            return Json(new { data });
+        }
+
     }
 }

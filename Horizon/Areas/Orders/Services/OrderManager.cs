@@ -101,7 +101,8 @@ namespace Horizon.Areas.Orders.Services
         public async Task<OrderContainer> GetOrderWithDetailsById(int orderId)
         {
             var vmContainer = new OrderContainer();
-            var orderWithDEtails = await _db.Orders.Include(obj => obj.OrderDetails).Include(obj => obj.Client)
+            var orderWithDEtails = await _db.Orders.Include(obj => obj.OrderDetails).ThenInclude(obj=>obj.Product)
+                .Include(obj => obj.Client)
                 .Where(obj => obj.Id == orderId).FirstOrDefaultAsync();
             vmContainer.Client = _mapper.Map<ClientVM>(orderWithDEtails.Client);
             vmContainer.OrderDetail = _mapper.Map<List<OrderDetailsVM>>(orderWithDEtails.OrderDetails);

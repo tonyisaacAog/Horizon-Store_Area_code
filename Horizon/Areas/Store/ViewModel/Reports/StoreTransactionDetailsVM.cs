@@ -17,6 +17,7 @@ namespace Horizon.Areas.Store.ViewModel.Reports
         public decimal UnitPrice { get; set; }
         public string TransDate { get; set; }
         public string TransTypeName { get; set; }
+        public string? SupplierOrClientName { get; set; }
         public int ReferanceId { get; set; }
         public StoreTransTypeEnum TransType { get; set; }
         public void CreateMapping(Profile configuration)

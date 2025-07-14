@@ -93,7 +93,7 @@ namespace Horizon.Areas.Sales.Services
             {
                 Id = obj.Id,
                 StoreItemId = (int)obj.StoreItemId,
-                StoreItemName = obj.StoreItem.ProductNameAr,
+                StoreItemName = obj.StoreItem.ProductNameAr??obj.StoreItem.ProductName,
                 QTY = Convert.ToInt32(obj.Amount),
                 UnitPrice = obj.UnitPrice,
             }).ToList();
@@ -101,7 +101,7 @@ namespace Horizon.Areas.Sales.Services
             {
                 Id = obj.Id,
                 StoreItemId = (int)obj.StoreItemsRawId,
-                StoreItemName = obj.StoreItemsRaw.ItemNameAr,
+                StoreItemName = obj.StoreItemsRaw.ItemNameAr??obj.StoreItemsRaw.ItemName,
                 QTY = Convert.ToInt32(obj.Amount),
                 UnitPrice = obj.UnitPrice,
             }).ToList();

@@ -48,6 +48,7 @@ namespace Horizon.Areas.Sales.Controllers
             return View(salesDetails);
         }
 
+        [HttpPost]
         public async Task<JsonResult> SaveSales([FromBody] SalesContainer vm)
         {
             var feedback = await _SalesManager.SaveSales(vm);

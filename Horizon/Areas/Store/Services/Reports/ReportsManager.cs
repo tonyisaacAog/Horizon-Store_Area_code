@@ -217,6 +217,12 @@ namespace Horizon.Areas.Store.Services.Reports
                     item.StoreTransactions.TransType == StoreTransTypeEnum.Sale ? "مبيعات" : "مرتجعات";
                 ST.UnitPrice = item.UnitPrice;
                 ST.ReferanceId = item.StoreTransactions.SourceId;
+                if( item.StoreTransactions.TransType == StoreTransTypeEnum.Sale)
+                {
+                    ST.SupplierOrClientName = (await _db.Sales.Include(obj => obj.Client)
+                        .Where(obj => item.StoreTransactions.DestinationType == StoreTransSourceTypes.Client
+                        && obj.Id == item.StoreTransactions.DestinationId).FirstOrDefaultAsync())?.Client.ClientName ?? "N/A";   
+                }
                 card.TransactionDetails.Add(ST);
             }
 
@@ -228,7 +234,7 @@ namespace Horizon.Areas.Store.Services.Reports
                  .Where(x => x.StoreTransactions.TransDate < startDate && x.StoreItemId == card.Search.StoreItemId)
                 .Skip(countBefore - 1)
                 .Take(1).ToListAsync();
-                card.Search.StartBalance = BeforeBalance.FirstOrDefault()?.QtyBalanceAfterDestination;
+                card.Search.StartBalance = BeforeBalance.FirstOrDefault()?.QtyBalanceAfterDestination??0;
             }
 
             else

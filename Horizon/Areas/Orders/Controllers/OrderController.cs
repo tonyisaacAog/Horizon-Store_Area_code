@@ -76,9 +76,8 @@ namespace Horizon.Areas.Orders.Controllers
             var orderContainer = await _orderManager.NewOrderForPerson();
             return View(orderContainer);
         }
-        
 
-        [ModelValidationWithJsonFeedBackFilter]
+        [HttpPost]
         public async Task<JsonResult> SaveOrder([FromBody] OrderContainer vm)
         {
             var feedback = await _orderManager.SaveOrders(vm);
@@ -87,7 +86,7 @@ namespace Horizon.Areas.Orders.Controllers
             else
                 return Json(new { errors = feedback.Messages });
         }
-        [ModelValidationWithJsonFeedBackFilter]
+        [HttpPost]
         public async Task<JsonResult> SaveOrderForPerson([FromBody] OrderForPersonContainer vm)
         {
             var feedback = await _orderManager.SaveOrdersForPerson(vm);

@@ -52,7 +52,7 @@
     <!-- Order Details Table -->
     <card title="تفاصيل امر الشغل" addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
         <table class="table table-bordered table-striped table-hover">
-            <thead class="bg-primary text-white">
+            <thead class="bg-light text-dark">
                 <tr>
                     <th>المنتج</th>
                     <th style="width:10%">الكمية</th>
@@ -297,7 +297,7 @@
                         OrderDetail: this.OrderDetail
                     };
 
-                    axios.post('/Orders/SaveOrderForPerson', payload)
+                    axios.post('/Orders/Order/SaveOrderForPerson', payload)
                         .then(res => {
                             alert('تم الحفظ بنجاح');
                             window.location = res.data.newLocation;

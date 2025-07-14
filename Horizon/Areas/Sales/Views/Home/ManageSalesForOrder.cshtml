@@ -1,169 +1,222 @@
 ﻿@model SalesContainer
 @{
-    var title = "اذن استلام منتج ";
+    var title = "اذن استلام منتج";
     ViewData["Title"] = title;
-    string data = JsonConvert.SerializeObject(Model);
 }
 
 <partial name="_Messages" />
 
-@section PageHeading{
+@section PageHeading {
     <partial name="_PageTitle" model="@title" />
-
 }
 
-
-<card title="بيانات العميل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
+<div id="sales-app">
+    <!-- بيانات العميل -->
+    <div class="card mb-3 border-primary">
+        <div class="card-header bg-primary text-white">بيانات العميل</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
                     <label>اسم العميل</label>
-                    <input data-bind="value:Client.ClientName" disabled="disabled" class="form-control" />
+                    <input class="form-control" v-model="client.ClientName" disabled />
                 </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
+                <div class="col-6">
                     <label>التليفون</label>
-                    <input data-bind="value:Client.Phone1" disabled="disabled" class="form-control" />
+                    <input class="form-control" v-model="client.Phone1" disabled />
                 </div>
             </div>
-
         </div>
     </div>
 
-</card>
+    <!-- تفاصيل الصرف -->
+    <div class="card mb-3 border-primary">
+        <div class="card-header bg-primary text-white">تفاصيل عملية صرف المنتجات</div>
+        <div class="card-body p-0">
+            <table class="table table-bordered table-striped m-0">
+                <thead class="bg-light text-dark">
+                    <tr>
+                        <th>المنتج</th>
+                        <th>الكمية</th>
+                        <th>سعر الوحدة</th>
+                        <th>الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in saleDetails" :key="index">
+                        <td>{{ item.StoreItemName }}</td>
+                        <td><input type="number" class="form-control" v-model.number="item.QTY" disabled /></td>
+                        <td><input type="number" class="form-control" v-model.number="item.UnitPrice" /></td>
+                        <td>{{ item.QTY * item.UnitPrice }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td><strong>{{ totalQTY }}</strong></td>
+                        <td><b>الإجمالي</b></td>
+                        <td><strong>{{ totalAmount }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 
-<card title="تفاصيل عملية صرف للمنتجات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-              
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: SaleDetails">
-            <tr>
-                <td>
-                    @Html.Editor("Id","StoreItemsList", new
-                    {
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItem}",
-                                @class = "form-select",
-                                @disabled = "disabled"
-
-                            }
-                    })
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:QTY" disabled />
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:UnitPrice"  />
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-               
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:SaleInfo.TotalAmount"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="ملخص عملية الصرف" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
+    <!-- ملخص العملية -->
+    <div class="card border-primary">
+        <div class="card-header bg-primary text-white">ملخص عملية الصرف</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
                     <label>تاريخ الصرف</label>
-                    <input data-bind="value:SaleInfo.SalesDate" class="form-control smallDate" />
+                    <input type="date" class="form-control" v-model="saleInfo.SalesDate" />
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>رقم الفاتورة </label>
-                    <input data-bind="value:SaleInfo.InvoiceNum" class="form-control" />
+                <div class="col-4">
+                    <label>رقم الفاتورة</label>
+                    <input class="form-control" v-model="saleInfo.InvoiceNum" />
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
+                <div class="col-4">
                     <label>مخزن الصرف</label>
-                    @Html.Editor("Id","StoreLocationList", new
-                    {
-                            htmlAttributes = new
-                            {
-                    @data_bind = "value:SaleInfo.StoreLocationId",
-                                @class = "form-select",
-                                @id = "StoreLocID"
-                            }
-                    })
+                    <select id="store-location-select" class="form-select">
+                        <option></option> <!-- للسماح بالاختيار الفارغ -->
+                    </select>
                 </div>
             </div>
-
+        </div>
+        <div class="card-footer text-end">
+            <button class="btn btn-primary" @@click="save">حفظ</button>
         </div>
     </div>
-
-
-    <card-footer>
-        <partial name="_SaveButton" />
-    </card-footer>
-</card>
-
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesContainer.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <script>
+        const backendData = @Html.Raw(Json.Serialize(Model));
 
-    <script type="text/javascript">
-        var sales = new Sales(@Html.Raw(data));
-        ko.applyBindings(sales);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        const app = Vue.createApp({
+            data() {
+                return {
+                    client: backendData.Client,
+                    saleDetails: backendData.SaleDetails,
+                    saleInfo: backendData.SaleInfo,
+                    SaleItemRawDetails: backendData.SaleItemRawDetails,
+                    orderId: backendData.OrderId || 0,
+                    isSaleFromOrder: backendData.IsSaleFromOrder || false,
+                    storeLocations: []
+                };
+            },
+
+            computed: {
+                totalQTY() {
+                    return this.saleDetails.reduce((sum, item) => sum + parseFloat(item.QTY || 0), 0);
+                },
+                totalAmount() {
+                    return this.saleDetails.reduce((sum, item) =>
+                        sum + (parseFloat(item.QTY || 0) * parseFloat(item.UnitPrice || 0)), 0);
+                }
+            },
+
+            methods: {
+                save() {
+                    if (!this.saleInfo.SalesDate) {
+                        alert("برجاء تحديد التاريخ");
+                        return;
+                    }
+
+                    if (!this.saleInfo.StoreLocationId) {
+                        alert("برجاء تحديد مخزن الصرف");
+                        return;
+                    }
+
+                    if (this.saleDetails.length === 0) {
+                        alert("يجب وضع المنتجات أو العناصر التي تريد بيعها");
+                        return;
+                    }
+
+                    const invalidIndex = this.saleDetails.findIndex(item =>
+                        !item.StoreItemId || item.StoreItemId === 0 ||
+                        !item.QTY || item.QTY <= 0
+                    );
+
+                    if (invalidIndex !== -1) {
+                        alert(`السطر رقم ${invalidIndex + 1} غير مكتمل. يرجى إدخال منتج وكمية صحيحة.`);
+                        return;
+                    }
+
+                    const payload = {
+                        Client: this.client,
+                        SaleInfo: this.saleInfo,
+                        SaleDetails: this.saleDetails,
+                        SaleItemRawDetails: this.SaleItemRawDetails,
+                        OrderId: this.orderId,
+                        IsSaleFromOrder: this.isSaleFromOrder
+                    };
+
+                    axios.post('/Sales/Home/SaveSales', payload)
+                        .then(res => {
+                            if (res.data) {
+                                alert("✅ تم الحفظ بنجاح");
+                                // يمكنك التوجيه هنا إذا أردت
+                                window.location.href = res.data.newLocation;
+                            } else {
+                                alert("⚠️ فشل الحفظ: " + (res.data.message || "حدث خطأ غير معروف"));
+                            }
+                        })
+                        .catch(err => {
+                            console.error("❌ فشل في الإرسال:", err.errors);
+                            alert("⚠️ حدث خطأ أثناء الاتصال بالسيرفر");
+                        });
+                },
+
+                initSelect2() {
+                    const self = this;
+                    const $select = $('#store-location-select');
+
+                    const options = self.storeLocations.map(loc => ({
+                        id: loc.Id,
+                        text: loc.Name
+                    }));
+
+                    $select.empty();
+
+                    $select.select2({
+                        placeholder: 'ابحث عن المخزن...',
+                        data: options,
+                        allowClear: true,
+                        width: '100%'
+                    }).off('select2:select')
+                      .on('select2:select', function (e) {
+                          const selected = e.params.data;
+                          self.saleInfo.StoreLocationId = selected.id;
+                      });
+
+                    if (self.saleInfo.StoreLocationId && self.saleInfo.StoreLocationName) {
+                        const option = new Option(self.saleInfo.StoreLocationName, self.saleInfo.StoreLocationId, true, true);
+                        $select.append(option).trigger('change');
+                    } else {
+                        $select.val(null).trigger('change'); // ⛔ لا اختيار افتراضي
+                    }
+                }
+            },
+
+            mounted() {
+                const self = this;
+                axios.get('/Store/StoreLocations/Search')
+                    .then(response => {
+                        self.storeLocations = response.data.data || [];
+                        self.initSelect2();
+                    })
+                    .catch(error => {
+                        console.error("حدث خطأ أثناء تحميل بيانات المخازن:", error);
+                        alert("⚠️ فشل تحميل المخازن");
+                    });
             }
-        }
-        $("#StoreLocID").select2();
+        });
+
+        app.mount('#sales-app');
     </script>
-
-
 }
