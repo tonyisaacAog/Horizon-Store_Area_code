@@ -1,74 +1,256 @@
 ﻿@model ClientVM
 @{
-    var title = "بيانات العميل";
-    ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
 
-}
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Container -->
+    <div>
+        <!-- Card Header -->
+        <div class="flex justify-between items-center  mb-8 mt-4">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                </svg>
 
-<card title=@title addational-class="fa-list-ol"
-          text-color-class="text-white" header-class="bg-primary">
-<div class="container">
-    <div class="row">
-        <div class="col-4">
-            <label>اسم العميل</label>
-            <input class="form-control" data-bind="value:ClientName" />
+                <h1 class="text-2xl text-[#212b36] font-bold">{{ client.Id !== 0 ? "تعديل بيانات العميل"
+                    : "اضافة عميل جديد" }}</h2>
+            </div>
+            <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Order", new { area = "Orders" }))"
+                class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+                رجوع
+                <i class="fa fa-arrow-left"></i>
+            </a>
         </div>
-        <div class="col-4">
-            <label>اسم العميل -عربي</label>
-            <input class="form-control" data-bind="value:ClientNameAr" />
+        <!-- Card Body -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- First Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
+                    <input v-model="client.ClientName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ClientName}">
+                    <span v-if="errors.ClientName" class="text-red-500 text-xs">{{ errors.ClientName }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل - عربي</label>
+                    <input v-model="client.ClientNameAr"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ClientNameAr}">
+                    <span v-if="errors.ClientNameAr" class="text-red-500 text-xs">{{ errors.ClientNameAr }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">البريد الالكتروني</label>
+                    <input v-model="client.Email" type="email"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.Email}">
+                    <span v-if="errors.Email" class="text-red-500 text-xs">{{ errors.Email }}</span>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تليفون 1</label>
+                    <input v-model="client.Phone1"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.Phone1}">
+                    <span v-if="errors.Phone1" class="text-red-500 text-xs">{{ errors.Phone1 }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تليفون 2</label>
+                    <input v-model="client.Phone2"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.Phone2}">
+                    <span v-if="errors.Phone2" class="text-red-500 text-xs">{{ errors.Phone2 }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تليفون 3</label>
+                    <input v-model="client.Phone3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.Phone3}">
+                    <span v-if="errors.Phone3" class="text-red-500 text-xs">{{ errors.Phone3 }}</span>
+                </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="flex justify-end pt-4 border-t border-gray-200">
+                <button v-on:click="saveClient"
+                    class="bg-emerald-800 hover:bg-blue-dark text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    حفظ
+                </button>
+            </div>
         </div>
-        <div class="col-4">
-            <label>البريد الالكتروني</label>
-            <input class="form-control" data-bind="value:Email" />
+    </div>
+
+    <!-- Messages Modal -->
+    <div v-if="showMessageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                <button v-on:click="showMessageModal = false" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <ul class="space-y-2">
+                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end">
+                <button v-on:click="showMessageModal = false"
+                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark">
+                    موافق
+                </button>
+            </div>
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-4">
-            <label>تليفون 1</label>
-            <input class="form-control" data-bind="value:Phone1" />
-        </div>
-        <div class="col-4">
-            <label>تليفون 2</label>
-            <input class="form-control" data-bind="value:Phone2" />
-        </div>
-        <div class="col-4">
-            <label>تليفون 3</label>
-            <input class="form-control" data-bind="value:Phone3" />
-        </div>
-    </div>
-</div>
-
-<card-footer>
-    <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
-</card-footer>
- </card>
-
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/ClientInfoValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script type="text/javascript">
-        var client = new GeneralKoViewModel(@Html.Raw(data));
-        ko.applyBindings(client);
+        // Initialize client data from server
+        var clientData = @Html.Raw(data);
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    client: clientData,
+                    errors: {
+                        ClientName: '',
+                        ClientNameAr: '',
+                        Email: '',
+                        Phone1: '',
+                        Phone2: '',
+                        Phone3: ''
+                    },
+                    messages: [],
+                    showMessageModal: false,
+                    isLoading: false
+                };
+            },
+            methods: {
+                validateForm() {
+                    let isValid = true;
+                    this.messages = [];
+
+                    // Reset errors
+                    Object.keys(this.errors).forEach(key => this.errors[key] = '');
+
+                    // Client Name validation
+                    if (!this.client.ClientName || this.client.ClientName.trim() === '') {
+                        this.errors.ClientName = 'اسم العميل مطلوب';
+                        this.messages.push('اسم العميل مطلوب');
+                        isValid = false;
+                    }
+
+                    // Client Name Arabic validation
+                    if (!this.client.ClientNameAr || this.client.ClientNameAr.trim() === '') {
+                        this.errors.ClientNameAr = 'اسم العميل - عربي مطلوب';
+                        this.messages.push('اسم العميل - عربي مطلوب');
+                        isValid = false;
+                    }
+
+                    // Phone1 validation
+                    if (!this.client.Phone1 || this.client.Phone1.trim() === '') {
+                        this.errors.Phone1 = 'تليفون 1 مطلوب';
+                        this.messages.push('تليفون 1 مطلوب');
+                        isValid = false;
+                    } else if (!/^\d+$/.test(this.client.Phone1)) {
+                        this.errors.Phone1 = 'يجب أن يحتوي على أرقام فقط';
+                        this.messages.push('تليفون 1 يجب أن يحتوي على أرقام فقط');
+                        isValid = false;
+                    }
+
+                    // Phone2 validation (optional)
+                    if (this.client.Phone2 && !/^\d+$/.test(this.client.Phone2)) {
+                        this.errors.Phone2 = 'يجب أن يحتوي على أرقام فقط';
+                        this.messages.push('تليفون 2 يجب أن يحتوي على أرقام فقط');
+                        isValid = false;
+                    }
+
+                    // Phone3 validation (optional)
+                    if (this.client.Phone3 && !/^\d+$/.test(this.client.Phone3)) {
+                        this.errors.Phone3 = 'يجب أن يحتوي على أرقام فقط';
+                        this.messages.push('تليفون 3 يجب أن يحتوي على أرقام فقط');
+                        isValid = false;
+                    }
+
+                    // Email validation (optional)
+                    if (this.client.Email && !/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(this.client.Email)) {
+                        this.errors.Email = 'بريد إلكتروني غير صحيح';
+                        this.messages.push('البريد الإلكتروني غير صحيح');
+                        isValid = false;
+                    }
+
+                    if (!isValid) {
+                        this.showMessageModal = true;
+                    }
+
+                    return isValid;
+                },
+
+                async saveClient() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    this.isLoading = true;
+
+                    try {
+                        const response = await fetch('/Sales/Client/SaveRecord', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(this.client)
+                        });
+
+                        const result = await response.json();
+
+                        if (result && (result.success || result.newLocation)) {
+                            // Handle success - redirect or show success message
+                            if (result.newLocation) {
+                                window.location.href = result.newLocation;
+                            } else {
+                                this.showMessage("تم حفظ بيانات التالف بنجاح", "success");
+                                // Optionally redirect to a listing page
+                                setTimeout(() => {
+                                    window.location.href = '/Sales/Client/Index';
+                                }, 1500);
+                            }
+                        } else {
+                            // Handle error
+                            this.messages = [result.errors && result.errors.length > 0 ? result.errors[0] : 'حدث خطأ أثناء الحفظ'];
+                            this.showModal();
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                        this.showMessageModal = true;
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }

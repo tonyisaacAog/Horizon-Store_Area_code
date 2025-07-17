@@ -5,246 +5,444 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+    <!-- Page Title -->
+    <div class="flex justify-between items-center  mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="#000000" stroke-width="2" stroke-linecap="round" class="stroke-[#212b36]"
+                stroke-linejoin="round">
+                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                <path d="M6 21v-2a4 4 0 0 1 4 -4h4c.342 0 .674 .043 .99 .124" />
+                <path d="M19 16v6" />
+                <path d="M22 19l-3 3l-3 -3" />
+            </svg>
 
-}
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h2>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Order", new { area = "Orders" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
 
-<card title="بيانات العميل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم العميل</label>
-                    <input data-bind="value:Client.ClientName" disabled="disabled" class="form-control" />
+    <!-- Client Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-white px-6 py-4 flex items-center  border-b">
+
+            <h2 class="text-lg font-semibold">بيانات العميل</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
+                    <input v-model="client.ClientName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
+                    <input v-model="client.Phone1" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>التليفون</label>
-                    <input data-bind="value:Client.Phone1" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-
         </div>
     </div>
 
-</card>
+    <!-- Raw Materials Sale Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-white px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
 
-<card title="تفاصيل عملية صرف لمواد خام" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    العنصر
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddItemRaw">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: SaleItemRawDetails">
-            <tr>
-                <td>
-                    @Html.Editor("StoreItemId","StoreItemRawList",new
-
-                        {
-
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItemRaw}",
-                                @class = "form-select",
-                            }
-
-                        })
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:QTY" />
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItemRaw">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-<card title="تفاصيل عملية صرف للمنتجات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: SaleDetails">
-            <tr>
-                <td>
-                    @Html.Editor("Id","StoreItemsList", new
-                    {
-                            htmlAttributes = new
-                            {
-                                @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItem}",
-                                @class = "form-select",
-                            }
-                    })
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:QTY" />
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
-                        <span class="fa fa-minus"></span>
-                    </button>  
-                </td>
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="ملخص عملية الصرف" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label>تاريخ الصرف</label>
-                    <input data-bind="value:SaleInfo.SalesDate" class="form-control smallDate" />
-                </div>
+                <h2 class="text-lg font-semibold">تفاصيل عملية صرف لمواد خام</h2>
             </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>رقم الفاتورة </label>
-                    <input data-bind="value:SaleInfo.InvoiceNum" class="form-control" />
-                </div>
+            <button @@click="addRawItem"
+                class="bg-sky-900 hover:bg-sky-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">العنصر</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in saleItemRawDetails" :key="'raw-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @Html.Editor("StoreItemId","StoreItemRawList",new
+
+                            {
+
+                                htmlAttributes = new
+                                {
+                                    @v_model = "item.StoreItemId",
+                                    @v_change = "updateRawItem(item)",
+                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
+                                }})
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.Qty"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.UnitPrice"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ (item.Qty * item.UnitPrice).toFixed(2) }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button @@click="removeRawItem(index)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-if="saleItemRawDetails.length === 0">
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ rawTotalQty.toFixed(2) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">الاجمالي</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ rawTotalAmount.toFixed(2) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Products Sale Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-white px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
+
+                <h2 class="text-lg font-semibold">تفاصيل عملية صرف للمنتجات</h2>
             </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>مخزن الصرف</label>
+            <button @@click="addItem"
+                class="bg-sky-900 hover:bg-sky-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">المنتج</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in saleDetails" :key="'prod-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @Html.Editor("Id","StoreItemsList", new
+                                                        {
+                                htmlAttributes = new
+                                {
+                                    @v_model = "item.StoreItemId",
+                                    @v_change = "updateItem(item)",
+                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
+                                }
+                                                        })
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.Qty"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.UnitPrice"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {{ (item.Qty * item.UnitPrice).toFixed(2) }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button @@click="removeItem(index)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-if="saleDetails.length === 0">
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ totalQty.toFixed(2) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">الاجمالي</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ totalAmount.toFixed(2) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sale Summary Card -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="text-white px-6 py-4  border-b">
+            <h2 class="text-lg font-semibold">ملخص عملية الصرف</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الصرف</label>
+                    <input v-model="saleInfo.SalesDate" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                    <span v-if="errors.SalesDate" class="text-red-500 text-xs">{{ errors.SalesDate }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <input v-model="saleInfo.InvoiceNum"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">مخزن الصرف</label>
                     @Html.Editor("Id","StoreLocationList", new
-                    {
-                            htmlAttributes = new
-                            {
-                    @data_bind = "value:SaleInfo.StoreLocationId",
-                                @class = "form-select",
-                                @id = "StoreLocID"
-                            }
-                    })
+                                        {
+                        htmlAttributes = new
+                        {
+                            @v_model = "saleInfo.StoreLocationId",
+                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
+                            @id = "StoreLocID"
+                        }
+                                        })
+                    <span v-if="errors.StoreLocationId" class="text-red-500 text-xs">{{ errors.StoreLocationId }}</span>
                 </div>
             </div>
 
+            <div class="flex justify-end pt-4 border-t border-gray-200">
+                <button @@click="save"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </div>
         </div>
     </div>
-
-
-    <card-footer>
-        <partial name="_SaveButton" />
-    </card-footer>
-</card>
-
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesContainer.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var sales = new Sales(@Html.Raw(data));
-        ko.applyBindings(sales);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                                                                                                                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                                                                                                                                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                                                                                                                                <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                                                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                                                                                                    </svg>
+                                                                                                                                                </button>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="p-4">
+                                                                                                                                                <ul class="space-y-2">
+                                                                                                                                                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                                                                                                                                </ul>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="p-4 border-t border-gray-200 flex justify-end">
+                                                                                                                                                <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-800-dark">
+                                                                                                                                                    موافق
+                                                                                                                                                </button>
+                                                                                                                                            </div>
+                    </div>
+                    </div>
+                    `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "عملية استلام منتج جديدة",
+                    saleInfo: initialData.SaleInfo,
+                    saleDetails: initialData.SaleDetails,
+                    saleItemRawDetails: initialData.SaleItemRawDetails,
+                    client: initialData.Client,
+                    messages: [],
+                    errors: {
+                        SalesDate: '',
+                        StoreLocationId: ''
+                    }
+                };
+            },
+            computed: {
+                totalQty() {
+                    return this.saleDetails.reduce((sum, item) => sum + parseFloat(item.Qty || 0), 0);
+                },
+                totalAmount() {
+                    return this.saleDetails.reduce((sum, item) => sum + (parseFloat(item.Qty || 0) * parseFloat(item.UnitPrice || 0)), 0);
+                },
+                rawTotalQty() {
+                    return this.saleItemRawDetails.reduce((sum, item) => sum + parseFloat(item.Qty || 0), 0);
+                },
+                rawTotalAmount() {
+                    return this.saleItemRawDetails.reduce((sum, item) => sum + (parseFloat(item.Qty || 0) * parseFloat(item.UnitPrice || 0)), 0);
+                }
+            },
+            methods: {
+                addItem() {
+                    this.saleDetails.push({
+                        Id: 0,
+                        StoreItemId: 0,
+                        Qty: 0,
+                        UnitPrice: 0
+                    });
+                },
+                removeItem(index) {
+                    this.saleDetails.splice(index, 1);
+                },
+                updateItem(item) {
+                    const duplicate = this.saleDetails.find(i =>
+                        i.StoreItemId === item.StoreItemId && i.Id !== item.Id);
+
+                    if (duplicate) {
+                        this.messages.push('هذا المنتج تم اضافته');
+                        this.saleDetails = this.saleDetails.filter(i => i !== item);
+                    }
+                },
+                addRawItem() {
+                    this.saleItemRawDetails.push({
+                        Id: 0,
+                        StoreItemId: 0,
+                        Qty: 0,
+                        UnitPrice: 0
+                    });
+                },
+                removeRawItem(index) {
+                    this.saleItemRawDetails.splice(index, 1);
+                },
+                updateRawItem(item) {
+                    const duplicate = this.saleItemRawDetails.find(i =>
+                        i.StoreItemId === item.StoreItemId && i.Id !== item.Id);
+
+                    if (duplicate) {
+                        this.messages.push('هذا العنصر تم اضافته');
+                        this.saleItemRawDetails = this.saleItemRawDetails.filter(i => i !== item);
+                    }
+                },
+                valIdateForm() {
+                    this.errors = {
+                        SalesDate: '',
+                        StoreLocationId: ''
+                    };
+
+                    let isValId = true;
+
+                    if (!this.saleInfo.SalesDate) {
+                        this.errors.SalesDate = 'برجاء تحديد التاريخ';
+                        isValId = false;
+                    }
+
+                    if (!this.saleInfo.StoreLocationId) {
+                        this.errors.StoreLocationId = 'برجاء تحديد مخزن الصرف';
+                        isValId = false;
+                    }
+
+                    if (this.saleDetails.length === 0 && this.saleItemRawDetails.length === 0) {
+                        this.messages.push('يجب وضع المنتجات او العناصر التى تريد بيعها');
+                        isValId = false;
+                    }
+
+                    // ValIdate items
+                    this.saleDetails.forEach(item => {
+                        if (!item.StoreItemId || item.StoreItemId === 0) {
+                            this.messages.push('برجاء اختيار المنتج لجميع العناصر');
+                            isValId = false;
+                        }
+                        if (!item.Qty || item.Qty <= 0) {
+                            this.messages.push('برجاء اضافة الكمية لجميع العناصر');
+                            isValId = false;
+                        }
+                        if (!item.UnitPrice || item.UnitPrice <= 0) {
+                            this.messages.push('برجاء اضافة السعر لجميع العناصر');
+                            isValId = false;
+                        }
+                    });
+
+                    // ValIdate raw items
+                    this.saleItemRawDetails.forEach(item => {
+                        if (!item.StoreItemId || item.StoreItemId === 0) {
+                            this.messages.push('برجاء اختيار المادة الخام لجميع العناصر');
+                            isValId = false;
+                        }
+                        if (!item.Qty || item.Qty <= 0) {
+                            this.messages.push('برجاء اضافة الكمية لجميع العناصر');
+                            isValId = false;
+                        }
+                        if (!item.UnitPrice || item.UnitPrice <= 0) {
+                            this.messages.push('برجاء اضافة السعر لجميع العناصر');
+                            isValId = false;
+                        }
+                    });
+
+                    return isValId;
+                },
+                save() {
+                    this.messages = [];
+
+                    if (!this.valIdateForm()) {
+                        return;
+                    }
+
+                    const data = {
+                        SaleInfo: this.saleInfo,
+                        SaleDetails: this.saleDetails,
+                        SaleItemRawDetails: this.saleItemRawDetails,
+                        Client: this.client
+                    };
+
+                    axios.post('/Sales/Home/SaveSales', data)
+                        .then(response => {
+                            if (response.data.success) {
+                                window.location.href = '/Sales/Home/Index';
+                            } else if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الحفظ'];
+                            }
+                        })
+                        .catch(error => {
+                            this.messages.push('حدث خطأ في الاتصال بالخادم');
+                        });
+                },
+                clearMessages() {
+                    this.messages = [];
+                }
+            },
+            mounted() {
+                if (this.saleDetails.length === 0) {
+                    this.addItem();
+                }
+                if (this.saleItemRawDetails.length === 0) {
+                    this.addRawItem();
+                }
             }
-        }
-        $("#StoreLocID").select2();
+        }).mount('#app');
     </script>
-
-
 }

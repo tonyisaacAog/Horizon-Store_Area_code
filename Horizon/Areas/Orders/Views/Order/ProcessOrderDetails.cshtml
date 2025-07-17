@@ -1,189 +1,211 @@
 ﻿@model OrderDetailsContainer
 @{
-    var title = "تفاصيل امر شغل ";
+    var title = "تفاصيل امر شغل";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
-
-}
-<card title="بيانات امر الشغل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-
-
-            <div class="col-6">
-                <div class="form-group">
-                    <label>رقم امر الشغل</label>
-                    <input disabled data-bind="value:Order.NoOfOrder" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ امر الشغل</label>
-                    <input disabled data-bind="value:Order.OrderDate" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ التسليم</label>
-                    <input disabled data-bind="value:Order.DeliveryOrder" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>الكمية</label>
-                    <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
-                </div>
-            </div>
-         @*    <div class="col-12 mb-2">
-                <div class="form-group">
-                    <label>ملاحظات امر الشغل</label>
-                    <textarea rows="8" disabled data-bind="value:Order.Notes" class="form-control">
-                        </textarea>
-                </div>
-
-            </div> *@
-        </div>
-    </div>
-</card>
-
-<card title="بيانات العميل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم العميل</label>
-                    <input data-bind="value:Order.ClientName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-             <div class="col-6">
-                <div class="form-group">
-                    <label>التليفون</label>
-                    <input data-bind="value:Order.Phone1" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-        </div>
-    </div>
-</card>
-
-
-<card title="تفاصيل امر الشغل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-      
-        <thead class="bg-gradient text-dark">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th style="width:10%">
-                    الكمية
-                </th>     
-                <th>ملاحظات</th>
-                <th></th>
-            </tr>
-
-        </thead>
-        <tbody data-bind="foreach:OrderDetail"> 
-            <tr>
-                <td>
- 
-                    <input disabled type="text" class="form-control" data-bind="value:ProductName" />
-
-                </td>
-
-                <td>
-                    <input disabled type="text" class="form-control" data-bind="value:QTY" />
-                </td>
-                <td>
-                    <textarea rows="1" disabled class="form-control" data-bind="value:Notes"></textarea>
-                </td>
-                <td>
-                  
-                    <a class="btn btn-primary" data-bind="visible:IsManufacturing()==false,attr:{href:'/Manufacturing/Home/ManageManufactingForOrder/'+Id()}">
-                        <span>اذن صرف المستلزمات</span>
-                    </a>   
-                     <span class="btn btn-success" data-bind="visible:IsManufacturing()==true">
-                        <span>تم صرف المستلزمات</span>
-                    </span>   
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-<card title="الاكسسوارات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table  class="table table-bordered table-striped table-hover">
-      
-        <thead class="bg-gradient text-dark">
-
-            <tr>
-                <th>
-                    المادة
-                </th>
-
-                <th>
-                    الكمية
-                </th>     
-             
-            </tr>
-
-        </thead>
-        <tbody data-bind="foreach:OrderConfigure">
-            <tr data-bind="visible:OrderConfigure.length>0">
-                <td>
- 
-                    <input disabled type="text" class="form-control" data-bind="value:StoreItemRaw" />
-
-                </td>
-
-                <td>
-                    <input disabled type="text" class="form-control" data-bind="value:Qty" />
-                </td>
-
-              
-            </tr>
-        </tbody>
-      
-    </table>
-</card>
-
-
-
-
-@section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/OrderDetailsValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/OrderDetailsContainer.js" asp-append-version="true"></script>
-
-
-    <script type="text/javascript">
-        var orderdetails = new OrderDetailsContainer(@Html.Raw(data));
-        ko.applyBindings(orderdetails);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .rtl-table th:first-child {
+            border-radius: 0 0.375rem 0.375rem 0;
         }
-        $("#StoreLocID").select2();
+
+        .rtl-table th:last-child {
+            border-radius: 0.375rem 0 0 0.375rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div id="app" class="container mx-auto p-4">
+        <!-- Messages -->
+
+        <!-- Page Title -->
+        <div class="flex justify-between items-center mb-8 mt-4">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                    <path d="M9 9l1 0" />
+                    <path d="M9 13l6 0" />
+                    <path d="M9 17l6 0" />
+                </svg>
+                <h1 class="text-2xl text-gray-800 font-bold">@title</h1>
+            </div>
+            <a href="/Orders/Order/Index"
+                class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+                رجوع
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Order Information Card -->
+        <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+            <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+                <h2 class="text-lg font-semibold">بيانات امر الشغل</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم امر الشغل</label>
+                        <input v-model="order.NoOfOrder" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">تاريخ امر الشغل</label>
+                        <input v-model="order.OrderDate" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">تاريخ التسليم</label>
+                        <input v-model="order.DeliveryOrder" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">الكمية</label>
+                        <input v-model="order.TotalAmount" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Information Card -->
+        <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+            <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+                <h2 class="text-lg font-semibold">بيانات العميل</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">اسم العميل</label>
+                        <input v-model="order.ClientName" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">التليفون</label>
+                        <input v-model="order.Phone1" disabled
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Card -->
+        <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+            <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+                <h2 class="text-lg font-semibold">تفاصيل امر الشغل</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rtl-table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                المنتج</th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                                الكمية</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ملاحظات</th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                                إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="(detail, index) in orderDetails" :key="index">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input v-model="detail.ProductName" disabled
+                                    class="w-full px-3 py-1 border border-gray-300 rounded-md bg-gray-100">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input v-model="detail.QTY" disabled
+                                    class="w-full px-3 py-1 border border-gray-300 rounded-md bg-gray-100 text-center">
+                            </td>
+                            <td class="px-6 py-4">
+                                <textarea v-model="detail.Notes" disabled rows="1"
+                                    class="w-full px-3 py-1 border border-gray-300 rounded-md bg-gray-100 resize-none"></textarea>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <a v-if="!detail.IsManufacturing"
+                                    :href="'/Manufacturing/Home/ManageManufactingForOrder/' + detail.Id"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md inline-flex items-center">
+                                    <i class="fas fa-box-open ml-1"></i>
+                                    <span>اذن صرف المستلزمات</span>
+                                </a>
+                                <span v-else
+                                    class="bg-green-600 text-white px-4 py-2 rounded-md inline-flex items-center">
+                                    <i class="fas fa-check-circle ml-1"></i>
+                                    <span>تم صرف المستلزمات</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Accessories Card -->
+        <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden" v-if="orderConfigure.length > 0">
+            <div class="bg-blue-600 text-white px-6 py-4 flex items-center">
+                <i class="fas fa-cogs mr-2"></i>
+                <h2 class="text-lg font-semibold">الاكسسوارات</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rtl-table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                المادة</th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+                                الكمية</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="(config, index) in orderConfigure" :key="index">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input v-model="config.StoreItemRaw" disabled
+                                    class="w-full px-3 py-1 border border-gray-300 rounded-md bg-gray-100">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input v-model="config.Qty" disabled
+                                    class="w-full px-3 py-1 border border-gray-300 rounded-md bg-gray-100 text-center">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const rawData = @Html.Raw(data);
+
+        createApp({
+            data() {
+                return {
+                    messages: [],
+                    order: rawData.Order,
+                    orderDetails: rawData.OrderDetail,
+                    orderConfigure: rawData.OrderConfigure,
+                }
+            },
+        }).mount('#app');
     </script>
+</body>
 
-
-}
+</html>

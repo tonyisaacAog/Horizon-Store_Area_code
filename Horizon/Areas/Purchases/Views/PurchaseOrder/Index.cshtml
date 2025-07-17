@@ -6,56 +6,152 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Header -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
 
-}
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="/Purchases/PurchaseOrder/ManagePurchaseOrder/0"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            <i class="fa fa-plus"></i>
+            اضافة امر انتاج
+        </a>
+    </div>
 
-
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-striped table-bordered table-hover dataTable">
-        <thead>
-            <tr>
-                <th>رقم الفاتورة</th>
-                <th>التاريخ</th>
-                <th>اسم المورد</th>
-                <th>تم انشاء اذن اضافة خامات</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach:items">
-            <tr>
-                <td><span data-bind="text:PurchaseOrderNumber"></span></td>
-                <td><span data-bind="text:PurchaseOrderDate"></span></td>
-                <td><span data-bind="text:SupplierName"></span></td>
-                <td><span data-bind="text:IsStoreInStock"></span></td>
-                <td>
-                    <a data-bind="attr:{href:'/Purchases/PurchaseOrder/ManagePurchaseOrder/'+Id() }" class="btn btn-sm btn-info">تفاصيل امر الانتاج</a>
-                    <a data-bind="attr:{href:'/Purchases/PurchaseOrder/PrintPurchaseOrder/'+Id() }" class="btn btn-sm btn-secondary">طباعة امر الانتاج</a>
-                </td>
-
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-
-
-
-
+    <!-- Card Body -->
+    <data-table :columns="columns" :data="purchaseOrders" :searchable="true" :sortable="true" :paginated="true"
+        :per-page-options="[5, 10, 25, 50]" :default-per-page="10" search-placeholder="البحث في اوامر الانتاج..."
+        no-data-message="لا توجد بيانات" @@row-action="handleRowAction" @@row-click="handleRowClick"
+        @@search-change="handleSearchChange" @@sort-change="handleSortChange" @@page-change="handlePageChange"
+        ref="purchaseOrderTable">
+    </data-table>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <!-- Import the separated component -->
+    <script type="module">
+        import { DataTable } from '/assets/components/DataTable.js?v=2.6';
 
-    <script type="text/javascript">
-        var client = new GeneralTable(@Html.Raw(data));
-        ko.applyBindings(client);
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                DataTable
+            },
+            data() {
+                return {
+                    title: 'قائمة اوامر الانتاج',
+                    purchaseOrders: @Html.Raw(data),
+                    totalPurchaseOrders: 0,
+                    searchResults: 0,
+                    currentPage: 1,
+                    columns: [
+                        {
+                            key: 'PurchaseOrderNumber',
+                            label: 'رقم الفاتورة',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6'
+                        },
+                        {
+                            key: 'PurchaseOrderDate',
+                            label: 'التاريخ',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6',
+                            type: 'date'
+                        },
+                        {
+                            key: 'SupplierName',
+                            label: 'اسم المورد',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/4'
+                        },
+                        {
+                            key: 'IsStoreInStock',
+                            label: 'تم انشاء اذن اضافة خامات',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6',
+                            type: 'boolean'
+                        },
+                        {
+                            key: 'actions',
+                            label: 'الإجراءات',
+                            type: 'actions',
+                            width: 'w-1/4',
+                            actions: [
+                                {
+                                    key: 'details',
+                                    label: 'تفاصيل امر الانتاج',
+                                    icon: 'fa-info-circle',
+                                    class: 'bg-blue-600 hover:bg-blue-700 text-white'
+                                },
+                                {
+                                    key: 'print',
+                                    label: 'طباعة امر الانتاج',
+                                    icon: 'fa-print',
+                                    class: 'bg-gray-600 hover:bg-gray-700 text-white'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mounted() {
+                this.totalPurchaseOrders = this.purchaseOrders.length;
+                this.searchResults = this.purchaseOrders.length;
+            },
+            methods: {
+                handleRowAction(event) {
+                    const { action, item } = event;
+
+                    switch (action) {
+                        case 'details':
+                            window.location.href = `/Purchases/PurchaseOrder/ManagePurchaseOrder/${item.Id}`;
+                            break;
+                        case 'print':
+                            window.location.href = `/Purchases/PurchaseOrder/PrintPurchaseOrder/${item.Id}`;
+                            break;
+                    }
+                },
+
+                handleRowClick(item) {
+                    console.log('Row clicked:', item);
+                    // You can add row click behavior here
+                },
+
+                handleSearchChange(event) {
+                    this.searchResults = event.results;
+                },
+
+                handleSortChange(event) {
+                    console.log('Sort changed:', event);
+                },
+
+                handlePageChange(event) {
+                    this.currentPage = event.page;
+                },
+
+                exportData() {
+                    const tableData = this.$refs.purchaseOrderTable.exportData();
+                    console.log('Exporting data:', tableData);
+                    // Implement export functionality
+                },
+
+                refreshData() {
+                    // Implement refresh functionality
+                    window.location.reload();
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }
-

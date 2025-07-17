@@ -5,188 +5,204 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Purchase", new { area = "Purchase" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-}
-
-
-<card title="بيانات المورد" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم المورد</label>  :
-                    <input class="form-control" readonly data-bind="value:Supplier.SupplierName" />
+    <!-- Supplier Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-primary text-white px-6 py-4 flex items-center gap-2">
+            <i class="fas fa-list-ol"></i>
+            <h2 class="text-lg font-semibold">بيانات المورد</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المورد</label>
+                    <input v-model="supplier.SupplierName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
+                    <input v-model="supplier.Phone1" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>التليفون</label>  :
-                    <input readonly class="form-control" data-bind="value:Supplier.Phone1"/>
-                </div>
-            </div>
-
         </div>
     </div>
 
-</card>
-
-
-
-<card title="تفاصيل عملية تخزين المستلزمات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    اسم العنصر
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-               
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: PurchaseDetails">
-            <tr>
-                <td>
-                    <span  data-bind="text:StoreItemName"></span>
-                </td>
-
-                <td>
-                    <span  data-bind="numericText:Qty" ></span>
-                </td>
-
-                <td>
-                    <span  data-bind="numericText:UnitPrice"></span>
-                </td>
-                <td>
-                    <span  data-bind="numericText:TotalAmount"></span>
-                </td>
-               
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span  class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-
-<card title="تفاصيل عملية تخزين المستلزمات لمنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    اسم المنتج
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: PurchaseStoreItemDetails">
-            <tr>
-                <td>
-                    <span data-bind="text:StoreItemName"></span>
-                </td>
-
-                <td>
-                    <span data-bind="numericText:Qty"></span>
-                </td>
-
-                <td>
-                    <span data-bind="numericText:UnitPrice"></span>
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalAmount"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="ملخص عملية التخزين" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ الفاتورة</label>  :
-                    <span class="form-control" data-bind="text:PurchaseInfo.PurchasingDate"><</span>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>رقم الفاتورة </label>  :
-                    <span class="form-control"  data-bind="text:PurchaseInfo.InvoiceNum"></span>
-                </div>
-            </div>
-          
+    <!-- Materials Storage Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-primary text-white px-6 py-4 flex items-center gap-2">
+            <i class="fas fa-list-ol"></i>
+            <h2 class="text-lg font-semibold">تفاصيل عملية تخزين المستلزمات</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="px-6 py-3 text-right">اسم العنصر</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right" style="width:15%">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in purchaseDetails" :key="'detail-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-medium text-gray-900">{{ item.StoreItemName }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ item.Qty }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ item.UnitPrice }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ item.Qty * item.UnitPrice}}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="purchaseDetails.length === 0">
+                        <td colspan="4" class="text-center text-lg text-gray-500 py-6">لا توجد تفاصيل للعرض</td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">{{ purchaseDetails.reduce((accumulator,
+                                currentValue) => accumulator + currentValue.Qty, 0) }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">الاجمالي</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">{{ purchaseDetails.reduce((accumulator,
+                                currentValue) => accumulator + (currentValue.UnitPrice * currentValue.Qty), 0)
+                                }}</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
-</card>
 
+    <!-- Product Storage Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-primary text-white px-6 py-4 flex items-center gap-2">
+            <i class="fas fa-list-ol"></i>
+            <h2 class="text-lg font-semibold">تفاصيل عملية تخزين المستلزمات لمنتج</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="px-6 py-3 text-right">اسم المنتج</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right" style="width:15%">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in purchaseStoreItemDetails" :key="'store-item-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-medium text-gray-900">{{ item.StoreItemName }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ item.Qty }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ (item.UnitPrice) }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ (item.Qty * item.UnitPrice) }}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="purchaseStoreItemDetails.length === 0">
+                        <td colspan="4" class="text-center text-lg text-gray-500 py-6">لا توجد تفاصيل للعرض</td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">{{
+                                (purchaseStoreItemDetails.reduce((accumulator,
+                                currentValue) => accumulator + currentValue.Qty, 0))
+                                }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">الاجمالي</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-bold text-gray-900">{{
+                                (purchaseStoreItemDetails.reduce((accumulator,
+                                currentValue) => accumulator + (currentValue.UnitPrice * currentValue.Qty), 0))
+                                }}</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Storage Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-primary text-white px-6 py-4 flex items-center gap-2">
+            <i class="fas fa-list-ol"></i>
+            <h2 class="text-lg font-semibold">ملخص عملية التخزين</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الفاتورة</label>
+                    <span class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 block">{{
+                        purchaseInfo.PurchasingDate }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <span class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 block">{{
+                        purchaseInfo.InvoiceNum || 'غير متاح' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Purchases/PurchaseValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Purchases/PurchaseContainer.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var purchase = new Purchase(@Html.Raw(data));
-        ko.applyBindings(purchase);
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        console.log(initialData);
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    title: "تفاصيل اذن اضافة خامات",
+                    supplier: initialData.Supplier || {},
+                    purchaseDetails: initialData.PurchaseDetails || [],
+                    purchaseStoreItemDetails: initialData.PurchaseStoreItemDetails || [],
+                    purchaseInfo: initialData.PurchaseInfo || {},
+                };
+            }
+        }).mount('#app');
     </script>
-
-
 }

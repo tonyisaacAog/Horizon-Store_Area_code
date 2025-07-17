@@ -28,7 +28,7 @@
     <None Remove="Areas\Sales\BoldReports\SaleInvoice.rdlc" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <COMReference Include="MSDATASRC">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -38,7 +38,7 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
+  </ItemGroup> -->
 
   <ItemGroup>
     <Content Include="Areas\Orders\BoldReports\OrderReport.rdlc">
@@ -57,7 +57,8 @@
     <PackageReference Include="BoldReports.Net.Core" Version="4.2.79" />
     <PackageReference Include="EPPlus" Version="6.1.2" />
     <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="10.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"
+      Version="6.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.14" />

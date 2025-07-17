@@ -5,112 +5,257 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
-
-}
-
-
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-6  mb-2">
-                <label>اسم المنتج</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.ProductName" />
-            </div>
-            <div class="col-6 mb-2">
-                <label>اسم المنتج عربى</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.ProductNameAr" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>كود المنتج</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.ItemCode" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>نوع المنتج</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.FamilyName" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>ماركة المنتج</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.StoreBrandName" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>الكمية الكلية الحالية للمنتج </label>
-                <input disabled class="form-control" data-bind="value:StoreItem.CurrentQty" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>الكمية التالفة للمنتج فى السابق</label>
-                <input disabled class="form-control" data-bind="value:StoreItem.DestroyedQty" />
-            </div>
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
         </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "StoreItems", new { area = "Store" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
     </div>
-</card>
 
-
-
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-4 mb-2">
-                <label>التالف</label>
-                <input class="form-control" data-bind="value:StoreItem.Quantity" />
+    <!-- Product Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيانات المنتج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="StoreItem.ProductName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج عربى</label>
+                    <input v-model="StoreItem.ProductNameAr" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">كود المنتج</label>
+                    <input v-model="StoreItem.ItemCode" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    <input v-model="StoreItem.FamilyName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ماركة المنتج</label>
+                    <input v-model="StoreItem.StoreBrandName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الكمية الكلية الحالية للمنتج</label>
+                    <input v-model="StoreItem.CurrentQty" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
             </div>
-            <div class="col-4  mb-2">
-                <label>التاريخ</label>
-                <input class="form-control smallDate" data-bind="value:DateOfDestroy" />
-            </div>
-           
-            <div class="col-4 mb-2">
-                <label>نوع المنتج</label>
-                @Html.Editor("Id","StoreLocationList", new
-                {
-                htmlAttributes = new
-                {
-                @data_bind = "value:StoreLocationId",
-                @class = "form-select",
-                @id = "storeLoc"
-
-                }
-                })
-            </div>
-            <div class="col-12 mb-2">
-                <label>ملاحظات</label>
-                
-                <textarea class="form-control" data-bind="value:Description"></textarea>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">الكمية التالفة للمنتج فى السابق</label>
+                <input v-model="StoreItem.DestroyedQty" disabled
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 md:w-1/2">
             </div>
         </div>
     </div>
 
- 
-</card>
-<card-footer>
-    <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
-</card-footer>
+    <!-- Destroy Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">تفاصيل التالف</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">كمية التالف</label>
+                    <input v-model="StoreItem.Quantity" type="number" step="0.1" min="0"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <span v-if="errors.Quantity" class="text-red-500 text-xs">{{ errors.Quantity }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التاريخ</label>
+                    <input v-model="DateOfDestroy" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <span v-if="errors.DateOfDestroy" class="text-red-500 text-xs">{{ errors.DateOfDestroy }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">مكان التخزين</label>
+                    @Html.Editor("Id","StoreLocationList", new
+                    {
+                        htmlAttributes = new
+                        {
+                            @v_model = "StoreLocationId",
+                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                            @id = "storeLoc"
+                        }
+                    })
+                    <span v-if="errors.StoreLocationId" class="text-red-500 text-xs">{{ errors.StoreLocationId }}</span>
+                </div>
+            </div>
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">ملاحظات</label>
+                <textarea v-model="Description" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+            </div>
+            <div class="flex justify-end mt-6">
+                <button @@click="save"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/App/Store/Store_Item_Brand_Family/StoreItemDestroyVRules.js" asp-append-version="true"></script>
-    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var client = new GeneralKoViewModel(@Html.Raw(data));
-        ko.applyBindings(client);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border-t border-gray-200 flex justify-end">
+                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                موافق
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: 'تحديد كمية التالف من المنتج',
+                    StoreItem: initialData.StoreItem || {},
+                    DateOfDestroy: initialData.DateOfDestroy || '',
+                    StoreLocationId: initialData.StoreLocationId || '',
+                    Description: initialData.Description || '',
+                    messages: [],
+                    errors: {
+                        Quantity: '',
+                        DateOfDestroy: '',
+                        StoreLocationId: ''
+                    }
+                };
+            },
+            methods: {
+                validateForm() {
+                    this.errors = {
+                        Quantity: '',
+                        DateOfDestroy: '',
+                        StoreLocationId: ''
+                    };
+                    this.messages = [];
+
+                    let isValid = true;
+
+                    // Validate destroyed quantity
+                    if (!this.StoreItem.Quantity || this.StoreItem.Quantity === '') {
+                        this.errors.Quantity = 'برجاء إدخال كمية التالف';
+                        isValid = false;
+                    } else if (isNaN(parseFloat(this.StoreItem.Quantity))) {
+                        this.errors.Quantity = 'كمية التالف يجب أن تكون رقماً';
+                        isValid = false;
+                    } else if (parseFloat(this.StoreItem.Quantity) < 0.1) {
+                        this.errors.Quantity = 'كمية التالف يجب أن تكون أكبر من 0.1';
+                        isValid = false;
+                    } else {
+                        // Validate that destroyed quantity doesn't exceed current quantity
+                        const currentQty = parseFloat(this.StoreItem.CurrentQty || 0);
+                        const destroyQty = parseFloat(this.StoreItem.Quantity || 0);
+                        if (destroyQty > currentQty) {
+                            this.errors.Quantity = 'كمية التالف لا يمكن أن تكون أكبر من الكمية الحالية للمنتج';
+                            isValid = false;
+                        }
+                    }
+
+                    // Validate date
+                    if (!this.DateOfDestroy || this.DateOfDestroy === '') {
+                        this.errors.DateOfDestroy = 'برجاء تحديد تاريخ التالف';
+                        isValid = false;
+                    }
+
+                    // Validate store location
+                    if (!this.StoreLocationId || this.StoreLocationId === '') {
+                        this.errors.StoreLocationId = 'برجاء اختيار مكان التخزين';
+                        isValid = false;
+                    }
+
+                    return isValid;
+                },
+
+                save() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    const destroyData = {
+                        StoreItem: this.StoreItem,
+                        DateOfDestroy: this.DateOfDestroy,
+                        StoreLocationId: this.StoreLocationId,
+                        Description: this.Description
+                    };
+
+                    axios.post('/Store/StoreItems/SaveDestoryAmount', destroyData)
+                        .then(response => {
+                            if (response.data.success) {
+                                window.location.href = '/Store/StoreItems';
+                            } else if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الحفظ'];
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                        });
+                },
+
+                clearMessages() {
+                    this.messages = [];
+                }
             }
-        }
-        $("#storeLoc").select2();
+        }).mount('#app');
     </script>
 }

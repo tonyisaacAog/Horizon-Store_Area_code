@@ -1,226 +1,414 @@
 ﻿@model OrderDetailsContainer
 @{
-    var title = "تفاصيل امر شغل ";
+    var title = "تفاصيل امر شغل";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
-
-}
-
-
-
-<card title="بيانات امر الشغل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>رقم امر الشغل</label>
-                    <input disabled data-bind="value:Order.NoOfOrder" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ امر الشغل</label>
-                    <input disabled data-bind="value:Order.OrderDate" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ التسليم</label>
-                    <input disabled data-bind="value:Order.DeliveryOrder" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>حالة امر الشغل</label>
-                    <input disabled data-bind="visible:Order.OrderStatus()==0" class="form-control " value="جديد" />
-                    <input disabled data-bind="visible:Order.OrderStatus()==1" class="form-control " value="جارى التنفيذ" />
-                    <input disabled data-bind="visible:Order.OrderStatus()==2" class="form-control " value="تم التنفيذ" />
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form-group">
-                    <label>الكمية</label>
-                    <input disabled data-bind="value:Order.TotalAmount" class="form-control" />
-                </div>
-            </div>
-            @*  <div class="col-12 mb-2">
-            <div class="form-group">
-            <label>ملاحظات امر الشغل</label>
-            <textarea rows="8"  data-bind="value:Order.Notes" class="form-control">
-            </textarea>
-            </div>
-            <div class="form-group mb-2 mt-2 row justify-content-center align-items-center">
-            <button data-bind="click:SaveNotes" class="btn btn-primary col-6">حفظ الملاحظات</button>
-            </div>
-            </div> *@
-        </div>
-    </div>
-</card>
-
-
-<card title="بيانات العميل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم العميل</label>
-                    <input data-bind="value:Order.ClientName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>التليفون</label>
-                    <input data-bind="value:Order.Phone1" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-        </div>
-    </div>
-</card>
-
-
-<card title="تفاصيل امر الشغل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-gradient text-dark">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th style="width:10%">
-                    الكمية
-                </th>
-                <th>
-                    ملاحظات
-                </th>
-
-                @*      <th>
-                السعر الإجمالي
-                </th> *@
-                <th data-bind="visible:Order.OrderStatus()==0">
-                    @*  <button class="btn btn-dark" data-bind="click:AddItem">
-                    <span class="fa fa-plus"></span>
-                    </button>*@
-                </th>
-            </tr>
-
-        </thead>
-        <tbody data-bind="foreach:OrderDetail">
-            <tr>
-                <td>
-
-                    <input disabled type="text" class="form-control" data-bind="value:ProductName" />
-
-                </td>
-
-                <td>
-                    <input disabled type="text" class="form-control" data-bind="value:QTY" />
-                </td>
-                <td>
-                    <textarea rows="1" disabled class="form-control" data-bind="value:Notes"></textarea>
-                </td>
-
-                @*   <td>
-                <input disabled type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
-                <td>
-                <span data-bind="numericText:TotalAmount"></span>
-                </td> *@
-                <td data-bind="visible:$parent.Order.OrderStatus()==0">
-                    <a class="btn btn-info" data-bind="attr:{href:'/Orders/Order/ManageConfigure/'+Id()}">
-                        <span class="fa fa-list"></span>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td></td>
-                <td data-bind="visible:Order.OrderStatus()==0"></td>
-
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="الاكسسوارات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-gradient text-dark">
-
-            <tr>
-                <th>
-                    المادة
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-
-            </tr>
-
-        </thead>
-        <tbody data-bind="foreach:OrderConfigure">
-            <tr data-bind="visible:OrderConfigure.length>0">
-                <td>
-
-                    <input disabled type="text" class="form-control" data-bind="value:StoreItemRaw" />
-
-                </td>
-
-                <td>
-                    <input disabled type="text" class="form-control" data-bind="value:Qty" />
-                </td>
-
-
-            </tr>
-        </tbody>
-
-    </table>
-  
-</card>
-<div class="mx-auto mt-2 row justify-content-center align-items-center">
-    <a class="btn btn-primary col-2" href="/Orders/Order/PrintOrder/@Model.Order.Id">طباعة امر الشغل</a>
-</div>
-
-
-@section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/OrderDetailsValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/OrderDetailsContainer.js" asp-append-version="true"></script>
-
-
-    <script type="text/javascript">
-        var orderdetails = new OrderDetailsContainer(@Html.Raw(data));
-        ko.applyBindings(orderdetails);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل امر شغل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for RTL support */
+        .rtl-table th:first-child {
+            border-radius: 0 0.375rem 0.375rem 0;
         }
-        $("#StoreLocID").select2();
+
+        .rtl-table th:last-child {
+            border-radius: 0.375rem 0 0 0.375rem;
+        }
+
+        .shadow-custom {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-6">
+
+        <!-- Messages Component -->
+        <messages :messages="messages" @@clear-messages="clearMessages"></messages>
+
+        <!-- Page Title -->
+        <div class="flex justify-between items-center mb-8 mt-4">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                    <path d="M9 9l1 0" />
+                    <path d="M9 13l6 0" />
+                    <path d="M9 17l6 0" />
+                </svg>
+                <h1 class="text-2xl text-gray-800 font-bold">{{ title }}</h1>
+            </div>
+            <a href="/Orders/Order/Index"
+                class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+                رجوع
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+
+        <!-- Order Information Card -->
+        <div class="bg-white rounded-lg shadow-custom mb-6 overflow-hidden">
+            <div class="text-gray-900 px-6 py-4 flex items-center gap-3 border-b">
+                <h2 class="text-lg font-semibold">بيانات امر الشغل</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم امر الشغل</label>
+                        <input v-model="order.NoOfOrder" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">تاريخ امر الشغل</label>
+                        <input v-model="order.OrderDate" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">تاريخ التسليم</label>
+                        <input v-model="order.DeliveryOrder" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">حالة امر الشغل</label>
+                        <input v-if="order.OrderStatus === 0" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-green-50 text-green-700 focus:outline-none"
+                            value="جديد">
+                        <input v-else-if="order.OrderStatus === 1" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-yellow-50 text-yellow-700 focus:outline-none"
+                            value="جارى التنفيذ">
+                        <input v-else-if="order.OrderStatus === 2" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-blue-50 text-blue-700 focus:outline-none"
+                            value="تم التنفيذ">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">الكمية الإجمالية</label>
+                        <input v-model="order.TotalAmount" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Information Card -->
+        <div class="bg-white rounded-lg shadow-custom mb-6 overflow-hidden">
+            <div class="text-gray-900 px-6 py-4 flex items-center gap-3 border-b">
+                <h2 class="text-lg font-semibold">بيانات العميل</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">اسم العميل</label>
+                        <input v-model="order.ClientName" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">التليفون</label>
+                        <input v-model="order.Phone1" disabled
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Card -->
+        <div class="bg-white rounded-lg shadow-custom mb-6 overflow-hidden" v-if="orderDetails.length > 0">
+            <div class="text-gray-900 px-6 py-4 flex items-center gap-3 border-b">
+                <h2 class="text-lg font-semibold">تفاصيل امر الشغل</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rtl-table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                المنتج
+                            </th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                style="width:15%">
+                                الكمية
+                            </th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ملاحظات
+                            </th>
+                            <th v-if="order.OrderStatus === 0"
+                                class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                style="width:10%">
+                                إجراءات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="detail in orderDetails" :key="detail.Id" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input disabled type="text"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none"
+                                    v-model="detail.ProductName">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input disabled type="text"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none text-center"
+                                    v-model="detail.QTY">
+                            </td>
+                            <td class="px-6 py-4">
+                                <textarea rows="2" disabled
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none resize-none"
+                                    v-model="detail.Notes"></textarea>
+                            </td>
+                            <td v-if="order.OrderStatus === 0" class="px-6 py-4 whitespace-nowrap">
+                                <a :href="`/Orders/Order/ManageConfigure/${detail.Id}`"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md inline-flex items-center gap-2 transition-colors">
+                                    <i class="fa fa-list text-sm"></i>
+                                    إدارة
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td class="px-6 py-4 font-semibold text-gray-900">الإجمالي</td>
+                            <td class="px-6 py-4 font-bold text-blue-600 text-center">{{ totalQTY }}</td>
+                            <td class="px-6 py-4"></td>
+                            <td v-if="order.OrderStatus === 0" class="px-6 py-4"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Accessories Card -->
+        <div class="bg-white rounded-lg shadow-custom mb-6 overflow-hidden" v-if="orderConfigure.length > 0">
+            <div class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-6 py-4 flex items-center gap-3">
+                <i class="fa fa-cogs text-lg"></i>
+                <h2 class="text-lg font-semibold">الاكسسوارات</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rtl-table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                المادة
+                            </th>
+                            <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                style="width:20%">
+                                الكمية
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="config in orderConfigure" :key="config.Id" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input disabled type="text"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none"
+                                    v-model="config.StoreItemRaw">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input disabled type="text"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none text-center"
+                                    v-model="config.Qty">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Print Button -->
+        <div class="flex justify-center mt-8">
+            <a :href="`/Orders/Order/PrintOrder/${order.Id}`"
+                class="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-lg inline-flex items-center gap-3 transition-colors text-lg">
+                <i class="fa fa-print"></i>
+                طباعة امر الشغل
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const rawData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border-t border-gray-200 flex justify-end">
+                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                موافق
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        // Constants
+        const RecordStatus = {
+            Added: 0,
+            Updated: 1,
+            Deleted: 2,
+            UnChanged: 3
+        };
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "تفاصيل امر شغل",
+                    order: rawData.Order,
+                    orderDetails: rawData.OrderDetail,
+                    orderConfigure: rawData.OrderConfigure,
+                    messages: []
+                };
+            },
+            computed: {
+                totalQTY() {
+                    return this.orderDetails.reduce((sum, detail) => sum + parseFloat(detail.QTY || 0), 0);
+                },
+                totalAmount() {
+                    return this.orderDetails.reduce((sum, detail) => {
+                        const qty = parseFloat(detail.QTY || 0);
+                        const price = parseFloat(detail.UnitPrice || 0);
+                        return sum + (qty * price);
+                    }, 0);
+                }
+            },
+            methods: {
+                clearMessages() {
+                    this.messages = [];
+                },
+                addItem() {
+                    const newItem = {
+                        Id: 0,
+                        ProductId: 0,
+                        ProductName: "",
+                        QTY: 0,
+                        UnitPrice: 0,
+                        Notes: "",
+                        RecordStatus: RecordStatus.Added
+                    };
+                    this.orderDetails.push(newItem);
+                },
+                removeItem(item) {
+                    const index = this.orderDetails.indexOf(item);
+                    if (index > -1) {
+                        this.orderDetails.splice(index, 1);
+                    }
+                },
+                updateItem(item) {
+                    const duplicateItems = this.orderDetails.filter(x => x.ProductId === item.ProductId);
+                    if (duplicateItems.length <= 1) {
+                        if (item.RecordStatus !== RecordStatus.Added) {
+                            item.RecordStatus = RecordStatus.Updated;
+                        }
+                    } else {
+                        this.removeItem(item);
+                        this.messages = [];
+                        this.messages.push("تم اختيار هذا المنتج من قبل");
+                    }
+                },
+                addConfigure() {
+                    const newConfig = {
+                        Id: 0,
+                        StoreItemId: 0,
+                        StoreItemRaw: "",
+                        Qty: 0,
+                        Description: ""
+                    };
+                    this.orderConfigure.push(newConfig);
+                },
+                removeConfigure(item) {
+                    const index = this.orderConfigure.indexOf(item);
+                    if (index > -1) {
+                        this.orderConfigure.splice(index, 1);
+                    }
+                },
+                validateForm() {
+                    this.messages = [];
+
+                    if (!this.order.ClientName) {
+                        this.messages.push("اسم العميل مطلوب");
+                    }
+
+                    if (this.orderDetails.length === 0) {
+                        this.messages.push("يجب إضافة منتج واحد على الأقل");
+                    }
+
+                    return this.messages.length === 0;
+                },
+                save() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    const orderData = {
+                        Order: this.order,
+                        OrderDetail: this.orderDetails,
+                        OrderConfigure: this.orderConfigure
+                    };
+
+                    this.sendAjaxCall(orderData, "/Orders/Order/SaveOrder");
+                },
+                saveNotes() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    this.sendAjaxCall(this.order, "/Orders/Order/SaveNotesForOrder");
+                },
+                async sendAjaxCall(data, url) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            console.log('تم الحفظ بنجاح');
+                        } else {
+                            this.messages = [result.message || 'حدث خطأ أثناء الحفظ'];
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                    }
+                }
+            }
+        }).mount('#app');
     </script>
+</body>
 
-
-}
+</html>

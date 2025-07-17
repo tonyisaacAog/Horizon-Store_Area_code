@@ -5,122 +5,166 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-@* <partial name="_Messages" /> *@
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-}
-
-<card title="بيان عملية التجميع" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-
-
-    <card title="بيان " addational-class="fa-list-ol"
-          text-color-class="text-white" header-class="bg-dark">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label>اسم المنتج</label>
-                    <span data-bind="text:ProductConfigurations.StoreItemVM.ProductName" class="form-control"></span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>نوع المنتج</label>
-                    <span data-bind="text:ProductConfigurations.StoreItemVM.FamilyName" class="form-control" ></span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>الكمية</label>
-                    <span data-bind="text:ProductConfigurations.StoreItemVM.Quantity" class="form-control" ></span>
-                </div>
-            </div>
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
         </div>
-        <card title="مستلزمات المنتج" addational-class="fa-list-ol"
-              text-color-class="text-dark" header-class="bg-smoke">
-            <div class="row">
-                <table class="table table-bordered table-striped table-hover">
-                    <thead class="bg-primary text-white">
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Manufacturing", new { area = "Manufacturing" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-                        <tr>
-                            <th>
-                                المادة الخام
-                            </th>
-                            <th>
-                                الكمية المستخدمة
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
-                        <tr>
-                            <td>
-                                <span data-bind="text:StoreItemRawName"></span>
-                            </td>
-                            <td>
-                                <span data-bind="text:QTY" ></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </card>
-    </card>
-
-
-</card>
-
-<card title="ملخص عملية التجميع" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label>تاريخ عملية التجميع</label>
-                    <span data-bind="text:ManufacturingInfoVM.BatchDate" class="form-control" ></span>
+    <!-- Product Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيان المنتج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="productConfigurations.StoreItemVM.ProductName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>رقم عملية التجميع</label>
-                    <span data-bind="text:ManufacturingInfoVM.BatchNumber" class="form-control"></span>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    <input v-model="productConfigurations.StoreItemVM.FamilyName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>المخزن</label>
-                    <span data-bind="text:StoreLocationName" class="form-control"></span>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الكمية</label>
+                    <input v-model="productConfigurations.StoreItemVM.Quantity" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Product Requirements Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">مستلزمات المنتج</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">المادة الخام</th>
+                        <th class="px-6 py-3 text-right">الكمية المستخدمة</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in productConfigurations.ItemConfigurationVM" :key="'config-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-medium text-gray-900">{{ item.StoreItemRawName }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">{{ item.QTY }}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="productConfigurations.ItemConfigurationVM.length === 0">
+                        <td colspan="2" class="text-center text-lg text-gray-500 py-6">لا توجد مستلزمات للعرض</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
- @*    <card-footer>
-        <partial name="_SaveButton" />
-    </card-footer> *@
-</card>
-
-
-
-
-
+    <!-- Manufacturing Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold">ملخص عملية التجميع</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ عملية التجميع</label>
+                    <input v-model="manufacturingInfoVM.BatchDate" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم عملية التجميع</label>
+                    <input v-model="manufacturingInfoVM.BatchNumber" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">المخزن</label>
+                    <input v-model="storeLocationName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    @* <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script> *@
-    <script src="~/APP/Manufacturing/ManufacturingContainer2.js" asp-append-version="true"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var Manufacturing = new ManufacturingContainer(@Html.Raw(data));
-        ko.applyBindings(Manufacturing);
-    </script>
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
 
+        // Messages Component
+        const Messages = {
+            template: `
+                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border-t border-gray-200 flex justify-end">
+                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                موافق
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "عملية تجميع منتج",
+                    productConfigurations: initialData.ProductConfigurations || { StoreItemVM: {}, ItemConfigurationVM: [] },
+                    manufacturingInfoVM: initialData.ManufacturingInfoVM || {},
+                    storeLocationName: initialData.StoreLocationName || '',
+                    messages: []
+                };
+            },
+            methods: {
+                clearMessages() {
+                    this.messages = [];
+                }
+            }
+        }).mount('#app');
+    </script>
 }

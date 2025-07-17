@@ -1,380 +1,471 @@
 ﻿@using Horizon.Areas.Orders.Models;
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - MG</title>
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" />
+
+    <!-- Libs CSS -->
+    <link href="~/assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet" />
+    <link href="~/assets/libs/apexcharts/dist/apexcharts.css" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    <link href="~/assets/css/theme.min.css" rel="stylesheet">
+
+    <!-- Additional CSS -->
     <link href="~/lib/jqueryui/jquery-ui.css" rel="stylesheet" />
-    <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <link href="~/css/RTL/BS5RTL.css" rel="stylesheet" asp-append-version="true" />
-    <link href="~/css/RTL/DashboardRTL.css" rel="stylesheet" asp-append-version="true" />
-    <link href="~/lib/font-awesome/css/all.css" />
+    @* <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" /> *@
     <link href="~/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/dist/css/select2Custome.css" rel="stylesheet" />
+    @* <link href="https://cdn.datatables.net/2.1.2/css/dataTables.dataTables.css" />
+    <link href="https://cdn.datatables.net/buttons/3.1.0/css/buttons.dataTables.css" /> *@
 
-    <link href="https://cdn.datatables.net/2.1.2/css/dataTables.dataTables.css" />
-    <link href="https://cdn.datatables.net/buttons/3.1.0/css/buttons.dataTables.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        #sidebar-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif !important;
+        }
+
+        /* RTL specific adjustments */
+        .navbar-vertical {
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown-menu-end {
+            left: 0 !important;
+            right: auto !important;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            box-shadow: none !important;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            border: 1px solid #525252 !important;
+        }
+
+        .nav-item,
+        .nav-item a,
+        .nav-item .nav {
+            white-space: wrap !important;
+            width: 100% !important;
+            list-style: circle !important;
+        }
+    </style>
 </head>
-<body class="sb-nav-fixed">
-    <div class="se-pre-con"></div>
-    <nav class="border-bottom sb-topnav navbar navbar-expand navbar-light bg-white d-print-none">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3 text-center" href="~/Home">
-            <img src="~/Images/Logo.png" />
-        </a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-            </div>
-        </form>
-        <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 
-            <li class="nav-item dropdown">
-                <a target="_blank" class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>مرحبا @User.Identity.Name!</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li>
-                        <a class="dropdown-item" href="~/Identity/Account/Manage/ChangePassword">
-                            تغيير كلمة المرور
-                        </a>
-                    </li>
-                    <li>
-                        <form class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="nav-link btn btn-link text-dark">خروج</button>
-                        </form>
-                    </li>
+<body>
+    <main>
+        <!-- app layout -->
+        <div id="app-layout" class="overflow-x-hidden flex flex-row-reverse">
+            <!-- start navbar -->
+            <nav class="navbar-vertical navbar" style="z-index: 99;">
+                <div id="myScrollableElement" class="h-screen" data-simplebar>
+                    <!-- brand logo -->
+                    <a class="navbar-brand" href="~/Home">
+                        <h1 class="text-white text-2xl font-bold">
+                            Horizon
+                        </h1>
+                    </a>
+                    <!-- navbar nav -->
+                    <ul class="navbar-nav flex-col" id="sideNavbar">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="~/Home">
+                                <i data-feather="home" class="w-4 h-4 ml-2"></i>
+                                لوحة التحكم
+                            </a>
+                        </li>
 
-                </ul>
-            </li>
+                        <!-- nav item -->
+                        <li class="nav-item">
+                            <div class="navbar-heading">الوحدات</div>
+                        </li>
 
+                        <!-- Client and Suppliers -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#ClientAndSupplierSettings" aria-expanded="false"
+                                aria-controls="ClientAndSupplierSettings">
+                                <i data-feather="users" class="w-4 h-4 ml-2"></i>
+                                العملاء والمواردين
+                            </a>
+                            <div id="ClientAndSupplierSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Sales/Client/Index">قائمة العملاء</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Purchases/Supplier/Index">قائمة الموردين</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
-        </ul>
-    </nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav" class="d-print-none">
-            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
-                    <div class="nav">
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ClientAndSupplierSettings"
-                           aria-expanded="false" style="text-decoration:none"
-                           aria-controls="pagesCollapseAuth">
-                            العملاء والمواردين
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="ClientAndSupplierSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Sales/Client/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    قائمة العملاء
-                                </a>
-                                <a class="nav-link" href="~/Purchases/Supplier/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    قائمة الموردين
-                                </a>
-                            </nav>
-                        </div>
+                        <!-- Production Orders -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#PurchaseOrderSettings" aria-expanded="false"
+                                aria-controls="PurchaseOrderSettings">
+                                <i data-feather="package" class="w-4 h-4 ml-2"></i>
+                                امر الانتاج
+                            </a>
+                            <div id="PurchaseOrderSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Purchases/PurchaseOrder/ManagePurchaseOrder">انشاء
+                                            امر انتاج</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Purchases/PurchaseOrder/Index">اوامر الانتاج</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <!-- Work Orders -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#OrderSettings" aria-expanded="false" aria-controls="OrderSettings">
+                                <i data-feather="clipboard" class="w-4 h-4 ml-2"></i>
+                                اوامر الشغل
+                            </a>
+                            <div id="OrderSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Orders/Order/ManageOrderForPerson">انشاء امر شغل</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">امر شغل
+                                            - جديد</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Process">امر
+                                            شغل - يتم المعالجة</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Done">امر شغل
+                                            - تم التجهيز</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Orders/Order/ProcessIndex">تحت التنفيذ</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <!-- Products -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#ProductSettings" aria-expanded="false" aria-controls="ProductSettings">
+                                <i data-feather="box" class="w-4 h-4 ml-2"></i>
+                                المنتجات
+                            </a>
+                            <div id="ProductSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreItems/Index">قائمة المنتجات</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreFamily/Index">انواع المنتجات</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreBrand/Index">الماركات</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <!-- Store Settings -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#StoreSettings" aria-expanded="false" aria-controls="StoreSettings">
+                                <i data-feather="database" class="w-4 h-4 ml-2"></i>
+                                اعدادات المخزن
+                            </a>
+                            <div id="StoreSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreItemRaw/TeakIndex">مستلزمات الانتاج
+                                            الصاج</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreItemRaw/Index">مستلزمات الانتاج
+                                            الاكسوارات</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreLocations/Index">المخازن</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/StoreMeasureUnit/Index">وحدات القياس</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Store/RawItemType/Index">قائمة الانواع</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#PurchaseOrderSettings"
-                           aria-expanded="false" style="text-decoration:none"
-                           aria-controls="pagesCollapseAuth">
-                            امر الانتاج
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="PurchaseOrderSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Purchases/PurchaseOrder/ManagePurchaseOrder">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    انشاء امر انتاج
-                                </a>
-                                <a class="nav-link" href="~/Purchases/PurchaseOrder/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    اوامر الانتاج
-                                </a>
-                            </nav>
-                        </div>
+                        <!-- Permissions -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#BillSettings" aria-expanded="false" aria-controls="BillSettings">
+                                <i data-feather="file-text" class="w-4 h-4 ml-2"></i>
+                                الاذون
+                            </a>
+                            <div id="BillSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Purchases/Home/Index">اذون خامات ومستلزمات عامة</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Sales/Home/Index">اذون صرف المنتجات</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <!-- Reports -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#ReportSettings" aria-expanded="false" aria-controls="ReportSettings">
+                                <i data-feather="bar-chart-2" class="w-4 h-4 ml-2"></i>
+                                التقارير
+                            </a>
+                            <div id="ReportSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/ItemRawForProduct">كارت صنف المنتج</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Sales/Reports/SalesBetweenDate">اذون صرف المنتجات</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Purchases/Reports/PurchaesBetweenDate">اذون الخامات والمسلتزمات</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Manufacturing/Reports/ManufacturingReport">تقرير تجميع منتج</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/GetAmountBalanceStoreItemInStore">تقرير جرد المخازن
+                                            للمنتجات</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/GetAmountBalanceStoreItem">تقرير ارصدة المنتجات</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectPurchQty">تقرير
+                                            ارصدة منتجات (سعر الصاج)</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/GetAmountBalanceStoreItemRaw">تقرير ارصدة الخامات
+                                            والمستلزمات</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectFromPurchase">تقرير
+                                            ارصدة منتجات غير مجمعة (سعر الصاج)</a></li>
+                                </ul>
+                            </div>
+                        </li>
 
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#OrderSettings"
-                           aria-expanded="false" style="text-decoration:none"
-                           aria-controls="pagesCollapseAuth">
-                            اوامر الشغل
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="OrderSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Orders/Order/ManageOrderForPerson">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    انشاء امر شغل
-                                </a>
-                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.New">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    امر شغل - جديد
-                                </a>
-                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Process">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    امر شغل - يتم المعالجة
-                                </a>
-                                <a class="nav-link" href="~/Orders/Order/Index?Status=@OrderStatus.Done">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    امر شغل - تم التجهيز
-                                </a>
-                                <a class="nav-link" href="~/Orders/Order/ProcessIndex">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    تحت التنفيذ
-                                </a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ProductSettings"
-                           aria-expanded="false"
-                           aria-controls="pagesCollapseAuth">
-                            المنتجات
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="ProductSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-
-                                <a class="nav-link" href="~/Store/StoreItems/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    قائمة المنتجات
-                                </a>
-                                <a class="nav-link" href="~/Store/StoreFamily/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    انواع المنتجات
-                                </a>
-                                <a class="nav-link" href="~/Store/StoreBrand/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    الماركات
-                                </a>
-                            </nav>
-                        </div>
-                     
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#StoreSettings"
-                           aria-expanded="false"
-                           aria-controls="pagesCollapseAuth">
-                            اعدادات المخزن
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="StoreSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Store/StoreItemRaw/TeakIndex">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    مستلزمات الانتاج الصاج
-                                </a>
-                                <a class="nav-link" href="~/Store/StoreItemRaw/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    مستلزمات الانتاج الاكسوارات
-                                </a>
-                                <a class="nav-link" href="~/Store/StoreLocations/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    المخازن
-                                </a>
-                                <a class="nav-link" href="~/Store/StoreMeasureUnit/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    وحدات القياس
-                                </a>
-
-                                <a class="nav-link" href="~/Store/RawItemType/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    قائمة الانواع
-                                </a>
-                            </nav>
-                        </div>
-
-
-
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#BillSettings"
-                           aria-expanded="false" style="text-decoration:none"
-                           aria-controls="pagesCollapseAuth">
-                            الاذون
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="BillSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Purchases/Home/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    اذون خامات ومستلزمات عامة
-                                </a>
-                                <a class="nav-link" href="~/Sales/Home/Index">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    اذون صرف المنتجات
-                                </a>
-                            </nav>
-                        </div>
-
-
-                        <a class="nav-link collapsed sb-sidenav-menu-heading" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ReportSettings"
-                           aria-expanded="false"
-                           aria-controls="pagesCollapseAuth">
-                            التقارير
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="ReportSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-
-                                <a class="nav-link" href="~/Store/Reports/ItemRawForProduct"> كارت صنف المنتج </a>
-                                <a class="nav-link" href="~/Sales/Reports/SalesBetweenDate"> اذون صرف المنتجات  </a>
-                                <a class="nav-link" href="~/Purchases/Reports/PurchaesBetweenDate">اذون الخامات والمسلتزمات </a>
-                                <a class="nav-link" href="~/Manufacturing/Reports/ManufacturingReport"> تقرير تجميع منتج</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemInStore">تقرير جرد المخازن للمنتجات </a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItem">تقرير ارصدة المنتجات</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectPurchQty">تقرير ارصدة منتجات (سعر الصاج)</a>
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemRaw">تقرير ارصدة الخامات والمستلزمات</a>
-                                @* <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollect">تقرير ارصدة منتجات غير مجمعة</a> *@
-                                <a class="nav-link" href="~/Store/Reports/GetAmountBalanceStoreItemNotCollectFromPurchase"> تقرير ارصدة منتجات غير مجمعة (سعر الصاج)</a>
-
-                            </nav>
-                        </div>
-
-
-                        <a class="sb-sidenav-menu-heading nav-link collapsed" href="#"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#UserSettings"
-                           aria-expanded="false"
-                           aria-controls="pagesCollapseAuth">
-                            المستخدمين
-                            <div class="ms-2 sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="UserSettings" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="~/Settings/UserAdmin/UserManagment">المستخدمين</a>
-                                <a class="nav-link" href="~/Settings/UserAdmin/RoleManagement">الصلاحيات</a>
-                            </nav>
-                        </div>
-
-                    </div>
+                        <!-- Users -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#!" data-bs-toggle="collapse"
+                                data-bs-target="#UserSettings" aria-expanded="false" aria-controls="UserSettings">
+                                <i data-feather="user" class="w-4 h-4 ml-2"></i>
+                                المستخدمين
+                            </a>
+                            <div id="UserSettings" class="collapse" data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-col">
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Settings/UserAdmin/UserManagment">المستخدمين</a></li>
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="~/Settings/UserAdmin/RoleManagement">الصلاحيات</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-
             </nav>
-        </div>
+            <!-- Sidebar Overlay -->
+            <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden">
+            </div>
 
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid">
-                    <div class="alert alert-dark alert-dismissible fade"
-                         id="feedback" role="alert">
+            <!--end of navbar-->
 
-                        <button type="button" class="btn-close"
-                                data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- app layout content -->
+            <div id="app-layout-content"
+                class="min-h-screen w-full min-w-[100vw] md:min-w-0 mr-[15.625rem] [transition:margin_0.25s_ease-out]">
+                <!-- start navbar -->
+                <div class="header">
+                    <!-- navbar -->
+                    <nav class="bg-white px-6 py-[10px] flex items-center justify-between shadow-sm">
+                        <a id="nav-toggle" href="#" class="text-gray-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </a>
+                        <div class="mr-3 hidden md:hidden lg:block">
+                        </div>
+                        <!-- navbar nav -->
+                        <ul class="flex mr-auto items-center">
+                            <li class="dropdown stopevent ml-2">
+                            </li>
+                            <!-- list -->
+                            <li class="dropdown mr-2">
+                                <a class="rounded-full" href="#" role="button" id="dropdownUser"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div class="w-10 h-10 relative">
+                                        <img src="~/assets/images/user.jpg" alt="User Image"
+                                            class="w-10 h-10 rounded-full object-cover">
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownUser">
+                                    <div class="px-4 pb-0 pt-2" style="min-width: 180px !important;">
+                                        <div class="leading-4">
+                                            <h5 class="mb-1">@User.Identity.Name</h5>
+                                            <a href="#">عرض ملفي الشخصي</a>
+                                        </div>
+                                        <div class="border-b mt-3 mb-2"></div>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <a class="dropdown-item" href="~/Identity/Account/Manage/ChangePassword">
+                                                <i class="w-4 h-4" data-feather="user"></i>
+                                                تغيير كلمة المرور
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout"
+                                                asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                <button type="submit" class="nav-link btn btn-link text-dark">
+                                                    <i class="w-4 h-4" data-feather="power"></i>
+                                                    تسجيل الخروج
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- end of navbar -->
+
+                @await RenderSectionAsync("PageHeading", required: false)
+
+                <div class="mx-6 mb-6">
+                    <div style="z-index: 9999999999;"
+                        class="bg-teal-500 mb-3 text-white min-w-[200px] rounded-lg p-4 fixed top-2 right-2 fade none mt-4"
+                        id="feedback" role="alert" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
                     </div>
-                </div>
-                @await RenderSectionAsync("PageHeading",required: false)
-
-
-                <div class="container-fluid p-4">
                     @RenderBody()
-
                 </div>
 
-            </main>
-            @*<footer class="py-4 bg-light mt-auto fixed-bottom">
-            <div class="container-fluid px-4">
-            <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; Your Website 2021</div>
-            <div>
-            <a href="#">Privacy Policy</a>
-            &middot;
-            <a href="#">Terms &amp; Conditions</a>
             </div>
-            </div>
-            </div>
-            </footer>*@
         </div>
-    </div>
+    </main>
 
+    <!-- Libs JS -->
+    <script src="~/assets/libs/feather-icons/dist/feather.min.js"></script>
+    <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/simplebar/dist/simplebar.min.js"></script>
+    <script src="~/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 
+    <!-- Theme JS -->
+    <script src="~/assets/js/theme.min.js"></script>
+
+    <!-- Additional Scripts -->
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery/dist/jquery-1.10.2.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.js"></script>
-    <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js" crossorigin="anonymous"></script>
+    @* <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js" crossorigin="anonymous"></script> *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js" crossorigin="anonymous"></script>
-
-
-    @*  <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script> *@
+    @* <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js" crossorigin="anonymous"></script> *@
     <script src="~/lib/jquery-number/jquery.number.min.js"></script>
-    <script src="~/lib/font-awesome/js/all.js"></script>
-    <script src="~/bootstrap5/js/bootstrap.bundle.min.js"></script>
-    @* <script src="https://cdn.jsdelivr.XYZ/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> *@
-    <script src="~/js/scripts.js" asp-append-version="true"></script>
+    <script src="~/dist/js/select2.full.min.js"></script>
     <script src="~/APP/General/General.js" asp-append-version="true"></script>
 
-
-    <script src="~/dist/js/select2.full.min.js"></script>
-    <script src="~/dist/js/select2.full.js"></script>
-    <script src="~/dist/js/select2.js"></script>
-    <script src="~/dist/js/select2.min.js"></script>
-    <script asp-append-version="true">
+    <script>
         $(document).ready(function () {
-            $(".nav-link").on("click", function (e) {
-                e.stopPropagation();
-                var target = $(this).data("bs-target");
-                var toggleId = target;
-                var menuState = localStorage.getItem(toggleId);
-                if (menuState !== null && menuState === "open" && toggleId != undefined) {
-                    $(this).find(".collapse").removeClass("show");
-                    $(`[data-bs-target="#${toggleId}"]`).addClass("collapsed");
-                    localStorage.setItem(toggleId, "closed");
-                } else if (toggleId != undefined) {
-                    $(`[data-bs-target="#${toggleId}"]`).removeClass("collapsed");
-                    $(this).find(".collapse").addClass("show");
-                    localStorage.setItem(toggleId, "open");
-                }
-            });
+            // Initialize feather icons
+            feather.replace();
 
-            $(".collapse").each(function () {
-                var toggleId = $(this).attr("id");
-                var menuState = localStorage.getItem("#" + toggleId);
-                if (menuState === "open" && toggleId != undefined) {
-                    $(this).addClass("show");
-                    $(`[data-bs-target="#${toggleId}"]`).removeClass("collapsed");
-                } else {
-                    $(`[data-bs-target="#${toggleId}"]`).addClass("collapsed");
-                    $(this).removeClass("show");
-                }
-            });
+            // Sidebar toggle functionality
 
+            if (window.location.href.includes('success') || new URLSearchParams(window.location.search).has('success')) {
+                $('#feedback')
+                    .addClass('alert-success show')
+                    .text('تم حفظ البيانات بنجاح');
+                setTimeout(function () {
+                    $('#feedback').removeClass('show');
+                }, 3000);
+            }
         });
+
+        let open = false;
+        $('#nav-toggle').on('click', function (e) {
+            e.preventDefault();
+            const sidebarWidth = $('.navbar-vertical').outerWidth();
+            const $appContent = $('#app-layout-content');
+            const $overlay = $('#sidebar-overlay');
+
+            if (open) {
+                $appContent.css('margin-right', '0');
+                $overlay.hide();
+                open = false;
+            } else {
+                $appContent.css('margin-right', sidebarWidth + 'px');
+                $('.navbar-vertical').css('margin-right', '0px');
+                $overlay.show();
+                open = true;
+            }
+        });
+        $('#sidebar-overlay').on('click', function () {
+            const sidebarWidth = $('.navbar-vertical').outerWidth();
+            const currentMargin = $('#app-layout-content').css('margin-right');
+            const $overlay = $('#sidebar-overlay');
+
+            if (open) {
+                $('.navbar-vertical').css('margin-right', '-17rem');
+                $overlay.hide();
+                open = false
+            } else {
+                $('.navbar-vertical').css('margin-right', '0px');
+                $overlay.show();
+                open = true
+
+            }
+        });
+
+
     </script>
-    @await RenderSectionAsync("Scripts",required: false)
 
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
 
+</html>

@@ -5,190 +5,234 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-}
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                <path d="M12 11h4"></path>
+                <path d="M12 16h4"></path>
+                <path d="M8 11h.01"></path>
+                <path d="M8 16h.01"></path>
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Sales", new { area = "Sales" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-
-<card title="بيانات العميل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم العميل</label>  :
-                    <span data-bind="text:Client.ClientName" ></span>
+    <!-- Client Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيانات العميل</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
+                    <input v-model="client.ClientName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم العميل</label>
+                    <input v-model="client.Phone1" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>رقم العميل</label>  :
-                    <span data-bind="text:Client.Phone1"  ></span>
-                </div>
-            </div>
-
         </div>
     </div>
 
-</card>
-
-<card title="تفاصيل عملية صرف مواد خام" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    اسم العنصر
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: SaleItemRawDetails">
-            <tr>
-                <td>
-                    <span data-bind="text:StoreItemName"></span>
-                </td>
-
-                <td>
-                    <span data-bind="text:QTY"></span>
-                </td>
-
-                <td>
-                    <span data-bind="text:UnitPrice"></span>
-                </td>
-                <td>
-                    <span data-bind="text:TotalAmount"></span>
-                </td>
-
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:ItemRawTotalAmount"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-<card title="تفاصيل عملية صرف المنتجات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    اسم المنتج
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-               
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: SaleDetails">
-            <tr>
-                <td>
-                    <span data-bind="text:StoreItemName"></span>
-                </td>
-
-                <td>
-                    <span data-bind="text:QTY"></span>
-                </td>
-
-                <td>
-                    <span data-bind="text:UnitPrice"></span>
-                </td>
-                <td>
-                    <span  data-bind="text:TotalAmount"></span>
-                </td>
-               
-            </tr>
-
-        </tbody>
-       <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="ملخص عملية الصرف" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label>تاريخ الصرف</label>  :
-                    <span  data-bind="text:SaleInfo.SalesDate"></span>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>رقم الفاتورة </label>  :
-                    <span data-bind="text:SaleInfo.InvoiceNum()==''?'غير متاح':SaleInfo.InvoiceNum"></span>
-                </div>
-            </div>
-             <div class="col-4">
-                <div class="form-group">
-                    <label>مخزن الصرف </label>  :
-                    <span data-bind="text:SaleInfo.StoreLocationName"></span>
-                </div>
-            </div>
-
+    <!-- Raw Materials Sales Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">تفاصيل عملية صرف مواد خام</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full ">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">اسم العنصر</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white ">
+                    <tr v-for="(item, index) in saleItemRawDetails" :key="'raw-'+index" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">{{ item.StoreItemName }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.QTY) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.UnitPrice) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.TotalAmount) }}</td>
+                    </tr>
+                    <tr v-if="saleItemRawDetails.length === 0">
+                        <td colspan="4" class="text-center text-lg text-gray-500 py-6">لا توجد مواد خام للعرض</td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td class="px-6 py-4"></td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(itemRawTotalQTY) }}</td>
+                        <td class="px-6 py-4 font-bold">الإجمالي</td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(itemRawTotalAmount) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
-</card>
 
+    <!-- Products Sales Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">تفاصيل عملية صرف المنتجات</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full ">
+                <thead class=" text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">اسم المنتج</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white ">
+                    <tr v-for="(item, index) in saleDetails" :key="'sale-'+index" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">{{ item.StoreItemName }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.QTY) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.UnitPrice) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ formatNumber(item.TotalAmount) }}</td>
+                    </tr>
+                    <tr v-if="saleDetails.length === 0">
+                        <td colspan="4" class="text-center text-lg text-gray-500 py-6">لا توجد منتجات للعرض</td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td class="px-6 py-4"></td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(totalQTY) }}</td>
+                        <td class="px-6 py-4 font-bold">الإجمالي</td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(totalAmount) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sales Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">ملخص عملية الصرف</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الصرف</label>
+                    <input v-model="saleInfo.SalesDate" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <input :value="saleInfo.InvoiceNum || 'غير متاح'" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">مخزن الصرف</label>
+                    <input v-model="saleInfo.StoreLocationName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Sales/SalesContainer.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script type="text/javascript">
-        var sale = new Sales(@Html.Raw(data));
-        ko.applyBindings(sale);
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4">
+                                        <ul class="space-y-2">
+                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                            موافق
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "تفاصيل صرف منتجات",
+                    client: initialData.Client || {},
+                    saleDetails: initialData.SaleDetails || [],
+                    saleItemRawDetails: initialData.SaleItemRawDetails || [],
+                    saleInfo: initialData.SaleInfo || {},
+                    messages: []
+                };
+            },
+            computed: {
+                totalQTY() {
+                    return this.saleDetails.reduce((sum, item) => sum + parseFloat(item.QTY || 0), 0);
+                },
+                totalAmount() {
+                    return this.saleDetails.reduce((sum, item) => sum + parseFloat(item.TotalAmount || 0), 0);
+                },
+                itemRawTotalQTY() {
+                    return this.saleItemRawDetails.reduce((sum, item) => sum + parseFloat(item.QTY || 0), 0);
+                },
+                itemRawTotalAmount() {
+                    return this.saleItemRawDetails.reduce((sum, item) => sum + parseFloat(item.TotalAmount || 0), 0);
+                }
+            },
+            methods: {
+                formatNumber(value) {
+                    if (value === null || value === undefined || isNaN(value)) return '0';
+                    return parseFloat(value).toLocaleString('ar-EG', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                },
+                clearMessages() {
+                    this.messages = [];
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }

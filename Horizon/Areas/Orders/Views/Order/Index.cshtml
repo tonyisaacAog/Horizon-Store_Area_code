@@ -1,73 +1,210 @@
-﻿@model List<OrderVM> 
+﻿@model List<OrderVM>
 @{
     var title = "قائمة امر الشغل";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
 
-}
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Header -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                <path d="M9 9l1 0" />
+                <path d="M9 13l6 0" />
+                <path d="M9 17l6 0" />
+            </svg>
 
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="/Orders/Order/ManageOrderForPerson"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            <i class="fa fa-plus"></i>
+            اصدار امر شغل
+        </a>
+    </div>
 
-<card title=@title addational-class="fa-list-ol"
-          text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-striped table-bordered table-hover dataTable">
-        <thead>
-            <tr>
-                <th>تسلسل</th>
-                <th>اسم العميل</th>
-                <th>تاريخ امر الشغل</th>
-                <th>تاريخ التسليم</th>
-                <th>الكمية</th>
-                <th>الحالة</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach:items">
-            <tr>
-                <td><span data-bind="text:NoOfOrder"></span></td>
-                <td><span data-bind="text:ClientName"></span></td>
-                <td><span data-bind="text:OrderDate"></span></td>
-                <td><span data-bind="text:DeliveryOrder"></span></td>
-                <td><span data-bind="text:TotalAmount"></span></td>
-                <td>
-                    <span class="text-primary h5" data-bind="visible:OrderStatus()==0">جديد</span>
-                    <span class="text-warning h5" data-bind="visible:OrderStatus()==1">جارى التنفيذ</span>
-                    <span class="text-success h5" data-bind="visible:OrderStatus()==2">تم التنفيذ</span>
-                </td>
-                <td>
-                    <a data-bind="attr:{href:'/Orders/Order/OrderDetails/'+Id() }" class="btn btn-sm btn-info">تفاصيل</a>
-                    <a data-bind="attr:{href:'/Orders/Order/PrintOrder/'+Id() }" class="btn btn-sm btn-success">طباعة</a>
-                    <a data-bind="visible:OrderStatus()==0,attr:{href:'/Orders/Order/StartProcessOrder/'+Id() }" class="btn btn-sm btn-primary">معالجة امر الشغل</a>
-                    <a data-bind="visible:(OrderStatus()==2&&IsInvoiceSale()==false),attr:{href:'/Sales/Home/ManageSalesForOrder/'+Id() }" class="btn btn-sm btn-secondary">انشاء فاتورة لامر الشغل</a>
-
-                </td>
-                
-            </tr>
-        </tbody>
-    </table>
-  @*  <card-footer>
-        <a data-bind="attr:{href:'/Order/Client/ManageRecord/0'}" class="btn btn-primary">اصدار امر شغل</a>
-    </card-footer>*@
-</card>
-
-
-
-
-
-
+    <!-- Card Body -->
+    <data-table :columns="columns" :data="orders" :searchable="true" :sortable="true" :paginated="true"
+        :per-page-options="[5, 10, 25, 50]" :default-per-page="10" search-placeholder="البحث في اوامر الشغل..."
+        no-data-message="لا توجد بيانات" @@row-action="handleRowAction" @@row-click="handleRowClick"
+        @@search-change="handleSearchChange" @@sort-change="handleSortChange" @@page-change="handlePageChange"
+        ref="orderTable">
+    </data-table>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
-    
-    <script type="text/javascript">
-        var order = new GeneralTable(@Html.Raw(data));
-        ko.applyBindings(order);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <!-- Import the separated component -->
+    <script type="module">
+        import { DataTable } from '/assets/components/DataTable.js?v=2.6';
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                DataTable
+            },
+            data() {
+                return {
+                    title: 'قائمة امر الشغل',
+                    orders: @Html.Raw(data),
+                    totalOrders: 0,
+                    searchResults: 0,
+                    currentPage: 1,
+                    columns: [
+                        {
+                            key: 'NoOfOrder',
+                            label: 'تسلسل',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/12'
+                        },
+                        {
+                            key: 'ClientName',
+                            label: 'اسم العميل',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6'
+                        },
+                        {
+                            key: 'OrderDate',
+                            label: 'تاريخ امر الشغل',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/8',
+                            type: 'date'
+                        },
+                        {
+                            key: 'DeliveryOrder',
+                            label: 'تاريخ التسليم',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/8',
+                            type: 'date'
+                        },
+                        {
+                            key: 'TotalAmount',
+                            label: 'الكمية',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/12'
+                        },
+                        {
+                            key: 'OrderStatus',
+                            label: 'الحالة',
+                            sortable: true,
+                            width: 'w-1/8',
+                            type: 'custom',
+                        },
+                        {
+                            key: 'actions',
+                            label: 'الإجراءات',
+                            type: 'actions',
+                            width: 'w-1/3',
+                            actions: [
+                                {
+                                    key: 'details',
+                                    label: 'تفاصيل',
+                                    icon: 'fa-info-circle',
+                                    class: 'bg-blue-600 hover:bg-blue-700 text-white'
+                                },
+                                {
+                                    key: 'print',
+                                    label: 'طباعة',
+                                    icon: 'fa-print',
+                                    class: 'bg-green-600 hover:bg-green-700 text-white'
+                                },
+                                {
+                                    key: 'process',
+                                    label: 'معالجة امر الشغل',
+                                    icon: 'fa-cog',
+                                    class: 'bg-indigo-600 hover:bg-indigo-700 text-white',
+                                    condition: (item) => item.OrderStatus === 0
+                                },
+                                {
+                                    key: 'invoice',
+                                    label: 'انشاء فاتورة',
+                                    icon: 'fa-file-invoice',
+                                    class: 'bg-gray-600 hover:bg-gray-700 text-white',
+                                    condition: (item) => item.OrderStatus === 2 && !item.IsInvoiceSale
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mounted() {
+                this.totalOrders = this.orders.length;
+                this.searchResults = this.orders.length;
+                this.orders.forEach(order => {
+                    order.OrderStatus = this.getOrderStatus(order.OrderStatus);
+                });
+            },
+            methods: {
+                getOrderStatus(status) {
+                    switch (status) {
+                        case 0:
+                            return 'جديد';
+                        case 1:
+                            return 'جارى التنفيذ';
+                        case 2:
+                            return 'تم التنفيذ';
+                        default:
+                            return 'غير معروف';
+                    }
+                },
+                handleRowAction(event) {
+                    const { action, item } = event;
+
+                    switch (action) {
+                        case 'details':
+                            window.location.href = `/Orders/Order/OrderDetails/${item.Id}`;
+                            break;
+                        case 'print':
+                            window.location.href = `/Orders/Order/PrintOrder/${item.Id}`;
+                            break;
+                        case 'process':
+                            window.location.href = `/Orders/Order/StartProcessOrder/${item.Id}`;
+                            break;
+                        case 'invoice':
+                            window.location.href = `/Sales/Home/ManageSalesForOrder/${item.Id}`;
+                            break;
+                    }
+                },
+
+                handleRowClick(item) {
+                    console.log('Row clicked:', item);
+                    // You can add row click behavior here
+                },
+
+                handleSearchChange(event) {
+                    this.searchResults = event.results;
+                },
+
+                handleSortChange(event) {
+                    console.log('Sort changed:', event);
+                },
+
+                handlePageChange(event) {
+                    this.currentPage = event.page;
+                },
+
+                exportData() {
+                    const tableData = this.$refs.orderTable.exportData();
+                    console.log('Exporting data:', tableData);
+                    // Implement export functionality
+                },
+
+                refreshData() {
+                    // Implement refresh functionality
+                    window.location.reload();
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }
-

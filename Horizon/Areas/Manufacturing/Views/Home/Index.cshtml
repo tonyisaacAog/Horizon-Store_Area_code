@@ -5,193 +5,360 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-}
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Manufacturing", new { area = "Manufacturing" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-<card title="بيان عملية التجميع" addational-class="fa-list-ol"
-       text-color-class="text-white" header-class="bg-primary">
-
-  
-        <card title="بيان " addational-class="fa-list-ol"
-              text-color-class="text-white" header-class="bg-dark">
-            <div class="row">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>اسم المنتج</label>
-                    <input data-bind="value:ProductConfigurations.StoreItemVM.ProductName" disabled="disabled" class="form-control" />
-                    </div>
+    <!-- Product Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيانات المنتج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="ProductConfigurations.StoreItemVM.ProductName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>نوع المنتج</label>
-                    <input data-bind="value:ProductConfigurations.StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    <input v-model="ProductConfigurations.StoreItemVM.FamilyName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>الكمية</label>
-                        <input data-bind="value:ProductConfigurations.StoreItemVM.Quantity,event:{change:UpdateTotalRaw}" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <card title="مستلومات المنتج" addational-class="fa-list-ol"
-                  text-color-class="text-dark" header-class="bg-smoke">
-                <div class="row">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="bg-primary text-white">
-
-                            <tr>
-                                <th>
-                                    المادة الخام
-                                </th>
-
-                                <th>
-                                    الكمية
-                                </th>
-                                <th>
-                                    الكمية المستخدمة
-                                </th>
-                                <th>
-                                    الكمية المتاحة
-                                </th>
-                                <th>
-                                    <button class="btn btn-dark" data-bind="click:AddItem">
-                                        <span class="fa fa-plus"></span>
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach:ProductConfigurations.ItemConfigurationVM">
-                            <tr>
-                                <td>
-                                    @Html.Editor("Id","StoreItemRawList", new
-                                    {
-                                         htmlAttributes = new
-                                            {
-                                                @data_bind = "value:StoreItemRawId,select2,event:{change:$parent.UpdateItem}",
-                                                @class = "form-select" ,disabled="true"
-                                            }
-                                    })
-                                </td>
-                                <td>
-                                    <span data-bind="text:MinimumAmount"></span>
-                                </td>
-                                <td>
-                                    <input class="form-control"  disabled data-bind="value:UsedQTY" />
-                                    @*event:{change:CheckQuantity}*@
-                                </td>
-                                <td>
-                                    <span data-bind="text:CurrentQty"></span>
-                                </td>
-                                <td >
-                                    <button class="col-4 btn btn-danger btn-sm ml-5" data-bind="click:$parent.RemoveItem">
-                                        <span class="fa fa-minus"></span>
-                                    </button>
-                                    <button class="col-4 btn btn-primary btn-sm mr-2" onclick="EditColumn(this)">
-                                        <span class="fa fa-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </card>
-        </card>
-  
-
-</card>
-
-<card title="ملخص عملية التجميع" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label>تاريخ عملية التجميع</label>
-                    <input data-bind="value:ManufacturingInfoVM.BatchDate" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>رقم عملية التجميع</label>
-                    <input data-bind="value:ManufacturingInfoVM.BatchNumber"  class="form-control" />
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label>المخزن</label>
-                    @Html.Editor("Id","StoreLocationList",new
-                    {
-                        htmlAttributes = new
-                        {
-                            @data_bind = "value:StoreLocationId",
-                            @class = "form-select",
-                            @id = "StoreLoc"
-                        }
-                    })
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">الكمية</label>
+                    <input v-model="ProductConfigurations.StoreItemVM.Quantity" type="number" @@change="UpdateTotalRaw"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                    <span v-if="errors.Quantity" class="text-red-500 text-xs">{{ errors.Quantity }}</span>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Raw Materials Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold">معلومات المواد الخام</h2>
+            </div>
+            <button @@click="AddItem"
+                class="bg-sky-900 hover:bg-sky-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">المادة الخام</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">الكمية المستخدمة</th>
+                        <th class="px-6 py-3 text-right">الكمية المتاحة</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in ProductConfigurations.ItemConfigurationVM" :key="'item-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @Html.Editor("Id","StoreItemRawList", new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @v_model = "item.StoreItemRawId",
+                                    @v_change = "UpdateItem(item)",
+                                    @disabled = "item.disabled",
+                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
+                                }
+                                                        })
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-gray-900">{{ item.MinimumAmount }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.UsedQTY" :disabled="item.disabled"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :class="{ 'bg-gray-100': item.disabled }">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-gray-900">{{ item.CurrentQty }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex gap-2">
+                                <button @@click="RemoveItem(index)" class="text-red-600 hover:text-red-800 px-2 py-1">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button @@click="ToggleEdit(item)" class="text-blue-600 hover:text-blue-800 px-2 py-1">
+                                    <i :class="item.disabled ? 'fas fa-edit' : 'fas fa-save'"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="ProductConfigurations.ItemConfigurationVM.length === 0">
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد مواد خام مضافة</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <card-footer>
-        <partial name="_SaveButton" />
-    </card-footer>
-</card>
-
-
-
-
-
+    <!-- Manufacturing Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold">ملخص عملية التجميع</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ عملية التجميع</label>
+                    <input v-model="ManufacturingInfoVM.BatchDate" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                    <span v-if="errors.BatchDate" class="text-red-500 text-xs">{{ errors.BatchDate }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم عملية التجميع</label>
+                    <input v-model="ManufacturingInfoVM.BatchNumber" type="text"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                    <span v-if="errors.BatchNumber" class="text-red-500 text-xs">{{ errors.BatchNumber }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">المخزن</label>
+                    @Html.Editor("Id","StoreLocationList", new
+                                        {
+                        htmlAttributes = new
+                        {
+                            @v_model = "StoreLocationId",
+                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
+                        }
+                                        })
+                    <span v-if="errors.StoreLocationId" class="text-red-500 text-xs">{{ errors.StoreLocationId }}</span>
+                </div>
+            </div>
+            <div class="flex justify-end mt-10">
+                <button @@click="Save"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-        <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-        <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-        <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-        <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-        <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-        <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-        <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-        <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-        <script src="~/APP/Manufacturing/ManufacturingContainerValidationRule.js" asp-append-version="true"></script>
-        <script src="~/APP/Manufacturing/ManufacturingContainer.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
 
+        // Messages Component
+        const Messages = {
+            template: `
+                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4">
+                                        <ul class="space-y-2">
+                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                            موافق
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
 
-        <script type="text/javascript">
-            var Manufacturing = new ManufacturingContainer(@Html.Raw(data));
-            ko.applyBindings(Manufacturing);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
-            }
-        }
-        $("#StoreLoc").select2()
-        </script>
+        const { createApp } = Vue;
 
-        <script>
-            function EditColumn(self){
-                let inputs = self.closest("tr").querySelectorAll('input');
-                let selects = self.closest("tr").querySelectorAll('select');
-                const isDisabled = inputs[0].hasAttribute('disabled');
-                self.innerHTML = "";
-                if(!isDisabled){
-                let i = '<i class="fas fa-edit"></i>';
-                    self.innerHTML = i;
-                    inputs[0].disabled = true;
-                    selects[0].disabled = true;
-                }else{
-                let i = '<i class="fas fa-save"></i>';
-                    
-                    self.innerHTML = i;
-                    inputs[0].disabled = false
-                    selects[0].disabled = false;
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "عملية تجميع منتج",
+                    ProductConfigurations: {
+                        StoreItemVM: initialData.ProductConfigurations.StoreItemVM,
+                        ItemConfigurationVM: initialData.ProductConfigurations.ItemConfigurationVM.map(item => ({
+                            ...item,
+                            disabled: true
+                        }))
+                    },
+                    ManufacturingInfoVM: initialData.ManufacturingInfoVM,
+                    StoreLocationId: initialData.StoreLocationId,
+                    messages: [],
+                    errors: {
+                        BatchDate: '',
+                        BatchNumber: '',
+                        StoreLocationId: '',
+                        Quantity: ''
+                    }
+                };
+            },
+            methods: {
+                AddItem() {
+                    this.ProductConfigurations.ItemConfigurationVM.push({
+                        Id: 0,
+                        StoreItemId: this.ProductConfigurations.StoreItemVM.Id,
+                        StoreItemRawId: 0,
+                        MinimumAmount: 1,
+                        UsedQTY: 0,
+                        Notes: null,
+                        CurrentQty: 0,
+                        disabled: false
+                    });
+                },
+                RemoveItem(index) {
+                    this.ProductConfigurations.ItemConfigurationVM.splice(index, 1);
+                },
+                ToggleEdit(item) {
+                    item.disabled = !item.disabled;
+                },
+                UpdateItem(item) {
+                    const duplicateItems = this.ProductConfigurations.ItemConfigurationVM.filter(i =>
+                        i.StoreItemRawId === item.StoreItemRawId && i.Id !== item.Id
+                    );
+
+                    if (duplicateItems.length > 0) {
+                        this.messages.push('تم اختيار هذا العنصر من قبل');
+                        this.ProductConfigurations.ItemConfigurationVM = this.ProductConfigurations.ItemConfigurationVM.filter(i => i !== item);
+                        return;
+                    }
+
+                    // Get raw item data
+                    if (item.StoreItemRawId && item.StoreItemRawId > 0) {
+                        axios.get(`/Manufacturing/Home/GetDataItemRaw/${item.StoreItemRawId}`)
+                            .then(response => {
+                                item.CurrentQty = response.data.QTY;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching raw item data:', error);
+                            });
+                    }
+                },
+                UpdateTotalRaw() {
+                    this.ProductConfigurations.ItemConfigurationVM.forEach(element => {
+                        element.UsedQTY = element.MinimumAmount * this.ProductConfigurations.StoreItemVM.Quantity;
+                    });
+                },
+                ValidateForm() {
+                    this.errors = {
+                        BatchDate: '',
+                        BatchNumber: '',
+                        StoreLocationId: '',
+                        Quantity: ''
+                    };
+
+                    let isValid = true;
+
+                    if (!this.ManufacturingInfoVM.BatchDate) {
+                        this.errors.BatchDate = 'برجاء اختيار التاريخ';
+                        isValid = false;
+                    }
+
+                    if (!this.ManufacturingInfoVM.BatchNumber) {
+                        this.errors.BatchNumber = 'برجاء كتابة رقم امر التصنيع';
+                        isValid = false;
+                    }
+
+                    if (!this.StoreLocationId) {
+                        this.errors.StoreLocationId = 'برجاء اختيار المخزن';
+                        isValid = false;
+                    }
+
+                    if (!this.ProductConfigurations.StoreItemVM.Quantity || this.ProductConfigurations.StoreItemVM.Quantity < 1) {
+                        this.errors.Quantity = 'برجاء اضافة كمية صحيحة';
+                        isValid = false;
+                    }
+
+                    if (this.ProductConfigurations.ItemConfigurationVM.length === 0) {
+                        this.messages.push('يجب ان يكون هناك مواد خام للمنتج للتصنيع');
+                        isValid = false;
+                    }
+
+                    // Validate item configurations
+                    this.ProductConfigurations.ItemConfigurationVM.forEach(item => {
+                        if (!item.StoreItemRawId || item.StoreItemRawId === 0) {
+                            this.messages.push('برجاء اختيار النوع لجميع المواد الخام');
+                            isValid = false;
+                        }
+                        if (!item.MinimumAmount || item.MinimumAmount < 0.1) {
+                            this.messages.push('برجاء اضافة الكمية الصحيحة لجميع المواد الخام');
+                            isValid = false;
+                        }
+                        if (item.UsedQTY && item.CurrentQty && parseFloat(item.UsedQTY) > parseFloat(item.CurrentQty)) {
+                            this.messages.push(`الكمية المستخدمة لا يمكن أن تكون أكبر من الكمية المتاحة (${item.CurrentQty})`);
+                            isValid = false;
+                        }
+                    });
+
+                    return isValid;
+                },
+                Save() {
+                    this.messages = [];
+
+                    if (!this.ValidateForm()) {
+                        return;
+                    }
+
+                    const data = {
+                        ProductConfigurations: this.ProductConfigurations,
+                        ManufacturingInfoVM: this.ManufacturingInfoVM,
+                        StoreLocationId: this.StoreLocationId
+                    };
+
+                    axios.post('/Manufacturing/Home/SaveManufacturing', data)
+                        .then(response => {
+                            if (response.data.success) {
+                                window.location.href = '/Manufacturing/Home/Index';
+                            } else if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الحفظ'];
+                            }
+                        })
+                        .catch(error => {
+                            this.messages.push('حدث خطأ في الاتصال بالخادم');
+                        });
+                },
+                clearMessages() {
+                    this.messages = [];
                 }
+            },
+            mounted() {
+                // Initialize calculations
+                this.UpdateTotalRaw();
             }
-
-        </script>
-
+        }).mount('#app');
+    </script>
 }

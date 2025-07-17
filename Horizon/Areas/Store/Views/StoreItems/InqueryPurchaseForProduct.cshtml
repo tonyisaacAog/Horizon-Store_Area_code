@@ -4,133 +4,278 @@
     var title = "استعلام نواقص الراك";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
-
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
-}
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-<card title="بيانات المنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم المنتج</label>
-                    <input data-bind="value:StoreItem.ProductName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>نوع المنتج</label>
-                    <input data-bind="value:StoreItem.FamilyName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                </path>
+                <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "StoreItems", new { area = "Store" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-            <div class="col-6">
-                <div class="form-group">
-                    <label>ماركة المنتج</label>
-                    <input data-bind="value:StoreItem.StoreBrandName" disabled="disabled" class="form-control" />
+    <!-- Product Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="ml-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+            </svg>
+            <h2 class="text-lg font-semibold">بيانات المنتج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="storeItem.ProductName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    <input v-model="storeItem.FamilyName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ماركة المنتج</label>
+                    <input v-model="storeItem.StoreBrandName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">كمية المنتج</label>
+                    <input v-model="storeItem.Quantity" type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <span v-if="errors.Quantity" class="text-red-500 text-xs">{{ errors.Quantity }}</span>
                 </div>
             </div>
-
-            <div class="col-6">
-                <div class="form-group">
-                    <label>كمية المنتج</label>
-                    <input data-bind="value:StoreItem.Quantity"  class="form-control" />
-                </div>
-            </div>
-            <div class="col-12" >
-                <div class="row justify-content-center align-items-center">
-                    <button class="btn btn-primary mt-4 w-50" data-bind="click:InqueryProduct">استعلام </button>
-                </div>
+            <div class="flex justify-center mt-8">
+                <button @@click="inqueryProduct" :disabled="loading"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-8 py-3 rounded-md flex items-center gap-2 transition-colors min-w-[200px] justify-center">
+                    <svg v-if="loading" class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <i v-else class="fas fa-search"></i>
+                    {{ loading ? 'جاري الاستعلام...' : 'استعلام' }}
+                </button>
             </div>
         </div>
     </div>
-</card>
 
+    <!-- Details Card -->
+    <div v-if="inqueryDetails.length > 0" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="ml-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10,9 9,9 8,9"></polyline>
+            </svg>
+            <h2 class="text-lg font-semibold">التفاصيل</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            العنصر
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            عدد المستلزمات
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            الكمية المطلوبة للتصنيع
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            الكمية من المستلزمات
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            الكمية المطلوبة للشراء
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(detail, index) in inqueryDetails" :key="'detail-'+index" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.StoreItemRawName" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-sm">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.NumberStoreItemRaw" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-sm">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.MinimumAmount" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-sm">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.AvailableAmount" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-sm">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.NeededAmount" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-sm text-red-600 font-medium">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
+    <!-- Empty State -->
+    <div v-else-if="hasSearched && inqueryDetails.length === 0"
+        class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">التفاصيل</h2>
+        </div>
+        <div class="p-12 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" class="mx-auto mb-4 text-gray-400"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+                <path d="M16 16s-4-4-8 0"></path>
+                <path d="M8 8s4-4 8 0"></path>
+            </svg>
+            <p class="text-gray-500 text-lg">لا توجد نتائج للاستعلام</p>
+        </div>
+    </div>
 
-<card title="التفاصيل" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover" data="visible:InqueryDetails.length>0">
-
-        <thead class="bg-primary text-white">
-            <tr>
-                <th>
-                     العنصر
-                </th>
-                <th>
-                    عدد المستلزامات
-                </th>
-                <th>
-                    الكمية المطلوبة للتصنيع
-                </th>
-                <th>
-                    الكمية من المستلزامات
-                </th>
-                <th>
-                    الكمية المطلوبة للشراء 
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach:InqueryDetails">
-            <tr>
-                <td>
-                    <input type="text" class="form-control" disabled data-bind="value:StoreItemRawName" />
-                </td>
-                <td>
-                    <input type="text" class="form-control" disabled data-bind="value:NumberStoreItemRaw" />
-                </td>
-                <td>
-                    <input type="text" class="form-control" disabled data-bind="value:MinimumAmount" />
-                </td>
-                <td>
-                    <input type="text" class="form-control" disabled data-bind="value:AvailableAmount" />
-                </td>
-                <td>
-                    <input type="text" class="form-control text-danger" disabled data-bind="value:NeededAmount" />
-                </td>
-            </tr>
-
-        </tbody>
-
-    </table>
-</card>
-
-
-
-
-@*
-<card-footer>
-    <partial name="_SaveButton" />
-</card-footer> *@
-
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Store/StoreItems/InqueryContainerForProductRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Store/StoreItems/InqueryContainerForProduct.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var inquery = new InqueryStoreItem(@Html.Raw(data));
-        ko.applyBindings(inquery);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                    <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                    <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="p-4">
+                                    <ul class="space-y-2">
+                                        <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 border-t border-gray-200 flex justify-end">
+                                    <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                        موافق
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "استعلام نواقص الراك",
+                    storeItem: initialData.StoreItem || {
+                        ProductName: '',
+                        FamilyName: '',
+                        StoreBrandName: '',
+                        Quantity: 0
+                    },
+                    inqueryDetails: initialData.InqueryDetails || [],
+                    messages: [],
+                    loading: false,
+                    hasSearched: false,
+                    errors: {
+                        Quantity: ''
+                    }
+                };
+            },
+            methods: {
+                validateForm() {
+                    this.errors = {
+                        Quantity: ''
+                    };
+
+                    let isValid = true;
+
+                    if (!this.storeItem.Quantity || this.storeItem.Quantity <= 0) {
+                        this.errors.Quantity = 'برجاء اضافة كمية المنتج';
+                        isValid = false;
+                    }
+
+                    return isValid;
+                },
+                inqueryProduct() {
+                    this.messages = [];
+                    this.hasSearched = false;
+
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    this.loading = true;
+
+                    axios.post('/Store/StoreItems/CalcInqueryForProduct/', this.storeItem)
+                        .then(response => {
+                            this.loading = false;
+                            this.hasSearched = true;
+
+                            if (response.data.success !== false) {
+                                this.inqueryDetails = response.data.Details || response.data || [];
+
+                                if (this.inqueryDetails.length === 0) {
+                                    this.messages.push('لا توجد نتائج للاستعلام');
+                                }
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الاستعلام'];
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            this.hasSearched = true;
+                            console.error('Error:', error);
+                            this.messages.push('حدث خطأ في الاتصال بالخادم');
+                        });
+                },
+                clearMessages() {
+                    this.messages = [];
+                }
             }
-        }
+        }).mount('#app');
     </script>
-
-
 }

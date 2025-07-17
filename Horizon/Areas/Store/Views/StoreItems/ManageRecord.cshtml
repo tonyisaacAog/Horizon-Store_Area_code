@@ -1,88 +1,257 @@
 ﻿@model StoreItemVM
 @{
-    var title = "بيانات المنتج";
-    ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
+    string title = "بيانات المنتج";
+    ViewData["Title"] = title;
 }
 
-<partial name="_Messages" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Container -->
+    <div>
+        <!-- Card Header -->
+        <div class="flex justify-between items-center mb-8 mt-4">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+                    <path d="M12 12l8 -4.5" />
+                    <path d="M12 12l0 9" />
+                    <path d="M12 12l-8 -4.5" />
+                </svg>
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+                <h1 class="text-2xl text-[#212b36] font-bold">{{ product.Id !== 0 ? "تعديل بيانات المنتج" :
+                     "اضافة منتج جديد" }}</h1>
+            </div>
+            <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "StoreItem", new { area = "Store" }))"
+                class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+                رجوع
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+        <!-- Card Body -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- First Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="product.ProductName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ProductName}">
+                    <span v-if="errors.ProductName" class="text-red-500 text-xs">{{ errors.ProductName }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج - عربي</label>
+                    <input v-model="product.ProductNameAr"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ProductNameAr}">
+                    <span v-if="errors.ProductNameAr" class="text-red-500 text-xs">{{ errors.ProductNameAr }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">كود المنتج</label>
+                    <input v-model="product.ItemCode"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ItemCode}">
+                    <span v-if="errors.ItemCode" class="text-red-500 text-xs">{{ errors.ItemCode }}</span>
+                </div>
+            </div>
 
-}
+            <!-- Second Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    @Html.Editor("Id","StoreFamilyList", new
+                    {
+                        htmlAttributes = new
+                        {
+                            @v_model = "product.FamilyId",
+                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                            @id = "storefamily"
 
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-4  mb-2">
-                <label>اسم المنتج</label>
-                <input class="form-control" data-bind="value:ProductName" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>اسم المنتج عربى</label>
-                <input class="form-control" data-bind="value:ProductNameAr" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>كود المنتج</label>
-                <input class="form-control" data-bind="value:ItemCode" />
-            </div>
-            <div class="col-4 mb-2">
-                <label>نوع المنتج</label>
-                @Html.Editor("Id","StoreFamilyList", new
-                {
-                htmlAttributes = new
-                {
-                @data_bind = "value:FamilyId",
-                @class = "form-select",
-                @id = "storefamily"
+                        }})
+                    <span v-if="errors.FamilyId" class="text-red-500 text-xs">{{ errors.FamilyId }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ماركة المنتج</label>
+                    @Html.Editor("Id","StoreBrandList", new
+                    {
+                        htmlAttributes = new
+                        {
+                            @v_model = "product.StoreBrandId",
+                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                            @id = "storeBrand"
+                        }})
 
-                }
-                })
+                    <span v-if="errors.StoreBrandId" class="text-red-500 text-xs">{{ errors.StoreBrandId }}</span>
+                </div>
             </div>
-            <div class="col-4 mb-2">
-                <label>ماركة المنتج</label>
-                @Html.Editor("Id","StoreBrandList", new
-                {
-                htmlAttributes = new
-                {
-                @data_bind = "value:StoreBrandId",
-                @class = "form-select",
-                @id = "storeBrand"
-                }
-                })
+
+            <!-- Card Footer -->
+            <div class="flex justify-end pt-4 border-t border-gray-200">
+                <button v-on:click="saveProduct"
+                    class="bg-emerald-800 hover:bg-blue-dark text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    حفظ
+                </button>
             </div>
         </div>
     </div>
 
-    <card-footer>
-        <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
-    </card-footer>
-</card>
-
+    <!-- Messages Modal -->
+    <div v-if="showMessageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                <button v-on:click="showMessageModal = false" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <ul class="space-y-2">
+                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end">
+                <button v-on:click="showMessageModal = false"
+                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark">
+                    موافق
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/App/Store/Store_Item_Brand_Family/StoreItemValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script type="text/javascript">
-        var client = new GeneralKoViewModel(@Html.Raw(data));
-        ko.applyBindings(client);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize product data from server
+        var productData = @Html.Raw(data);
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    product: productData,
+                    errors: {
+                        ProductName: '',
+                        ProductNameAr: '',
+                        ItemCode: '',
+                        FamilyId: '',
+                        StoreBrandId: ''
+                    },
+                    messages: [],
+                    showMessageModal: false,
+                    isLoading: false
+                };
+            },
+            methods: {
+                validateForm() {
+                    let isValid = true;
+                    this.messages = [];
+
+                    // Reset errors
+                    Object.keys(this.errors).forEach(key => this.errors[key] = '');
+
+                    // Product Name validation
+                    if (!this.product.ProductName || this.product.ProductName.trim() === '') {
+                        this.errors.ProductName = 'اسم المنتج مطلوب';
+                        this.messages.push('اسم المنتج مطلوب');
+                        isValid = false;
+                    }
+
+                    // Product Name Arabic validation
+                    if (!this.product.ProductNameAr || this.product.ProductNameAr.trim() === '') {
+                        this.errors.ProductNameAr = 'اسم المنتج - عربي مطلوب';
+                        this.messages.push('اسم المنتج - عربي مطلوب');
+                        isValid = false;
+                    }
+
+                    // Item Code validation
+                    if (!this.product.ItemCode || this.product.ItemCode.trim() === '') {
+                        this.errors.ItemCode = 'كود المنتج مطلوب';
+                        this.messages.push('كود المنتج مطلوب');
+                        isValid = false;
+                    }
+
+                    // Family validation
+                    if (!this.product.FamilyId || this.product.FamilyId <= 0) {
+                        this.errors.FamilyId = 'نوع المنتج مطلوب';
+                        this.messages.push('نوع المنتج مطلوب');
+                        isValid = false;
+                    }
+
+                    // Brand validation
+                    if (!this.product.StoreBrandId || this.product.StoreBrandId <= 0) {
+                        this.errors.StoreBrandId = 'ماركة المنتج مطلوبة';
+                        this.messages.push('ماركة المنتج مطلوبة');
+                        isValid = false;
+                    }
+
+                    if (!isValid) {
+                        this.showMessageModal = true;
+                    }
+
+                    return isValid;
+                },
+
+                async saveProduct() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    this.isLoading = true;
+
+                    try {
+                        const response = await fetch('/Store/StoreItems/SaveRecord', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(this.product)
+                        });
+
+                        const result = await response.json();
+
+                        if (result && (result.success || result.newLocation)) {
+                            // Handle success - redirect or show success message
+                            if (result.newLocation) {
+                                window.location.href = result.newLocation;
+                            } else {
+                                this.showMessage("تم حفظ بيانات المنتج بنجاح", "success");
+                                // Optionally redirect to a listing page
+                                setTimeout(() => {
+                                    window.location.href = '/Store/StoreItem/Index';
+                                }, 1500);
+                            }
+                        } else {
+                            // Handle error
+                            this.messages = [result.errors && result.errors.length > 0 ? result.errors[0] : 'حدث خطأ أثناء الحفظ'];
+                            this.showMessageModal = true;
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                        this.showMessageModal = true;
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                
+                showMessage(message, type = 'error') {
+                    this.messages = [message];
+                    this.showMessageModal = true;
+                }
             }
-        }
-        $("#storefamily").select2();
-        $("#storeBrand").select2();
+        }).mount('#app');
     </script>
 }

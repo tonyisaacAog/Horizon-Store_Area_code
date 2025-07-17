@@ -4,78 +4,250 @@
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
     var warning = (bool)ViewBag.WarningLimit;
-    var id = (int)ViewBag.Id ;
+    var id = (int)ViewBag.Id;
 }
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Header -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="M18 17V9" />
+                <path d="M13 17V5" />
+                <path d="M8 17v-3" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+    </div>
 
-}
-
-
-
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <form asp-action="GetAmountBalanceStoreItemRaw" method="get" asp-area="Store" asp-controller="Reports">
-        <div class="container">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-4 mb-1">
-                    <label>النوع</label>
-                    @Html.Editor("Id","AllItemRawTypeList", new
-                    {
-                    htmlAttributes = new
-                    {
-                    @class = "form-select",
-                    @value = @id
-                    }
-                    })
-
-                </div>
-                <div class="col-3 mb-1">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" checked="@warning" type="checkbox" role="switch" id="WarningLimit" name="WarningLimit">
-                        <label class="form-check-label" for="WarningLimit">النواقص</label>
+    <!-- Search Form Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 border-b px-6 py-4 flex items-center gap-2">
+            <i class="fas fa-search"></i>
+            <h2 class="text-lg font-semibold">بحث وفلترة</h2>
+        </div>
+        <div class="p-6">
+            <form asp-action="GetAmountBalanceStoreItemRaw" method="get" asp-area="Store" asp-controller="Reports" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">النوع</label>
+                        @Html.Editor("Id","AllItemRawTypeList", new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                                @value = @id
+                            }
+                        })
+                    </div>
+                    <div>
+                        <div class="flex items-center">
+                            <input type="checkbox" 
+                                   id="WarningLimit" 
+                                   name="WarningLimit" 
+                                   :checked="warningLimit"
+                                   @@change="warningLimit = $event.target.checked"
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="WarningLimit" class="mr-2 block text-sm text-gray-700">النواقص</label>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" 
+                            class="bg-emerald-800 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg w-full transition-colors">
+                            بحث
+                        </button>
                     </div>
                 </div>
-                <div class="col-4 mt-3">
-                    <button class="btn btn-primary w-100">بحث</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Card -->
+    <data-table :columns="columns" :data="items" :searchable="true" :sortable="true" :paginated="true"
+        :per-page-options="[10, 25, 50, 100]" :default-per-page="25" search-placeholder="البحث في أرصدة الخامات والمستلزمات..."
+        no-data-message="لا توجد بيانات متاحة" @@row-action="handleRowAction" @@row-click="handleRowClick"
+        @@search-change="handleSearchChange" @@sort-change="handleSortChange" @@page-change="handlePageChange"
+        ref="rawMaterialsTable">
+
+        <!-- Custom row styling for warning items -->
+        <template #row="{ item, index }">
+            <tr :class="{'bg-red-50 border-red-200': isWarningItem(item)}" class="hover:bg-gray-50">
+                <td class="px-4 py-3">{{ item.StoreItemRawName }}</td>
+                <td class="px-4 py-3 text-right">{{ formatNumber(item.QTY) }}</td>
+                <td class="px-4 py-3 text-right">{{ formatNumber(item.DestroyedQty) }}</td>
+                <td class="px-4 py-3 text-right">
+                    <span :class="{'text-red-600 font-medium': isWarningItem(item)}">
+                        {{ formatNumber(item.WarningLimit) }}
+                    </span>
+                </td>
+            </tr>
+        </template>
+
+        <!-- Summary Slot -->
+        <template #summary>
+            <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-t border-gray-200">
+                <div class="text-sm text-gray-600">
+                    إجمالي العناصر: <span class="font-medium">{{ totalItems }}</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    النتائج المعروضة: <span class="font-medium">{{ searchResults }}</span>
+                </div>
+                <div v-if="warningItemsCount > 0" class="text-sm text-red-600">
+                    عناصر تحت الحد الأدنى: <span class="font-medium">{{ warningItemsCount }}</span>
                 </div>
             </div>
-        </div>
-    </form>
-</card>
+        </template>
+    </data-table>
+</div>
 
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-striped table-bordered table-hover dataTable">
-        <thead>
-            <tr>
-                <th>العنصر</th>
-                <th>الكمية</th>
-                <th>التالف</th>
-                <th>حد ادنى</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach:items">
-
-            <tr>
-                <td><span data-bind="text:StoreItemRawName"></span></td>
-                <td><span data-bind="text:QTY"></span></td>
-                <td><span data-bind="text:DestroyedQty"></span></td>
-                <td><span data-bind="text:WarningLimit"></span></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <!-- Import the DataTable component -->
+    <script type="module">
+        import { DataTable } from '/assets/components/DataTable.js?v=2.6';
 
-    <script type="text/javascript">
-        var client = new GeneralTable(@Html.Raw(data));
-        ko.applyBindings(client);
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                DataTable
+            },
+            data() {
+                return {
+                    title: 'ارصدة الخامات والمستلزمات العامة',
+                    items: @Html.Raw(data),
+                    totalItems: 0,
+                    searchResults: 0,
+                    currentPage: 1,
+                    warningLimit: @warning.ToString().ToLower(),
+                    selectedId: @id,
+                    columns: [
+                        {
+                            key: 'StoreItemRawName',
+                            label: 'العنصر',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-2/5'
+                        },
+                        {
+                            key: 'QTY',
+                            label: 'الكمية',
+                            sortable: true,
+                            align: 'right',
+                            width: 'w-1/5',
+                            format: (value) => {
+                                if (value === null || value === undefined || value === '') return '0';
+                                const num = parseFloat(value);
+                                return num.toLocaleString('ar-EG');
+                            }
+                        },
+                        {
+                            key: 'DestroyedQty',
+                            label: 'التالف',
+                            sortable: true,
+                            align: 'right',
+                            width: 'w-1/5',
+                            format: (value) => {
+                                if (value === null || value === undefined || value === '') return '0';
+                                const num = parseFloat(value);
+                                return num.toLocaleString('ar-EG');
+                            }
+                        },
+                        {
+                            key: 'WarningLimit',
+                            label: 'حد ادنى',
+                            sortable: true,
+                            align: 'right',
+                            width: 'w-1/5',
+                            format: (value) => {
+                                if (value === null || value === undefined || value === '') return '0';
+                                const num = parseFloat(value);
+                                return num.toLocaleString('ar-EG');
+                            }
+                        }
+                    ]
+                }
+            },
+            computed: {
+                warningItemsCount() {
+                    return this.items.filter(item => this.isWarningItem(item)).length;
+                }
+            },
+            mounted() {
+                this.totalItems = this.items.length;
+                this.searchResults = this.items.length;
+
+                // Set document title
+                document.title = this.title;
+            },
+            methods: {
+                formatNumber(value) {
+                    if (value === null || value === undefined || value === '') return '0';
+                    const num = parseFloat(value);
+                    return num.toLocaleString('ar-EG');
+                },
+
+                isWarningItem(item) {
+                    // Check if quantity is below warning limit
+                    const qty = parseFloat(item.QTY) || 0;
+                    const warningLimit = parseFloat(item.WarningLimit) || 0;
+                    return qty <= warningLimit && warningLimit > 0;
+                },
+
+                handleRowAction(event) {
+                    const { action, item } = event;
+
+                    switch (action) {
+                        case 'details':
+                            this.showItemDetails(item);
+                            break;
+                        case 'history':
+                            this.showItemHistory(item);
+                            break;
+                        case 'adjust':
+                            this.adjustQuantity(item);
+                            break;
+                    }
+                },
+
+                showItemDetails(item) {
+                    // Implement your detail view logic here
+                    console.log('Showing details for:', item);
+                    // Example: window.location.href = `/Store/Details/${item.Id}`;
+                },
+
+                showItemHistory(item) {
+                    // Implement history view logic here
+                    console.log('Showing history for:', item);
+                    // Example: window.location.href = `/Store/History/${item.Id}`;
+                },
+
+                adjustQuantity(item) {
+                    // Implement quantity adjustment logic here
+                    console.log('Adjusting quantity for:', item);
+                    // Example: window.location.href = `/Store/Adjust/${item.Id}`;
+                },
+
+                handleRowClick(item) {
+                    console.log('Row clicked:', item);
+                    // You can implement row click behavior here
+                },
+
+                handleSearchChange(event) {
+                    this.searchResults = event.results;
+                },
+
+                handleSortChange(event) {
+                    console.log('Sort changed:', event);
+                },
+
+                handlePageChange(event) {
+                    this.currentPage = event.page;
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }

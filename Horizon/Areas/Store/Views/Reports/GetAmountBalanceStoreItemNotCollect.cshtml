@@ -5,14 +5,13 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-@section PageHeading{
+@section PageHeading {
     <partial name="_PageTitle" model="@title" />
 }
 
 
 
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
+<card title=@title addational-class="fa-list-ol" text-color-class="text-white" header-class="bg-primary">
     <table class="table table-striped table-bordered table-hover dataTable">
         <thead>
             <tr>
@@ -43,5 +42,3 @@
 
 
 }
-
-

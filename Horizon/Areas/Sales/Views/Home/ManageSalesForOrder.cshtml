@@ -2,114 +2,190 @@
 @{
     var title = "اذن استلام منتج";
     ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-@section PageHeading {
-    <partial name="_PageTitle" model="@title" />
-}
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Home", new { area = "Sales" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-<div id="sales-app">
-    <!-- بيانات العميل -->
-    <div class="card mb-3 border-primary">
-        <div class="card-header bg-primary text-white">بيانات العميل</div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-6">
-                    <label>اسم العميل</label>
-                    <input class="form-control" v-model="client.ClientName" disabled />
+    <!-- Client Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class=" text-gray-900 px-6 py-4 flex items-center border-b bg-primary">
+            <h2 class="text-lg font-semibold text-gray-900">بيانات العميل</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
+                    <input v-model="client.ClientName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
-                <div class="col-6">
-                    <label>التليفون</label>
-                    <input class="form-control" v-model="client.Phone1" disabled />
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
+                    <input v-model="client.Phone1" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- تفاصيل الصرف -->
-    <div class="card mb-3 border-primary">
-        <div class="card-header bg-primary text-white">تفاصيل عملية صرف المنتجات</div>
-        <div class="card-body p-0">
-            <table class="table table-bordered table-striped m-0">
-                <thead class="bg-light text-dark">
+    <!-- Sale Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class=" text-gray-900 px-6 py-4 flex items-center justify-between border-b bg-primary">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold text-gray-900">تفاصيل عملية صرف المنتجات</h2>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th>المنتج</th>
-                        <th>الكمية</th>
-                        <th>سعر الوحدة</th>
-                        <th>الإجمالي</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المنتج</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الكمية</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الإجمالي</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in saleDetails" :key="index">
-                        <td>{{ item.StoreItemName }}</td>
-                        <td><input type="number" class="form-control" v-model.number="item.QTY" disabled /></td>
-                        <td><input type="number" class="form-control" v-model.number="item.UnitPrice" /></td>
-                        <td>{{ item.QTY * item.UnitPrice }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ item.StoreItemName }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model.number="item.QTY" disabled
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model.number="item.UnitPrice"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ item.QTY * item.UnitPrice }}</td>
                     </tr>
                 </tbody>
-                <tfoot>
+                <tfoot class="bg-gray-50">
                     <tr>
-                        <td></td>
-                        <td><strong>{{ totalQTY }}</strong></td>
-                        <td><b>الإجمالي</b></td>
-                        <td><strong>{{ totalAmount }}</strong></td>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ totalQTY }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">الإجمالي</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">{{ totalAmount }}</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
 
-    <!-- ملخص العملية -->
-    <div class="card border-primary">
-        <div class="card-header bg-primary text-white">ملخص عملية الصرف</div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-4">
-                    <label>تاريخ الصرف</label>
-                    <input type="date" class="form-control" v-model="saleInfo.SalesDate" />
+    <!-- Sale Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class=" text-gray-900 px-6 py-4 flex items-center border-b bg-primary">
+            <h2 class="text-lg font-semibold text-gray-900">ملخص عملية الصرف</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الصرف</label>
+                    <input type="date" v-model="saleInfo.SalesDate"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                 </div>
-                <div class="col-4">
-                    <label>رقم الفاتورة</label>
-                    <input class="form-control" v-model="saleInfo.InvoiceNum" />
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <input v-model="saleInfo.InvoiceNum"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                 </div>
-                <div class="col-4">
-                    <label>مخزن الصرف</label>
-                    <select id="store-location-select" class="form-select">
-                        <option></option> <!-- للسماح بالاختيار الفارغ -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">مخزن الصرف</label>
+                    <select id="store-location-select"
+                        class="w-full px-3 py-2 border border-gray-300 h-[48px] rounded-md focus:outline-none">
+                        <option></option>
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="card-footer text-end">
-            <button class="btn btn-primary" @@click="save">حفظ</button>
+            <div class="flex justify-end mt-6">
+                <button @@click="save"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript">
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
 
-    <script>
-        const backendData = @Html.Raw(Json.Serialize(Model));
+        // Messages Component
+        const Messages = {
+            template: `
+                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4">
+                                        <ul class="space-y-2">
+                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                            موافق
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
 
-        const app = Vue.createApp({
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
             data() {
                 return {
-                    client: backendData.Client,
-                    saleDetails: backendData.SaleDetails,
-                    saleInfo: backendData.SaleInfo,
-                    SaleItemRawDetails: backendData.SaleItemRawDetails,
-                    orderId: backendData.OrderId || 0,
-                    isSaleFromOrder: backendData.IsSaleFromOrder || false,
-                    storeLocations: []
+                    title: "اذن استلام منتج",
+                    client: initialData.Client,
+                    saleDetails: initialData.SaleDetails,
+                    saleInfo: initialData.SaleInfo,
+                    SaleItemRawDetails: initialData.SaleItemRawDetails || [],
+                    orderId: initialData.OrderId || 0,
+                    isSaleFromOrder: initialData.IsSaleFromOrder || false,
+                    storeLocations: [],
+                    messages: []
                 };
             },
-
             computed: {
                 totalQTY() {
                     return this.saleDetails.reduce((sum, item) => sum + parseFloat(item.QTY || 0), 0);
@@ -119,21 +195,22 @@
                         sum + (parseFloat(item.QTY || 0) * parseFloat(item.UnitPrice || 0)), 0);
                 }
             },
-
             methods: {
                 save() {
+                    this.messages = [];
+
                     if (!this.saleInfo.SalesDate) {
-                        alert("برجاء تحديد التاريخ");
+                        this.messages.push("برجاء تحديد التاريخ");
                         return;
                     }
 
                     if (!this.saleInfo.StoreLocationId) {
-                        alert("برجاء تحديد مخزن الصرف");
+                        this.messages.push("برجاء تحديد مخزن الصرف");
                         return;
                     }
 
                     if (this.saleDetails.length === 0) {
-                        alert("يجب وضع المنتجات أو العناصر التي تريد بيعها");
+                        this.messages.push("يجب وضع المنتجات أو العناصر التي تريد بيعها");
                         return;
                     }
 
@@ -143,7 +220,7 @@
                     );
 
                     if (invalidIndex !== -1) {
-                        alert(`السطر رقم ${invalidIndex + 1} غير مكتمل. يرجى إدخال منتج وكمية صحيحة.`);
+                        this.messages.push(`السطر رقم ${invalidIndex + 1} غير مكتمل. يرجى إدخال منتج وكمية صحيحة.`);
                         return;
                     }
 
@@ -159,19 +236,20 @@
                     axios.post('/Sales/Home/SaveSales', payload)
                         .then(res => {
                             if (res.data) {
-                                alert("✅ تم الحفظ بنجاح");
-                                // يمكنك التوجيه هنا إذا أردت
-                                window.location.href = res.data.newLocation;
+                                if (res.data.success) {
+                                    window.location.href = res.data.newLocation;
+                                } else {
+                                    this.messages = res.data.errors || ["⚠️ فشل الحفظ: حدث خطأ غير معروف"];
+                                }
                             } else {
-                                alert("⚠️ فشل الحفظ: " + (res.data.message || "حدث خطأ غير معروف"));
+                                this.messages.push("⚠️ فشل الحفظ: حدث خطأ غير معروف");
                             }
                         })
                         .catch(err => {
-                            console.error("❌ فشل في الإرسال:", err.errors);
-                            alert("⚠️ حدث خطأ أثناء الاتصال بالسيرفر");
+                            console.error("❌ فشل في الإرسال:", err);
+                            this.messages.push("⚠️ حدث خطأ أثناء الاتصال بالسيرفر");
                         });
                 },
-
                 initSelect2() {
                     const self = this;
                     const $select = $('#store-location-select');
@@ -189,20 +267,22 @@
                         allowClear: true,
                         width: '100%'
                     }).off('select2:select')
-                      .on('select2:select', function (e) {
-                          const selected = e.params.data;
-                          self.saleInfo.StoreLocationId = selected.id;
-                      });
+                        .on('select2:select', function (e) {
+                            const selected = e.params.data;
+                            self.saleInfo.StoreLocationId = selected.id;
+                        });
 
                     if (self.saleInfo.StoreLocationId && self.saleInfo.StoreLocationName) {
                         const option = new Option(self.saleInfo.StoreLocationName, self.saleInfo.StoreLocationId, true, true);
                         $select.append(option).trigger('change');
                     } else {
-                        $select.val(null).trigger('change'); // ⛔ لا اختيار افتراضي
+                        $select.val(null).trigger('change');
                     }
+                },
+                clearMessages() {
+                    this.messages = [];
                 }
             },
-
             mounted() {
                 const self = this;
                 axios.get('/Store/StoreLocations/Search')
@@ -212,11 +292,9 @@
                     })
                     .catch(error => {
                         console.error("حدث خطأ أثناء تحميل بيانات المخازن:", error);
-                        alert("⚠️ فشل تحميل المخازن");
+                        this.messages.push("⚠️ فشل تحميل المخازن");
                     });
             }
-        });
-
-        app.mount('#sales-app');
+        }).mount('#app');
     </script>
 }

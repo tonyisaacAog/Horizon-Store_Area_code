@@ -5,75 +5,241 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Container -->
+    <div>
+        <!-- Card Header -->
+        <div class="flex justify-between items-center mb-8 mt-4">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#000000" stroke-width="2" class="stroke-[#212b36]" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
+                    <path d="M4 9h1" />
+                    <path d="M19 9h1" />
+                    <path d="M9 9h1" />
+                    <path d="M14 9h1" />
+                </svg>
 
-}
-<card title=@title addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <label>اسم المادة</label>
-                <input class="form-control" data-bind="value:ItemName" />
+                <h1 class="text-2xl text-[#212b36] font-bold">{{ storeItem.Id !== 0 ? "تعديل بيانات المادة الخام" :
+                    "اضافة مادة خام جديدة" }}</h1>
             </div>
-            <div class="col-4">
-                <label>اسم المادة -عربي</label>
-                <input class="form-control" data-bind="value:ItemNameAr" />
-            </div>
-                <div class="col-4">
-                <label>اقل كمية</label>
-                <input class="form-control" data-bind="value:WarningLimit" />
-            </div>
+            <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "StoreItemRaw", new { area = "Store" }))"
+                class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+                رجوع
+                <i class="fa fa-arrow-left"></i>
+            </a>
         </div>
-    </div>
-    <div class="container">
-        <div class="row">
-    
-        
-            <div class="col-4 mb-1">
-                <label>النوع</label>
-                @Html.Editor("Id","ItemRawTypeList", new
-                {
-                    htmlAttributes = new
+
+        <!-- Card Body -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- First Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المادة</label>
+                    <input v-model="storeItem.ItemName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ItemName}">
+                    <span v-if="errors.ItemName" class="text-red-500 text-xs">{{ errors.ItemName }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المادة - عربي</label>
+                    <input v-model="storeItem.ItemNameAr"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.ItemNameAr}">
+                    <span v-if="errors.ItemNameAr" class="text-red-500 text-xs">{{ errors.ItemNameAr }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اقل كمية</label>
+                    <input v-model="storeItem.WarningLimit" type="number" min="0"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        :class="{'border-red-500': errors.WarningLimit}">
+                    <span v-if="errors.WarningLimit" class="text-red-500 text-xs">{{ errors.WarningLimit }}</span>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">النوع</label>
+                    @Html.Editor("Id","ItemRawTypeList", new
                     {
-                        @data_bind = "value:RawItemTypeId",
-                        @class = "form-select",
-                        @id = "RawItemType"
-                    }
-                })
-                
+                        htmlAttributes = new
+                        {
+                            @v_model = "storeItem.RawItemTypeId",
+                            @class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                            @id = "RawItemType"
+                        }})
+
+
+                    <span v-if="errors.RawItemTypeId" class="text-red-500 text-xs">{{ errors.RawItemTypeId }}</span>
+                </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="flex justify-end pt-4 border-t border-gray-200">
+                <button v-on:click="saveStoreItem" :disabled="isLoading"
+                    class="bg-emerald-800 hover:bg-blue-dark text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors disabled:opacity-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span v-if="isLoading">جاري الحفظ...</span>
+                    <span v-else>حفظ</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <card-footer>
-        <button class="btn btn-primary" data-bind="click:Save">حفظ</button>
-    </card-footer>
-</card>
-
+    <!-- Messages Modal -->
+    <div v-if="showMessageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                <button v-on:click="showMessageModal = false" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <ul class="space-y-2">
+                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end">
+                <button v-on:click="showMessageModal = false"
+                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark">
+                    موافق
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/App/Store/StoreItemRaw/StoreItemRawInfoValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/General/GeneralKoViewModel.js" asp-append-version="true"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script type="text/javascript">
-        var client = new GeneralKoViewModel(@Html.Raw(data));
-        ko.applyBindings(client);
-        //ko.bindingHandlers.select2 = {
-        //    update: function (element, valueAccessor, allBindingsAccessor) {
-        //        $(element).select2();
-        //    }
-        //}
-        $("#RawItemType").select2();
+        // Initialize store item data from server
+        var storeItemData = @Html.Raw(data);
+        
+        // Mock data for item types - replace with actual data from server
+        var itemTypesData = [
+            { Value: 1, Text: "نوع 1" },
+            { Value: 2, Text: "نوع 2" },
+            { Value: 3, Text: "نوع 3" }
+        ];
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    storeItem: storeItemData,
+                    itemTypes: itemTypesData,
+                    errors: {
+                        ItemName: '',
+                        ItemNameAr: '',
+                        RawItemTypeId: '',
+                        WarningLimit: ''
+                    },
+                    messages: [],
+                    showMessageModal: false,
+                    isLoading: false
+                };
+            },
+            methods: {
+                validateForm() {
+                    let isValid = true;
+                    this.messages = [];
+
+                    // Reset errors
+                    Object.keys(this.errors).forEach(key => this.errors[key] = '');
+
+                    // Item Name validation
+                    if (!this.storeItem.ItemName || this.storeItem.ItemName.trim() === '') {
+                        this.errors.ItemName = 'ادخل اسم المادة الخام';
+                        this.messages.push('ادخل اسم المادة الخام');
+                        isValid = false;
+                    }
+
+                    // Item Name Arabic validation
+                    if (!this.storeItem.ItemNameAr || this.storeItem.ItemNameAr.trim() === '') {
+                        this.errors.ItemNameAr = 'ادخل اسم المادة الخام عربى';
+                        this.messages.push('ادخل اسم المادة الخام عربى');
+                        isValid = false;
+                    }
+
+                    // Raw Item Type validation
+                    if (!this.storeItem.RawItemTypeId || this.storeItem.RawItemTypeId === '') {
+                        this.errors.RawItemTypeId = 'اختر نوع المادة';
+                        this.messages.push('اختر نوع المادة');
+                        isValid = false;
+                    }
+
+                    // Warning Limit validation
+                    if (this.storeItem.WarningLimit !== null && this.storeItem.WarningLimit !== undefined && this.storeItem.WarningLimit !== '') {
+                        if (isNaN(this.storeItem.WarningLimit) || this.storeItem.WarningLimit < 0) {
+                            this.errors.WarningLimit = 'يجب أن تكون الكمية رقم صحيح أكبر من أو يساوي صفر';
+                            this.messages.push('يجب أن تكون الكمية رقم صحيح أكبر من أو يساوي صفر');
+                            isValid = false;
+                        }
+                    }
+
+                    if (!isValid) {
+                        this.showMessageModal = true;
+                    }
+
+                    return isValid;
+                },
+
+                async saveStoreItem() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    this.isLoading = true;
+
+                    try {
+                        const response = await fetch('/Store/StoreItemRaw/SaveRecord', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(this.storeItem)
+                        });
+
+                        const result = await response.json();
+
+                        if (result && (result.success || result.newLocation)) {
+                            // Handle success - redirect or show success message
+                            if (result.newLocation) {
+                                window.location.href = result.newLocation;
+                            } else {
+                                this.showMessage("تم حفظ بيانات المادة الخام بنجاح", "success");
+                                // Optionally redirect to a listing page
+                                setTimeout(() => {
+                                    window.location.href = '/Store/StoreItemRaw/Index';
+                                }, 1500);
+                            }
+                        } else {
+                            // Handle error
+                            this.messages = [result.errors && result.errors.length > 0 ? result.errors[0] : 'حدث خطأ أثناء الحفظ'];
+                            this.showMessageModal = true;
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                        this.showMessageModal = true;
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            }
+        }).mount('#app');
     </script>
 }

@@ -1,61 +1,159 @@
-﻿@model List<SupplierVM> 
+﻿@model List<SupplierVM>
 @{
     var title = "قائمة الموردين";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
 
-}
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Card Header -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21l-8 -4.5v-9l8 -4.5l8 4.5v4.5" />
+                <path d="M12 12l8 -4.5" />
+                <path d="M12 12v9" />
+                <path d="M12 12l-8 -4.5" />
+                <path d="M22 18h-7" />
+                <path d="M18 15l-3 3l3 3" />
+            </svg>
 
-<card title=@title addational-class="fa-list-ol"
-          text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-striped table-bordered table-hover dataTable">
-        <thead>
-            <tr>
-                <th>اسم المورد</th>
-                <th>تليفون 1</th>
-                <th>تليفون 2</th>
-                <th>البريد الالكتروني</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach:items">
-            <tr>
-                <td><span data-bind="text:SupplierName"></span></td>
-                <td><span data-bind="text:Phone1"></span></td>
-                <td><span data-bind="text:Phone2"></span></td>
-                <td><span data-bind="text:Email"></span></td>
-                <td>
-                    <a data-bind="attr:{href:'/Purchases/Supplier/ManageRecord/'+Id() }" class="btn btn-sm btn-primary">تعديل</a>
-                    <a data-bind="attr:{href:'/Purchases/Home/ManagePurchase/'+Id() }" class="btn btn-sm btn-outline-primary">اذن اضافة مستلزمات</a>
-                </td>
-                
-            </tr>
-        </tbody>
-    </table>
-    <card-footer>
-        <a data-bind="attr:{href:'/Purchases/Supplier/ManageRecord/0'}" class="btn btn-primary">اضافة مورد</a>
-    </card-footer>
-</card>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="/Purchases/Supplier/ManageRecord/0"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            <i class="fa fa-plus"></i>
+            اضافة مورد
+        </a>
+    </div>
 
-
-
-
-
-
+    <!-- Card Body -->
+    <data-table :columns="columns" :data="suppliers" :searchable="true" :sortable="true" :paginated="true"
+        :per-page-options="[5, 10, 25, 50]" :default-per-page="10" search-placeholder="البحث في الموردين..."
+        no-data-message="لا توجد بيانات" @@row-action="handleRowAction" @@row-click="handleRowClick"
+        @@search-change="handleSearchChange" @@sort-change="handleSortChange" @@page-change="handlePageChange"
+        ref="supplierTable">
+    </data-table>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/APP/General/GeneralTableViewModel.js" asp-append-version="true"></script>
-    
-    <script type="text/javascript">
-        var client = new GeneralTable(@Html.Raw(data));
-        ko.applyBindings(client);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <!-- Import the separated component -->
+    <script type="module">
+        import { DataTable } from '/assets/components/DataTable.js?v=2.6';
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                DataTable
+            },
+            data() {
+                return {
+                    title: 'قائمة الموردين',
+                    suppliers: @Html.Raw(data),
+                    totalSuppliers: 0,
+                    searchResults: 0,
+                    currentPage: 1,
+                    columns: [
+                        {
+                            key: 'SupplierName',
+                            label: 'اسم المورد',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/4'
+                        },
+                        {
+                            key: 'Phone1',
+                            label: 'تليفون 1',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6'
+                        },
+                        {
+                            key: 'Phone2',
+                            label: 'تليفون 2',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/6'
+                        },
+                        {
+                            key: 'Email',
+                            label: 'البريد الالكتروني',
+                            sortable: true,
+                            searchable: true,
+                            width: 'w-1/4'
+                        },
+                        {
+                            key: 'actions',
+                            label: 'الإجراءات',
+                            type: 'actions',
+                            width: 'w-1/6',
+                            actions: [
+                                {
+                                    key: 'edit',
+                                    label: 'تعديل',
+                                    icon: 'fa-edit',
+                                    class: 'bg-blue-600 hover:bg-blue-700 text-white'
+                                },
+                                {
+                                    key: 'purchase',
+                                    label: 'اذن اضافة مستلزمات',
+                                    icon: 'fa-plus-circle',
+                                    class: 'bg-green-600 hover:bg-green-700 text-white'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            mounted() {
+                this.totalSuppliers = this.suppliers.length;
+                this.searchResults = this.suppliers.length;
+            },
+            methods: {
+                handleRowAction(event) {
+                    const { action, item } = event;
+
+                    switch (action) {
+                        case 'edit':
+                            window.location.href = `/Purchases/Supplier/ManageRecord/${item.Id}`;
+                            break;
+                        case 'purchase':
+                            window.location.href = `/Purchases/Home/ManagePurchase/${item.Id}`;
+                            break;
+                    }
+                },
+
+                handleRowClick(item) {
+                    console.log('Row clicked:', item);
+                    // You can add row click behavior here
+                },
+
+                handleSearchChange(event) {
+                    this.searchResults = event.results;
+                },
+
+                handleSortChange(event) {
+                    console.log('Sort changed:', event);
+                },
+
+                handlePageChange(event) {
+                    this.currentPage = event.page;
+                },
+
+                exportData() {
+                    const tableData = this.$refs.supplierTable.exportData();
+                    console.log('Exporting data:', tableData);
+                    // Implement export functionality
+                },
+
+                refreshData() {
+                    // Implement refresh functionality
+                    window.location.reload();
+                }
+            }
+        }).mount('#app');
     </script>
-
-
 }
-

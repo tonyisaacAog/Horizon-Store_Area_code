@@ -334,8 +334,7 @@
           "System.Xml.XmlSerializer": "6.0.0.0",
           "System.Xml.XPath": "6.0.0.0",
           "System.Xml.XPath.XDocument": "6.0.0.0",
-          "WindowsBase": "4.0.0.0",
-          "Interop.MSDATASRC": "1.0.0.0"
+          "WindowsBase": "4.0.0.0"
         },
         "runtime": {
           "Horizon.dll": {}
@@ -380,7 +379,7 @@
         "runtime": {
           "lib/net6.0/Bold.Licensing.dll": {
             "assemblyVersion": "4.2.79.0",
-            "fileVersion": "4.2.79.0"
+            "fileVersion": "0.0.0.0"
           }
         },
         "compile": {
@@ -394,7 +393,7 @@
         "runtime": {
           "lib/net6.0/BoldReports.AspNet.Core.dll": {
             "assemblyVersion": "4.2600.79.0",
-            "fileVersion": "4.2600.79.0"
+            "fileVersion": "0.0.0.0"
           }
         },
         "compile": {
@@ -424,7 +423,7 @@
         "runtime": {
           "lib/net6.0/BoldReports.Web.dll": {
             "assemblyVersion": "4.2600.79.0",
-            "fileVersion": "4.2600.79.0"
+            "fileVersion": "0.0.0.0"
           }
         },
         "compile": {
@@ -1552,22 +1551,22 @@
           "runtimes/win-arm/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm",
             "assetType": "native",
-            "fileVersion": "2.1.1.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "2.1.1.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "2.1.1.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "2.1.1.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -2639,7 +2638,7 @@
           "runtimes/win-arm64/native/sni.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "4.6.25512.1"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -2648,7 +2647,7 @@
           "runtimes/win-x64/native/sni.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "4.6.25512.1"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -2657,7 +2656,7 @@
           "runtimes/win-x86/native/sni.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "4.6.25512.1"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -6037,12 +6036,6 @@
           "WindowsBase.dll": {}
         },
         "compileOnly": true
-      },
-      "Interop.MSDATASRC/1.0.0.0": {
-        "compile": {
-          "Interop.MSDATASRC.dll": {}
-        },
-        "compileOnly": true
       }
     }
   },
@@ -9410,11 +9403,6 @@
       "sha512": ""
     },
     "WindowsBase/4.0.0.0": {
-      "type": "referenceassembly",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Interop.MSDATASRC/1.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

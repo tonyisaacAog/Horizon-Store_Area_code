@@ -5,248 +5,428 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
 
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Purchase", new { area = "Purchases" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
 
-}
-
-
-<card title="بيانات المورد" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم المورد</label>
-                    <input data-bind="value:Supplier.SupplierName" disabled="disabled" class="form-control" />
+    <!-- Supplier Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيانات المورد</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المورد</label>
+                    <input v-model="supplier.SupplierName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
+                    <input v-model="supplier.Phone1" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>التليفون</label>
-                    <input data-bind="value:Supplier.Phone1" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-
         </div>
     </div>
 
-</card>
-
-<card title="تفاصيل عملية تخزين المستلزمات" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    العنصر
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الوحدة
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: PurchaseDetails">
-            <tr>
-                <td>
-                    <div>
-                        @Html.Editor("StoreItemId","StoreItemRawList", new
-                        {
-                        htmlAttributes = new
-                        {
-                        @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItem}",
-                        @class = "form-select",
-
-                        }
-                        })
-
-                    </div>
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:Qty" />
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                        
-                </td>
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:TotalAmount"></span></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="تفاصيل عملية تخزين المستلزمات لمنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    المنتج
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th style="width:15%">
-                    سعر الصاج
-                </th>
-
-                <th>
-                    السعر الإجمالي
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddStoreItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: PurchaseStoreItemDetails">
-            <tr>
-                <td>
-                    <div>
-                        @Html.Editor("Id","StoreItemsList",new
-
+    <!-- Purchase Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold">تفاصيل عملية تخزين المستلزمات</h2>
+            </div>
+            <button @@click="addItem"
+                class="bg-sky-900 hover:bg-sky-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">العنصر</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in purchaseDetails" :key="'purchase-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @Html.Editor("StoreItemId","StoreItemRawList", new
                             {
-
                                 htmlAttributes = new
-
                                 {
-
-                                    @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateStoreItem}",
-
-                                    @class = "form-select",
-
+                                    @v_model = "item.StoreItemId",
+                                    @v_change = "updateItem(item)",
+                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
                                 }
+                                                        })
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.Qty" step="0.1" min="0.1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.UnitPrice" step="0.1" min="0.1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="font-medium">{{ formatNumber(item.Qty * item.UnitPrice) }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button @@click="removeItem(index)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-if="purchaseDetails.length === 0">
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                    </tr>
 
-                            })
-
-                    </div>
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:Qty" />
-                </td>
-
-                <td>
-                    <input type="text" class="form-control" data-bind="value:UnitPrice" />
-                </td>
-                <td>
-                    <span data-bind="numericText:TotalAmount"></span>
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveStoreItem">
-                        <span class="fa fa-minus"></span>
-                    </button>
-
-                </td>
-            </tr>
-
-        </tbody>
-        <tbody>
-            <tr>
-                <td></td>
-                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalQTY"></span></td>
-                <td><b>الاجمالي</b></td>
-                <td><span class="fw-bold" data-bind="numericText:StoreItemTotalAmount"></span></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</card>
-
-
-<card title="ملخص عملية التخزين" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>تاريخ الفاتورة</label>
-                    <input data-bind="value:PurchaseInfo.PurchasingDate" class="form-control smallDate" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>رقم الفاتورة </label>
-                    <input data-bind="value:PurchaseInfo.InvoiceNum"  class="form-control" />
-                </div>
-            </div>
-
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4"></td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(totalQTY) }}</td>
+                        <td class="px-6 py-4 font-bold">الاجمالي</td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(totalAmount) }}</td>
+                        <td class="px-6 py-4"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 
+    <!-- Store Items Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold">تفاصيل عملية تخزين المستلزمات لمنتج</h2>
+            </div>
+            <button @@click="addStoreItem"
+                class="bg-sky-900 hover:bg-sky-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">المنتج</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">سعر الصاج</th>
+                        <th class="px-6 py-3 text-right">السعر الإجمالي</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in purchaseStoreItemDetails" :key="'store-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @Html.Editor("Id","StoreItemsList", new
+                                                        {
+                                htmlAttributes = new
+                                {
+                                    @v_model = "item.StoreItemId",
+                                    @v_change = "updateStoreItem(item)",
+                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
+                                }
+                                                        })
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.Qty" step="0.1" min="0.1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.UnitPrice" step="0.1" min="0.1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="font-medium">{{ formatNumber(item.UnitPrice) }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button @@click="removeStoreItem(index)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-if="purchaseStoreItemDetails.length === 0">
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4"></td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(storeItemTotalQTY) }}</td>
+                        <td class="px-6 py-4 font-bold">الاجمالي</td>
+                        <td class="px-6 py-4 font-bold">{{ formatNumber(storeItemTotalAmount) }}</td>
+                        <td class="px-6 py-4"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 
-    <card-footer>
-        <partial name="_SaveButton" />
-    </card-footer>
-</card>
+    <!-- Purchase Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold">ملخص عملية التخزين</h2>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الفاتورة</label>
+                    <input v-model="purchaseInfo.PurchasingDate" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                    <span v-if="errors.PurchasingDate" class="text-red-500 text-xs">{{ errors.PurchasingDate }}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <input v-model="purchaseInfo.InvoiceNum"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                </div>
+            </div>
+            <div class="flex justify-end mt-10">
+                <button @@click="save"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-
-
-
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Purchases/PurchaseValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Purchases/PurchaseContainer.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-        var purchase = new Purchase(@Html.Raw(data));
-        ko.applyBindings(purchase);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                    <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="p-4">
+                                <ul class="space-y-2">
+                                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 border-t border-gray-200 flex justify-end">
+                                <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                    موافق
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "اذن اضافة مستلزمات جديدة",
+                    purchaseInfo: initialData.PurchaseInfo,
+                    purchaseDetails: initialData.PurchaseDetails || [],
+                    purchaseStoreItemDetails: initialData.PurchaseStoreItemDetails || [],
+                    supplier: initialData.Supplier,
+                    messages: [],
+                    errors: {
+                        PurchasingDate: ''
+                    }
+                };
+            },
+            computed: {
+                totalQTY() {
+                    return this.purchaseDetails.reduce((sum, item) => sum + parseFloat(item.Qty || 0), 0);
+                },
+                totalAmount() {
+                    return this.purchaseDetails.reduce((sum, item) => sum + (parseFloat(item.Qty || 0) * parseFloat(item.UnitPrice || 0)), 0);
+                },
+                storeItemTotalQTY() {
+                    return this.purchaseStoreItemDetails.reduce((sum, item) => sum + parseFloat(item.Qty || 0), 0);
+                },
+                storeItemTotalAmount() {
+                    return this.purchaseStoreItemDetails.reduce((sum, item) => sum + parseFloat(item.UnitPrice || 0), 0);
+                }
+            },
+            methods: {
+                addItem() {
+                    this.purchaseDetails.push({
+                        Id: 0,
+                        StoreItemId: 0,
+                        Qty: 0,
+                        UnitPrice: 0
+                    });
+                },
+                removeItem(index) {
+                    this.purchaseDetails.splice(index, 1);
+                },
+                updateItem(item) {
+                    const duplicates = this.purchaseDetails.filter(i => i.StoreItemId === item.StoreItemId);
+
+                    if (duplicates.length > 1) {
+                        this.messages.push('هذا العنصر تم اضافته');
+                        this.purchaseDetails = this.purchaseDetails.filter(i => i !== item);
+                    }
+                },
+                addStoreItem() {
+                    this.purchaseStoreItemDetails.push({
+                        Id: 0,
+                        StoreItemId: 0,
+                        Qty: 0,
+                        UnitPrice: 0
+                    });
+                },
+                removeStoreItem(index) {
+                    this.purchaseStoreItemDetails.splice(index, 1);
+                },
+                updateStoreItem(item) {
+                    const duplicates = this.purchaseStoreItemDetails.filter(i => i.StoreItemId === item.StoreItemId);
+
+                    if (duplicates.length > 1) {
+                        this.messages.push('هذا العنصر تم اضافته');
+                        this.purchaseStoreItemDetails = this.purchaseStoreItemDetails.filter(i => i !== item);
+                    }
+                },
+                validateForm() {
+                    this.errors = {
+                        PurchasingDate: ''
+                    };
+                    this.messages = [];
+
+                    let isValid = true;
+
+                    // Validate PurchasingDate
+                    if (!this.purchaseInfo.PurchasingDate) {
+                        this.errors.PurchasingDate = 'برجاء تحديد التاريخ';
+                        isValid = false;
+                    }
+
+                    // Validate purchase details
+                    if (this.purchaseDetails.length === 0) {
+                        this.messages.push('فاتورة المشتريات يجب ان تحتوى على مادة خام واحدة على الاقل.');
+                        isValid = false;
+                    }
+
+                    // Validate each purchase detail
+                    this.purchaseDetails.forEach((item, index) => {
+                        if (!item.StoreItemId || item.StoreItemId === 0) {
+                            this.messages.push(`العنصر ${index + 1}: برجاء اختيار العنصر`);
+                            isValid = false;
+                        }
+                        if (!item.Qty || item.Qty < 0.1) {
+                            this.messages.push(`العنصر ${index + 1}: برجاء اضافة الكمية`);
+                            isValid = false;
+                        }
+                        if (!item.UnitPrice || item.UnitPrice < 0.1) {
+                            this.messages.push(`العنصر ${index + 1}: برجاء اضافة السعر`);
+                            isValid = false;
+                        }
+                    });
+
+                    // Validate each store item detail
+                    this.purchaseStoreItemDetails.forEach((item, index) => {
+                        if (!item.StoreItemId || item.StoreItemId === 0) {
+                            this.messages.push(`المنتج ${index + 1}: برجاء اختيار المنتج`);
+                            isValid = false;
+                        }
+                        if (!item.Qty || item.Qty < 0.1) {
+                            this.messages.push(`المنتج ${index + 1}: برجاء اضافة الكمية`);
+                            isValid = false;
+                        }
+                        if (!item.UnitPrice || item.UnitPrice < 0.1) {
+                            this.messages.push(`المنتج ${index + 1}: برجاء اضافة السعر`);
+                            isValid = false;
+                        }
+                    });
+
+                    return isValid;
+                },
+                save() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    // Set the total amount
+                    this.purchaseInfo.TotalAmount = this.totalQTY;
+
+                    const data = {
+                        PurchaseInfo: this.purchaseInfo,
+                        PurchaseDetails: this.purchaseDetails,
+                        PurchaseStoreItemDetails: this.purchaseStoreItemDetails,
+                        Supplier: this.supplier
+                    };
+
+                    axios.post('/Purchases/Home/SavePurchase', data)
+                        .then(response => {
+                            if (response.data.success) {
+                                window.location.href = '/Purchases/Home/Index';
+                            } else if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الحفظ'];
+                            }
+                        })
+                        .catch(error => {
+                            this.messages.push('حدث خطأ في الاتصال بالخادم');
+                        });
+                },
+                clearMessages() {
+                    this.messages = [];
+                },
+                formatNumber(value) {
+                    if (!value) return '0';
+                    return parseFloat(value).toFixed(2);
+                }
+            },
+            mounted() {
+                // Initialize with at least one item if empty
+                if (this.purchaseDetails.length === 0) {
+                    this.addItem();
+                }
+                if (this.purchaseStoreItemDetails.length === 0) {
+                    this.addStoreItem();
+                }
             }
-        }
-
+        }).mount('#app');
     </script>
-
-
 }
