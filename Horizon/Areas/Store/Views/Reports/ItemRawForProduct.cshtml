@@ -110,7 +110,8 @@
     <script>
         // Initialize Select2
         $(document).ready(function() {
-            $("#StoreItemsSelect2").select2();
+            // Fixed: Use the correct ID that matches the HTML element
+            $("#StoreItemId").select2();
         });
 
         const { createApp } = Vue;
@@ -125,6 +126,15 @@
                         startDate: "@Model.Search.StartDate",
                         endDate: "@Model.Search.EndDate"
                     }
+                }
+            },
+            mounted() {
+                // Set document title
+                document.title = this.title;
+
+                // Initialize Select2 if available (alternative approach)
+                if (typeof $ !== 'undefined' && $.fn.select2) {
+                    $("#StoreItemId").select2();
                 }
             },
             methods: {

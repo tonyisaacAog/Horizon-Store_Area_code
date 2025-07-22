@@ -14,7 +14,8 @@
         <div class="flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
                 fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <path
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
         </div>
@@ -92,15 +93,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">مكان التخزين</label>
-                    @Html.Editor("Id","StoreLocationList", new
-                    {
-                        htmlAttributes = new
-                        {
-                            @v_model = "StoreLocationId",
-                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
-                            @id = "storeLoc"
-                        }
-                    })
+                    <select id="store-location-select"
+                        class="w-full px-3 py-2 border border-gray-300 h-[48px] rounded-md focus:outline-none">
+                        <option></option>
+                    </select>
                     <span v-if="errors.StoreLocationId" class="text-red-500 text-xs">{{ errors.StoreLocationId }}</span>
                 </div>
             </div>
@@ -130,29 +126,29 @@
         // Messages Component
         const Messages = {
             template: `
-                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                    <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                    <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="p-4">
+                                    <ul class="space-y-2">
+                                        <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 border-t border-gray-200 flex justify-end">
+                                    <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                        موافق
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="p-4">
-                            <ul class="space-y-2">
-                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                            </ul>
-                        </div>
-                        <div class="p-4 border-t border-gray-200 flex justify-end">
-                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
-                                موافق
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `,
+                    `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -171,6 +167,9 @@
                     StoreLocationId: initialData.StoreLocationId || '',
                     Description: initialData.Description || '',
                     messages: [],
+                    StoreLocationId: initialData.StoreLocationId,
+                    StoreLocationName: initialData.StoreLocationName,
+                    storeLocations: [],
                     errors: {
                         Quantity: '',
                         DateOfDestroy: '',
@@ -224,6 +223,38 @@
                     return isValid;
                 },
 
+
+                initStoreSelect2() {
+                    const self = this;
+                    const $select = $('#store-location-select');
+
+                    const options = self.storeLocations.map(loc => ({
+                        id: loc.Id,
+                        text: loc.Name
+                    }));
+
+                    $select.empty();
+
+                    $select.select2({
+                        placeholder: 'ابحث عن المخزن...',
+                        data: options,
+                        allowClear: true,
+                        width: '100%'
+                    }).off('select2:select')
+                        .on('select2:select', function (e) {
+                            const selected = e.params.data;
+                            self.StoreLocationId = selected.id;
+                        });
+
+                    if (self.StoreLocationId && self.StoreLocationId) {
+                        const option = new Option(self.StoreLocationName, self.StoreLocationId, true, true);
+                        $select.append(option).trigger('change');
+                    } else {
+                        $select.val(null).trigger('change');
+                    }
+                },
+
+
                 save() {
                     if (!this.validateForm()) {
                         return;
@@ -255,6 +286,19 @@
                 clearMessages() {
                     this.messages = [];
                 }
+            },
+            mounted() {
+                const self = this;
+                axios.get('/Store/StoreLocations/Search')
+                    .then(response => {
+                        self.storeLocations = response.data.data || [];
+                        self.initStoreSelect2();
+                    })
+                    .catch(error => {
+                        console.error("حدث خطأ أثناء تحميل بيانات المخازن:", error);
+                        this.messages.push("⚠️ فشل تحميل المخازن");
+                    });
+
             }
         }).mount('#app');
     </script>

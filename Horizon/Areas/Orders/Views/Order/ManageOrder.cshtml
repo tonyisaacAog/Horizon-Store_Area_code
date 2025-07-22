@@ -5,6 +5,38 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 48px !important;
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #374151;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        right: 6px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+</style>
+
 <div id="app" class="container mx-auto px-4 py-6">
     <!-- Messages Component -->
     <messages :messages="messages" @@clear-messages="clearMessages"></messages>
@@ -73,22 +105,16 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in orderDetails" :key="'order-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @Html.Editor("Id","StoreItemsList", new
-                            {
-                                htmlAttributes = new
-                                {
-                                    @v_model = "item.ProductId",
-                                    @v_change = "updateItem(item)",
-                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
-                                }
-                                                        })
+                            <select
+                                class="product-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index"></select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="number" v-model="item.QTY"
+                            <input type="number" v-model="item.QTY" @@input="updateItem(item, index)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <textarea v-model="item.Notes" rows="1"
+                            <textarea v-model="item.Notes" @@input="updateItem(item, index)" rows="1"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none resize-none"></textarea>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -147,6 +173,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
         // Initialize data from server
         var initialData = @Html.Raw(data);
@@ -154,29 +182,29 @@
         // Messages Component
         const Messages = {
             template: `
-                    <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                                <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4">
+                                        <ul class="space-y-2">
+                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                            موافق
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="p-4">
-                                <ul class="space-y-2">
-                                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                                </ul>
-                            </div>
-                            <div class="p-4 border-t border-gray-200 flex justify-end">
-                                <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
-                                    موافق
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `,
+                        `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -206,35 +234,100 @@
             },
             methods: {
                 addItem() {
+                    // Check if the last item is properly filled before adding a new one
+                    const lastItem = this.orderDetails[this.orderDetails.length - 1];
+
+                    if (lastItem && (
+                        !lastItem.ProductId || lastItem.ProductId === 0 ||
+                        !lastItem.QTY || lastItem.QTY <= 0
+                    )) {
+                        this.messages.push("يرجى اختيار المنتج وإدخال كمية صحيحة قبل إضافة صف جديد.");
+                        return;
+                    }
+
                     this.orderDetails.push({
                         Id: 0,
                         ProductId: 0,
+                        ProductName: '',
                         QTY: 0,
                         UnitPrice: 1,
                         Notes: null,
                         RecordStatus: 0 // RecordStatus.Added
                     });
+
+                    // Initialize Select2 for the new item
+                    this.$nextTick(() => {
+                        this.initSelect2(this.orderDetails.length - 1);
+                    });
                 },
                 removeItem(index) {
                     this.orderDetails.splice(index, 1);
                 },
-                updateItem(item) {
-                    const duplicate = this.orderDetails.find(i =>
-                        i.ProductId === item.ProductId && i.Id !== item.Id);
-
-                    if (duplicate) {
-                        this.messages.push('تم اختيار هذا المنتج من قبل');
-                        this.orderDetails = this.orderDetails.filter(i => i !== item);
-                    } else {
-                        if (item.RecordStatus !== 0) { // RecordStatus.Added
-                            item.RecordStatus = 1; // RecordStatus.Updated
-                        }
+                updateItem(item, index) {
+                    // Update record status if not newly added
+                    if (item.RecordStatus !== 0) { // RecordStatus.Added
+                        item.RecordStatus = 1; // RecordStatus.Updated
                     }
+                },
+                initSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.product-select[data-index="${index}"]`);
+
+                    $select.select2({
+                        placeholder: "اختر المنتج",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItems/SearchItems',
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: x.ProductName
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        const selectedId = parseInt(selected.id);
+
+                        // Check for duplicates
+                        const isDuplicate = self.orderDetails.some((item, i) =>
+                            i !== index && item.ProductId === selectedId);
+
+                        if (isDuplicate) {
+                            self.messages.push('تم اختيار هذا المنتج من قبل');
+                            $(this).val(null).trigger('change');
+                            return;
+                        }
+
+                        // Update the item
+                        const item = self.orderDetails[index];
+                        item.ProductId = selectedId;
+                        item.ProductName = selected.text;
+                        self.updateItem(item, index);
+                    }).on('select2:clear', function (e) {
+                        // Clear the product when selection is cleared
+                        const item = self.orderDetails[index];
+                        item.ProductId = 0;
+                        item.ProductName = '';
+                        self.updateItem(item, index);
+                    });
                 },
                 validateForm() {
                     this.errors = {
                         OrderDate: ''
                     };
+                    this.messages = [];
 
                     let isValid = true;
 
@@ -248,23 +341,28 @@
                         isValid = false;
                     }
 
-                    // Validate order details
-                    this.orderDetails.forEach(item => {
+                    // Validate each order detail row
+                    this.orderDetails.forEach((item, index) => {
                         if (!item.ProductId || item.ProductId === 0) {
-                            this.messages.push('برجاء اختيار المنتج لجميع العناصر');
+                            this.messages.push(`السطر رقم ${index + 1}: برجاء اختيار المنتج`);
                             isValid = false;
                         }
                         if (!item.QTY || item.QTY <= 0) {
-                            this.messages.push('برجاء اضافة الكمية لجميع العناصر');
+                            this.messages.push(`السطر رقم ${index + 1}: برجاء اضافة الكمية`);
                             isValid = false;
                         }
                     });
 
+                    // Check if there's at least one valid row
+                    const hasValidRow = this.orderDetails.some(x => x.ProductId > 0 && x.QTY > 0);
+                    if (!hasValidRow) {
+                        this.messages.push("يجب إدخال منتج واحد على الأقل بكمية صحيحة.");
+                        isValid = false;
+                    }
+
                     return isValid;
                 },
                 save() {
-                    this.messages = [];
-
                     if (!this.validateForm()) {
                         return;
                     }
@@ -297,8 +395,20 @@
                 }
             },
             mounted() {
-                if (this.orderDetails.length === 0)
-                    this.addItem();
+                // Initialize existing items with Select2
+                this.orderDetails.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initSelect2(index);
+
+                        // If item already has a product selected, set it in Select2
+                        if (item.ProductId && item.ProductName) {
+                            const $select = $(`select.product-select[data-index="${index}"]`);
+                            const option = new Option(item.ProductName, item.ProductId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
+
             }
         }).mount('#app');
     </script>

@@ -5,6 +5,38 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 48px !important;
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #374151;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        right: 6px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+</style>
+
 <div id="app" class="container mx-auto px-4 py-6">
     <!-- Messages Component -->
     <messages :messages="messages" @@clear-messages="clearMessages"></messages>
@@ -14,7 +46,8 @@
         <div class="flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
                 fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <path
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
         </div>
@@ -82,15 +115,9 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">المشتريات</label>
-                    @Html.Editor("Id","PurchasingList", new
-                    {
-                        htmlAttributes = new
-                        {
-                            @v_model = "purchasingId",
-                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-[48px]",
-                            @id = "purchasingSelect"
-                        }
-                    })
+                    <select id="purchasingSelect"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-[48px]">
+                    </select>
                     <span v-if="errors.purchasingId" class="text-red-500 text-xs">{{ errors.purchasingId }}</span>
                 </div>
             </div>
@@ -113,6 +140,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
         // Initialize data from server
         var initialData = @Html.Raw(data);
@@ -120,29 +149,29 @@
         // Messages Component
         const Messages = {
             template: `
-                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                    <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                    <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="p-4">
+                                    <ul class="space-y-2">
+                                        <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                    </ul>
+                                </div>
+                                <div class="p-4 border-t border-gray-200 flex justify-end">
+                                    <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                        موافق
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="p-4">
-                            <ul class="space-y-2">
-                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                            </ul>
-                        </div>
-                        <div class="p-4 border-t border-gray-200 flex justify-end">
-                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
-                                موافق
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `,
+                    `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -170,6 +199,71 @@
                 };
             },
             methods: {
+                initPurchasingSelect2() {
+                    const self = this;
+                    const $select = $('#purchasingSelect');
+
+                    $select.select2({
+                        placeholder: "اختر المشتريات",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/Purchasing/SearchPurchasing', // Update this URL to match your purchasing search endpoint
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: x.PurchasingName || x.Name || x.Description // Adjust field names based on your data structure
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        self.purchasingId = selected.id;
+                    }).on('select2:clear', function (e) {
+                        self.purchasingId = '';
+                    });
+
+                    // Set initial value if exists
+                    if (this.purchasingId) {
+                        // You'll need to add logic here to load and display the initial purchasing name
+                        // This might require another API call to get the purchasing details by ID
+                        this.loadInitialPurchasing();
+                    }
+                },
+
+                loadInitialPurchasing() {
+                    if (this.purchasingId) {
+                        // Make an API call to get purchasing details by ID
+                        axios.get(`/Store/Purchasing/GetById/${this.purchasingId}`)
+                            .then(response => {
+                                if (response.data.success && response.data.data) {
+                                    const purchasing = response.data.data;
+                                    const $select = $('#purchasingSelect');
+                                    const option = new Option(
+                                        purchasing.PurchasingName || purchasing.Name || purchasing.Description,
+                                        purchasing.Id,
+                                        true,
+                                        true
+                                    );
+                                    $select.append(option).trigger('change');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error loading initial purchasing:', error);
+                            });
+                    }
+                },
+
                 validateForm() {
                     this.errors = {
                         destroyQty: '',
@@ -247,6 +341,12 @@
                 clearMessages() {
                     this.messages = [];
                 }
+            },
+            mounted() {
+                // Initialize Select2 for purchasing dropdown
+                this.$nextTick(() => {
+                    this.initPurchasingSelect2();
+                });
             }
         }).mount('#app');
     </script>
