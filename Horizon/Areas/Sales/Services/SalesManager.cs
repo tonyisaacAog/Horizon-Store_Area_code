@@ -55,6 +55,14 @@ namespace Horizon.Areas.Sales.Services
         {
             var vm = new SalesContainer();
             var order = await _orderManager.GetOrderWithDetailsById(OrderId);
+            if(order.Order.OrderStatus != Orders.Models.OrderStatus.Done)
+            {
+                throw new Exception("لا يمكن انشاء فاتورة من هذا الطلب لانه لم يتم التجهيز.");
+            }
+            if (order.Order.IsInvoiceSale == true)
+            {
+                throw new Exception("تم انشاء فاتورة من هذا الطلب.");
+            }
             vm.Client = order.Client;
             order.OrderDetail.ForEach(line =>
             {
