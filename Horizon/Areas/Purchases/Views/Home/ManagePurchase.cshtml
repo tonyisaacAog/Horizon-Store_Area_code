@@ -5,6 +5,38 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 48px !important;
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #374151;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        right: 6px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+</style>
+
 <div id="app" class="container mx-auto px-4 py-6">
     <!-- Messages Component -->
     <messages :messages="messages" @@clear-messages="clearMessages"></messages>
@@ -72,22 +104,18 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in purchaseDetails" :key="'purchase-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @Html.Editor("StoreItemId","StoreItemRawList", new
-                            {
-                                htmlAttributes = new
-                                {
-                                    @v_model = "item.StoreItemId",
-                                    @v_change = "updateItem(item)",
-                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
-                                }
-                                                        })
+                            <select
+                                class="store-item-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index" :data-type="'purchase'"></select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <input type="number" v-model="item.Qty" step="0.1" min="0.1"
+                                @@input="updateItem(item, index)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <input type="number" v-model="item.UnitPrice" step="0.1" min="0.1"
+                                @@input="updateItem(item, index)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -100,9 +128,8 @@
                         </td>
                     </tr>
                     <tr v-if="purchaseDetails.length === 0">
-                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر للعرض</td>
                     </tr>
-
                 </tbody>
                 <tfoot>
                     <tr class="bg-gray-50">
@@ -142,22 +169,18 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in purchaseStoreItemDetails" :key="'store-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @Html.Editor("Id","StoreItemsList", new
-                                                        {
-                                htmlAttributes = new
-                                {
-                                    @v_model = "item.StoreItemId",
-                                    @v_change = "updateStoreItem(item)",
-                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]",
-                                }
-                                                        })
+                            <select
+                                class="store-item-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index" :data-type="'store'"></select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <input type="number" v-model="item.Qty" step="0.1" min="0.1"
+                                @@input="updateStoreItem(item, index)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <input type="number" v-model="item.UnitPrice" step="0.1" min="0.1"
+                                @@input="updateStoreItem(item, index)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -170,7 +193,7 @@
                         </td>
                     </tr>
                     <tr v-if="purchaseStoreItemDetails.length === 0">
-                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر للعرض</td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -221,6 +244,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
         // Initialize data from server
         var initialData = @Html.Raw(data);
@@ -228,29 +253,29 @@
         // Messages Component
         const Messages = {
             template: `
-                    <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                                <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="p-4">
-                                <ul class="space-y-2">
-                                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                                </ul>
-                            </div>
-                            <div class="p-4 border-t border-gray-200 flex justify-end">
-                                <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
-                                    موافق
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `,
+                                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="p-4">
+                                            <ul class="space-y-2">
+                                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-4 border-t border-gray-200 flex justify-end">
+                                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                                موافق
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -290,42 +315,115 @@
             },
             methods: {
                 addItem() {
+                    const lastItem = this.purchaseDetails[this.purchaseDetails.length - 1];
+
+                    if (lastItem && (
+                        !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+                        !lastItem.Qty || lastItem.Qty <= 0 ||
+                        !lastItem.UnitPrice || lastItem.UnitPrice <= 0
+                    )) {
+                        this.messages.push("يرجى اختيار العنصر وإدخال كمية وسعر صحيح قبل إضافة صف جديد.");
+                        return;
+                    }
+
                     this.purchaseDetails.push({
                         Id: 0,
                         StoreItemId: 0,
+                        StoreItemName: '',
                         Qty: 0,
                         UnitPrice: 0
                     });
+                    this.$nextTick(() => this.initSelect2(this.purchaseDetails.length - 1, 'purchase'));
                 },
                 removeItem(index) {
                     this.purchaseDetails.splice(index, 1);
                 },
-                updateItem(item) {
-                    const duplicates = this.purchaseDetails.filter(i => i.StoreItemId === item.StoreItemId);
-
-                    if (duplicates.length > 1) {
-                        this.messages.push('هذا العنصر تم اضافته');
-                        this.purchaseDetails = this.purchaseDetails.filter(i => i !== item);
-                    }
+                updateItem(item, index) {
+                    // Additional logic when item is updated can be added here
                 },
                 addStoreItem() {
+                    const lastItem = this.purchaseStoreItemDetails[this.purchaseStoreItemDetails.length - 1];
+
+                    if (lastItem && (
+                        !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+                        !lastItem.Qty || lastItem.Qty <= 0 ||
+                        !lastItem.UnitPrice || lastItem.UnitPrice <= 0
+                    )) {
+                        this.messages.push("يرجى اختيار المنتج وإدخال كمية وسعر صحيح قبل إضافة صف جديد.");
+                        return;
+                    }
+
                     this.purchaseStoreItemDetails.push({
                         Id: 0,
                         StoreItemId: 0,
+                        StoreItemName: '',
                         Qty: 0,
                         UnitPrice: 0
                     });
+                    this.$nextTick(() => this.initSelect2(this.purchaseStoreItemDetails.length - 1, 'store'));
                 },
                 removeStoreItem(index) {
                     this.purchaseStoreItemDetails.splice(index, 1);
                 },
-                updateStoreItem(item) {
-                    const duplicates = this.purchaseStoreItemDetails.filter(i => i.StoreItemId === item.StoreItemId);
+                updateStoreItem(item, index) {
+                    // Additional logic when store item is updated can be added here
+                },
+                initSelect2(index, type) {
+                    const self = this;
+                    const $select = $(`select.store-item-select[data-index="${index}"][data-type="${type}"]`);
 
-                    if (duplicates.length > 1) {
-                        this.messages.push('هذا العنصر تم اضافته');
-                        this.purchaseStoreItemDetails = this.purchaseStoreItemDetails.filter(i => i !== item);
-                    }
+                    // Determine the appropriate endpoint based on type
+                    const endpoint = type === 'purchase' ? '/Store/StoreItemRaw/SearchRawItems' : '/Store/StoreItems/SearchItems';
+                    const placeholder = type === 'purchase' ? "اختر العنصر" : "اختر المنتج";
+
+                    $select.select2({
+                        placeholder: placeholder,
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: endpoint,
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: type === 'purchase' ? x.ItemName : x.ProductName
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        const selectedId = selected.id;
+
+                        // Check for duplicates based on type
+                        const targetArray = type === 'purchase' ? self.purchaseDetails : self.purchaseStoreItemDetails;
+                        const isDuplicate = targetArray.some((item, i) => i !== index && item.StoreItemId === selectedId);
+
+                        if (isDuplicate) {
+                            self.messages.push(`هذا ${type === 'purchase' ? 'العنصر' : 'المنتج'} تم اختياره مسبقًا.`);
+                            $(this).val(null).trigger('change');
+                            return;
+                        }
+
+                        // Assign selected values
+                        const item = targetArray[index];
+                        item.StoreItemId = selected.id;
+                        item.StoreItemName = selected.text;
+
+                        if (type === 'purchase') {
+                            self.updateItem(item, index);
+                        } else {
+                            self.updateStoreItem(item, index);
+                        }
+                    });
                 },
                 validateForm() {
                     this.errors = {
@@ -342,8 +440,8 @@
                     }
 
                     // Validate purchase details
-                    if (this.purchaseDetails.length === 0) {
-                        this.messages.push('فاتورة المشتريات يجب ان تحتوى على مادة خام واحدة على الاقل.');
+                    if (this.purchaseDetails.length === 0 && this.purchaseStoreItemDetails.length === 0) {
+                        this.messages.push('يجب إضافة عنصر واحد على الأقل في إحدى الجدولين.');
                         isValid = false;
                     }
 
@@ -387,7 +485,7 @@
                     }
 
                     // Set the total amount
-                    this.purchaseInfo.TotalAmount = this.totalQTY;
+                    this.purchaseInfo.TotalAmount = this.totalAmount + this.storeItemTotalAmount;
 
                     const data = {
                         PurchaseInfo: this.purchaseInfo,
@@ -419,13 +517,28 @@
                 }
             },
             mounted() {
-                // Initialize with at least one item if empty
-                if (this.purchaseDetails.length === 0) {
-                    this.addItem();
-                }
-                if (this.purchaseStoreItemDetails.length === 0) {
-                    this.addStoreItem();
-                }
+                // Initialize Select2 for existing items
+                this.purchaseDetails.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initSelect2(index, 'purchase');
+                        if (item.StoreItemId && item.StoreItemName) {
+                            const $select = $(`select.store-item-select[data-index="${index}"][data-type="purchase"]`);
+                            const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
+
+                this.purchaseStoreItemDetails.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initSelect2(index, 'store');
+                        if (item.StoreItemId && item.StoreItemName) {
+                            const $select = $(`select.store-item-select[data-index="${index}"][data-type="store"]`);
+                            const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
             }
         }).mount('#app');
     </script>

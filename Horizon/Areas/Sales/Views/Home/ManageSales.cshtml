@@ -5,6 +5,38 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 48px !important;
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #374151;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        right: 6px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+</style>
+
 <div id="app" class="container mx-auto px-4 py-6">
     <!-- Messages Component -->
     <messages :messages="messages" @@clear-messages="clearMessages"></messages>
@@ -21,7 +53,7 @@
                 <path d="M22 19l-3 3l-3 -3" />
             </svg>
 
-            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h2>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
         </div>
         <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Order", new { area = "Orders" }))"
             class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
@@ -30,11 +62,9 @@
         </a>
     </div>
 
-
     <!-- Client Information Card -->
     <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
-        <div class="text-white px-6 py-4 flex items-center  border-b">
-
+        <div class="text-gray-900 px-6 py-4 flex items-center  border-b">
             <h2 class="text-lg font-semibold">بيانات العميل</h2>
         </div>
         <div class="p-6">
@@ -42,12 +72,12 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">اسم العميل</label>
                     <input v-model="client.ClientName" disabled
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
                     <input v-model="client.Phone1" disabled
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
                 </div>
             </div>
         </div>
@@ -55,9 +85,8 @@
 
     <!-- Raw Materials Sale Details Card -->
     <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
-        <div class="text-white px-6 py-4 flex items-center justify-between border-b">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
             <div class="flex items-center">
-
                 <h2 class="text-lg font-semibold">تفاصيل عملية صرف لمواد خام</h2>
             </div>
             <button @@click="addRawItem"
@@ -79,24 +108,17 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in saleItemRawDetails" :key="'raw-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @Html.Editor("StoreItemId","StoreItemRawList",new
-
-                            {
-
-                                htmlAttributes = new
-                                {
-                                    @v_model = "item.StoreItemId",
-                                    @v_change = "updateRawItem(item)",
-                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
-                                }})
+                            <select
+                                class="raw-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index"></select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="number" v-model="item.Qty"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                            <input type="number" v-model="item.Qty" @@input="updateRawItem(item, index)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="number" v-model="item.UnitPrice"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                            <input type="number" v-model="item.UnitPrice" @@input="updateRawItem(item, index)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ (item.Qty * item.UnitPrice).toFixed(2) }}
@@ -108,7 +130,7 @@
                         </td>
                     </tr>
                     <tr v-if="saleItemRawDetails.length === 0">
-                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر للعرض</td>
                     </tr>
                     <tr class="bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap"></td>
@@ -124,9 +146,8 @@
 
     <!-- Products Sale Details Card -->
     <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
-        <div class="text-white px-6 py-4 flex items-center justify-between border-b">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
             <div class="flex items-center">
-
                 <h2 class="text-lg font-semibold">تفاصيل عملية صرف للمنتجات</h2>
             </div>
             <button @@click="addItem"
@@ -148,23 +169,17 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in saleDetails" :key="'prod-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @Html.Editor("Id","StoreItemsList", new
-                                                        {
-                                htmlAttributes = new
-                                {
-                                    @v_model = "item.StoreItemId",
-                                    @v_change = "updateItem(item)",
-                                    @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
-                                }
-                                                        })
+                            <select
+                                class="product-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index"></select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="number" v-model="item.Qty"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                            <input type="number" v-model="item.Qty" @@input="updateItem(item, index)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="number" v-model="item.UnitPrice"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                            <input type="number" v-model="item.UnitPrice" @@input="updateItem(item, index)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ (item.Qty * item.UnitPrice).toFixed(2) }}
@@ -176,7 +191,7 @@
                         </td>
                     </tr>
                     <tr v-if="saleDetails.length === 0">
-                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر ضف للعرض </td>
+                        <td colspan="5" class="text-center text-lg text-gray-500 py-6">لا توجد عناصر للعرض</td>
                     </tr>
                     <tr class="bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap"></td>
@@ -192,7 +207,7 @@
 
     <!-- Sale Summary Card -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="text-white px-6 py-4  border-b">
+        <div class="text-gray-900 px-6 py-4  border-b">
             <h2 class="text-lg font-semibold">ملخص عملية الصرف</h2>
         </div>
         <div class="p-6">
@@ -200,26 +215,20 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الصرف</label>
                     <input v-model="saleInfo.SalesDate" type="date"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                     <span v-if="errors.SalesDate" class="text-red-500 text-xs">{{ errors.SalesDate }}</span>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
                     <input v-model="saleInfo.InvoiceNum"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  h-[48px] ">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">مخزن الصرف</label>
-                    @Html.Editor("Id","StoreLocationList", new
-                                        {
-                        htmlAttributes = new
-                        {
-                            @v_model = "saleInfo.StoreLocationId",
-                            @class = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px] ",
-                            @id = "StoreLocID"
-                        }
-                                        })
-                    <span v-if="errors.StoreLocationId" class="text-red-500 text-xs">{{ errors.StoreLocationId }}</span>
+                    <select id="store-location-select"
+                        class="w-full px-3 py-2 border border-gray-300 h-[48px] rounded-md focus:outline-none">
+                        <option></option>
+                    </select>
                 </div>
             </div>
 
@@ -237,6 +246,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
         // Initialize data from server
         var initialData = @Html.Raw(data);
@@ -244,29 +255,29 @@
         // Messages Component
         const Messages = {
             template: `
-                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                                                                                                                                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                                                                                                                                                <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                                                                                                                                                <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                                                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                                                                                                    </svg>
-                                                                                                                                                </button>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="p-4">
-                                                                                                                                                <ul class="space-y-2">
-                                                                                                                                                    <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                                                                                                                                                </ul>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="p-4 border-t border-gray-200 flex justify-end">
-                                                                                                                                                <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-800-dark">
-                                                                                                                                                    موافق
-                                                                                                                                                </button>
-                                                                                                                                            </div>
-                    </div>
-                    </div>
-                    `,
+                                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4">
+                                                        <ul class="space-y-2">
+                                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                                            موافق
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -283,6 +294,7 @@
                     saleInfo: initialData.SaleInfo,
                     saleDetails: initialData.SaleDetails,
                     saleItemRawDetails: initialData.SaleItemRawDetails,
+                    storeLocations: [],
                     client: initialData.Client,
                     messages: [],
                     errors: {
@@ -306,107 +318,248 @@
                 }
             },
             methods: {
+                // Product methods
                 addItem() {
+                    const lastItem = this.saleDetails[this.saleDetails.length - 1];
+
+                    if (lastItem && (
+                        !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+                        !lastItem.Qty || lastItem.Qty <= 0 ||
+                        !lastItem.UnitPrice || lastItem.UnitPrice <= 0
+                    )) {
+                        this.messages.push("يرجى اختيار المنتج وإدخال كمية وسعر صحيح قبل إضافة صف جديد.");
+                        return;
+                    }
+
                     this.saleDetails.push({
                         Id: 0,
                         StoreItemId: 0,
+                        StoreItemName: '',
                         Qty: 0,
                         UnitPrice: 0
                     });
+
+                    this.$nextTick(() => this.initProductSelect2(this.saleDetails.length - 1));
                 },
+
                 removeItem(index) {
                     this.saleDetails.splice(index, 1);
                 },
-                updateItem(item) {
-                    const duplicate = this.saleDetails.find(i =>
-                        i.StoreItemId === item.StoreItemId && i.Id !== item.Id);
 
-                    if (duplicate) {
-                        this.messages.push('هذا المنتج تم اضافته');
-                        this.saleDetails = this.saleDetails.filter(i => i !== item);
-                    }
+                updateItem(item, index) {
+                    // This method can be used for any additional logic when item is updated
                 },
+
+                initProductSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.product-select[data-index="${index}"]`);
+
+                    $select.select2({
+                        placeholder: "اختر المنتج",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItems/SearchItems', // Adjust URL as needed
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: x.ProductName
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        const selectedId = selected.id;
+
+                        // Check for duplicates
+                        const isDuplicate = self.saleDetails.some((item, i) => i !== index && item.StoreItemId === selectedId);
+                        if (isDuplicate) {
+                            self.messages.push("هذا المنتج تم اختياره مسبقًا.");
+                            $(this).val(null).trigger('change');
+                            return;
+                        }
+
+                        // Assign selected values
+                        const item = self.saleDetails[index];
+                        item.StoreItemId = selected.id;
+                        item.StoreItemName = selected.text;
+                        self.updateItem(item, index);
+                    });
+                },
+
+                // Raw material methods
                 addRawItem() {
+                    const lastItem = this.saleItemRawDetails[this.saleItemRawDetails.length - 1];
+
+                    if (lastItem && (
+                        !lastItem.StoreItemId || lastItem.StoreItemId === 0 ||
+                        !lastItem.Qty || lastItem.Qty <= 0 ||
+                        !lastItem.UnitPrice || lastItem.UnitPrice <= 0
+                    )) {
+                        this.messages.push("يرجى اختيار المادة الخام وإدخال كمية وسعر صحيح قبل إضافة صف جديد.");
+                        return;
+                    }
+
                     this.saleItemRawDetails.push({
                         Id: 0,
                         StoreItemId: 0,
+                        StoreItemName: '',
                         Qty: 0,
                         UnitPrice: 0
                     });
+
+                    this.$nextTick(() => this.initRawSelect2(this.saleItemRawDetails.length - 1));
                 },
+
                 removeRawItem(index) {
                     this.saleItemRawDetails.splice(index, 1);
                 },
-                updateRawItem(item) {
-                    const duplicate = this.saleItemRawDetails.find(i =>
-                        i.StoreItemId === item.StoreItemId && i.Id !== item.Id);
 
-                    if (duplicate) {
-                        this.messages.push('هذا العنصر تم اضافته');
-                        this.saleItemRawDetails = this.saleItemRawDetails.filter(i => i !== item);
+                updateRawItem(item, index) {
+                    // This method can be used for any additional logic when item is updated
+                },
+
+                initRawSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.raw-select[data-index="${index}"]`);
+
+                    $select.select2({
+                        placeholder: "اختر المادة الخام",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItemRaw/SearchRawItems', // Adjust URL as needed for raw materials
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: x.ItemName
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        const selectedId = selected.id;
+
+                        // Check for duplicates
+                        const isDuplicate = self.saleItemRawDetails.some((item, i) => i !== index && item.StoreItemId === selectedId);
+                        if (isDuplicate) {
+                            self.messages.push("هذه المادة الخام تم اختيارها مسبقًا.");
+                            $(this).val(null).trigger('change');
+                            return;
+                        }
+
+                        // Assign selected values
+                        const item = self.saleItemRawDetails[index];
+                        item.StoreItemId = selected.id;
+                        item.StoreItemName = selected.text;
+                        self.updateRawItem(item, index);
+                    });
+                },
+
+                initStoreSelect2() {
+                    const self = this;
+                    const $select = $('#store-location-select');
+
+                    const options = self.storeLocations.map(loc => ({
+                        id: loc.Id,
+                        text: loc.Name
+                    }));
+
+                    $select.empty();
+
+                    $select.select2({
+                        placeholder: 'ابحث عن المخزن...',
+                        data: options,
+                        allowClear: true,
+                        width: '100%'
+                    }).off('select2:select')
+                        .on('select2:select', function (e) {
+                            const selected = e.params.data;
+                            self.saleInfo.StoreLocationId = selected.id;
+                        });
+
+                    if (self.saleInfo.StoreLocationId && self.saleInfo.StoreLocationName) {
+                        const option = new Option(self.saleInfo.StoreLocationName, self.saleInfo.StoreLocationId, true, true);
+                        $select.append(option).trigger('change');
+                    } else {
+                        $select.val(null).trigger('change');
                     }
                 },
-                valIdateForm() {
+
+                validateForm() {
                     this.errors = {
                         SalesDate: '',
                         StoreLocationId: ''
                     };
 
-                    let isValId = true;
+                    let isValid = true;
 
                     if (!this.saleInfo.SalesDate) {
                         this.errors.SalesDate = 'برجاء تحديد التاريخ';
-                        isValId = false;
+                        isValid = false;
                     }
 
                     if (!this.saleInfo.StoreLocationId) {
                         this.errors.StoreLocationId = 'برجاء تحديد مخزن الصرف';
-                        isValId = false;
+                        isValid = false;
                     }
 
                     if (this.saleDetails.length === 0 && this.saleItemRawDetails.length === 0) {
                         this.messages.push('يجب وضع المنتجات او العناصر التى تريد بيعها');
-                        isValId = false;
+                        isValid = false;
                     }
 
-                    // ValIdate items
-                    this.saleDetails.forEach(item => {
-                        if (!item.StoreItemId || item.StoreItemId === 0) {
-                            this.messages.push('برجاء اختيار المنتج لجميع العناصر');
-                            isValId = false;
-                        }
-                        if (!item.Qty || item.Qty <= 0) {
-                            this.messages.push('برجاء اضافة الكمية لجميع العناصر');
-                            isValId = false;
-                        }
-                        if (!item.UnitPrice || item.UnitPrice <= 0) {
-                            this.messages.push('برجاء اضافة السعر لجميع العناصر');
-                            isValId = false;
-                        }
-                    });
+                    // Validate product items
+                    const invalidProductIndex = this.saleDetails.findIndex(item =>
+                        !item.StoreItemId || item.StoreItemId === 0 ||
+                        !item.Qty || item.Qty <= 0 ||
+                        !item.UnitPrice || item.UnitPrice <= 0
+                    );
 
-                    // ValIdate raw items
-                    this.saleItemRawDetails.forEach(item => {
-                        if (!item.StoreItemId || item.StoreItemId === 0) {
-                            this.messages.push('برجاء اختيار المادة الخام لجميع العناصر');
-                            isValId = false;
-                        }
-                        if (!item.Qty || item.Qty <= 0) {
-                            this.messages.push('برجاء اضافة الكمية لجميع العناصر');
-                            isValId = false;
-                        }
-                        if (!item.UnitPrice || item.UnitPrice <= 0) {
-                            this.messages.push('برجاء اضافة السعر لجميع العناصر');
-                            isValId = false;
-                        }
-                    });
+                    if (invalidProductIndex !== -1) {
+                        this.messages.push(`السطر رقم ${invalidProductIndex + 1} في المنتجات غير مكتمل. يرجى اختيار المنتج وإدخال كمية وسعر صحيح.`);
+                        isValid = false;
+                    }
 
-                    return isValId;
+                    // Validate raw material items
+                    const invalidRawIndex = this.saleItemRawDetails.findIndex(item =>
+                        !item.StoreItemId || item.StoreItemId === 0 ||
+                        !item.Qty || item.Qty <= 0 ||
+                        !item.UnitPrice || item.UnitPrice <= 0
+                    );
+
+                    if (invalidRawIndex !== -1) {
+                        this.messages.push(`السطر رقم ${invalidRawIndex + 1} في المواد الخام غير مكتمل. يرجى اختيار المادة الخام وإدخال كمية وسعر صحيح.`);
+                        isValid = false;
+                    }
+
+                    return isValid;
                 },
+
                 save() {
                     this.messages = [];
 
-                    if (!this.valIdateForm()) {
+                    if (!this.validateForm()) {
                         return;
                     }
 
@@ -431,17 +584,47 @@
                             this.messages.push('حدث خطأ في الاتصال بالخادم');
                         });
                 },
+
                 clearMessages() {
                     this.messages = [];
                 }
             },
+
             mounted() {
-                if (this.saleDetails.length === 0) {
-                    this.addItem();
-                }
-                if (this.saleItemRawDetails.length === 0) {
-                    this.addRawItem();
-                }
+                // Initialize existing items with Select2
+                this.saleDetails.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initProductSelect2(index);
+                        if (item.StoreItemId && item.StoreItemName) {
+                            const $select = $(`select.product-select[data-index="${index}"]`);
+                            const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
+
+                this.saleItemRawDetails.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initRawSelect2(index);
+                        if (item.StoreItemId && item.StoreItemName) {
+                            const $select = $(`select.raw-select[data-index="${index}"]`);
+                            const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
+
+                const self = this;
+                axios.get('/Store/StoreLocations/Search')
+                    .then(response => {
+                        self.storeLocations = response.data.data || [];
+                        self.initStoreSelect2();
+                    })
+                    .catch(error => {
+                        console.error("حدث خطأ أثناء تحميل بيانات المخازن:", error);
+                        this.messages.push("⚠️ فشل تحميل المخازن");
+                    });
+
             }
         }).mount('#app');
     </script>
