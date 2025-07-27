@@ -149,29 +149,29 @@
         // Messages Component
         const Messages = {
             template: `
-                        <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                                    <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
-                                    <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="p-4">
-                                    <ul class="space-y-2">
-                                        <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
-                                    </ul>
-                                </div>
-                                <div class="p-4 border-t border-gray-200 flex justify-end">
-                                    <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
-                                        موافق
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `,
+                                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4">
+                                                        <ul class="space-y-2">
+                                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                                            موافق
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `,
             props: ['messages'],
             emits: ['clear-messages']
         };
@@ -208,7 +208,7 @@
                         allowClear: true,
                         minimumInputLength: 1,
                         ajax: {
-                            url: '/Store/Purchasing/SearchPurchasing', // Update this URL to match your purchasing search endpoint
+                            url: '/Purchases/Home/GetPurchaseBySearchValue', // Update this URL to match your purchasing search endpoint
                             dataType: 'json',
                             delay: 300,
                             cache: true,
@@ -221,7 +221,7 @@
                                 return {
                                     results: data.items.map(x => ({
                                         id: x.Id,
-                                        text: x.PurchasingName || x.Name || x.Description // Adjust field names based on your data structure
+                                        text: x.PurchaseDesc
                                     }))
                                 };
                             }

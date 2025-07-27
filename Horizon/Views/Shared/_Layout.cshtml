@@ -317,7 +317,7 @@
                 <div class="header">
                     <!-- navbar -->
                     <nav class="bg-white px-6 py-[10px] flex items-center justify-between shadow-sm">
-                        <a id="nav-toggle" href="#" class="text-gray-800">
+                        <a id="nav-toggle" href="#" class="text-gray-800 p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -415,8 +415,7 @@
             // Initialize feather icons
             feather.replace();
 
-            // Sidebar toggle functionality
-
+            // Success message handling
             if (window.location.href.includes('success') || new URLSearchParams(window.location.search).has('success')) {
                 $('#feedback')
                     .addClass('alert-success show')
@@ -425,44 +424,106 @@
                     $('#feedback').removeClass('show');
                 }, 3000);
             }
-        });
 
-        let open = false;
-        $('#nav-toggle').on('click', function (e) {
-            e.preventDefault();
-            const sidebarWidth = $('.navbar-vertical').outerWidth();
-            const $appContent = $('#app-layout-content');
-            const $overlay = $('#sidebar-overlay');
+            // Sidebar toggle functionality with localStorage support
+            const SIDEBAR_STATE_KEY = 'horizon_sidebar_state';
 
-            if (open) {
-                $appContent.css('margin-right', '0');
-                $overlay.hide();
-                open = false;
-            } else {
-                $appContent.css('margin-right', sidebarWidth + 'px');
-                $('.navbar-vertical').css('margin-right', '0px');
-                $overlay.show();
-                open = true;
+            // Get saved state from localStorage (desktop only)
+            function getSavedSidebarState() {
+                if (!isMobile()) {
+                    const saved = localStorage.getItem(SIDEBAR_STATE_KEY);
+                    return saved !== null ? JSON.parse(saved) : true; // Default to open
+                }
+                return false; // Mobile always starts closed
             }
-        });
-        $('#sidebar-overlay').on('click', function () {
-            const sidebarWidth = $('.navbar-vertical').outerWidth();
-            const currentMargin = $('#app-layout-content').css('margin-right');
-            const $overlay = $('#sidebar-overlay');
 
-            if (open) {
-                $('.navbar-vertical').css('margin-right', '-17rem');
-                $overlay.hide();
-                open = false
-            } else {
-                $('.navbar-vertical').css('margin-right', '0px');
-                $overlay.show();
-                open = true
-
+            // Save sidebar state to localStorage (desktop only)
+            function saveSidebarState(isOpen) {
+                if (!isMobile()) {
+                    localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(isOpen));
+                }
             }
+
+            let sidebarOpen = getSavedSidebarState();
+
+            // Function to check if we're on mobile
+            function isMobile() {
+                return window.innerWidth < 768; // md breakpoint
+            }
+
+            // Function to reset sidebar state on window resize
+            function handleResize() {
+                if (!isMobile()) {
+                    // Desktop: Apply saved state or default to open
+                    const savedState = getSavedSidebarState();
+                    if (savedState) {
+                        $('#app-layout-content').css('margin-right', '15.625rem');
+                        $('.navbar-vertical').css('margin-right', '0px');
+                    } else {
+                        $('#app-layout-content').css('margin-right', '0');
+                        $('.navbar-vertical').css('margin-right', '-15.625rem');
+                    }
+                    $('#sidebar-overlay').hide();
+                    sidebarOpen = savedState;
+                } else {
+                    // Mobile: Reset to closed state
+                    $('#app-layout-content').css('margin-right', '0');
+                    $('.navbar-vertical').css('margin-right', '-15.625rem');
+                    $('#sidebar-overlay').hide();
+                    sidebarOpen = false;
+                }
+            }
+
+            // Initialize sidebar state based on screen size
+            handleResize();
+
+            // Handle window resize
+            $(window).on('resize', handleResize);
+
+            // Toggle button click handler
+            $('#nav-toggle').on('click', function (e) {
+                e.preventDefault();
+
+                if (isMobile()) {
+                    // Mobile behavior: toggle sidebar with overlay (no saving)
+                    if (sidebarOpen) {
+                        // Close sidebar
+                        $('.navbar-vertical').css('margin-right', '-15.625rem');
+                        $('#sidebar-overlay').hide();
+                        sidebarOpen = false;
+                    } else {
+                        // Open sidebar
+                        $('.navbar-vertical').css('margin-right', '0px');
+                        $('#sidebar-overlay').show();
+                        sidebarOpen = true;
+                    }
+                } else {
+                    // Desktop behavior: toggle content margin and save state
+                    if (sidebarOpen) {
+                        // Hide sidebar
+                        $('#app-layout-content').css('margin-right', '0');
+                        $('.navbar-vertical').css('margin-right', '-15.625rem');
+                        sidebarOpen = false;
+                        saveSidebarState(false);
+                    } else {
+                        // Show sidebar
+                        $('#app-layout-content').css('margin-right', '15.625rem');
+                        $('.navbar-vertical').css('margin-right', '0px');
+                        sidebarOpen = true;
+                        saveSidebarState(true);
+                    }
+                }
+            });
+
+            // Overlay click handler (mobile only)
+            $('#sidebar-overlay').on('click', function () {
+                if (isMobile() && sidebarOpen) {
+                    $('.navbar-vertical').css('margin-right', '-15.625rem');
+                    $('#sidebar-overlay').hide();
+                    sidebarOpen = false;
+                }
+            });
         });
-
-
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

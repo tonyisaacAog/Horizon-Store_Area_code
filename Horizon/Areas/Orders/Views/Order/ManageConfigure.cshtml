@@ -5,126 +5,393 @@
     string data = JsonConvert.SerializeObject(Model);
 }
 
-<partial name="_Messages" />
-@section PageHeading{
-    <partial name="_PageTitle" model="@title" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 48px !important;
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
 
-}
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #374151;
+    }
 
-<card title="بيانات المنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>اسم المنتج</label>
-                    <input data-bind="value:StoreItemVM.ProductName" disabled="disabled" class="form-control" />
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100%;
+        right: 6px;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
+</style>
+
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages="clearMessages"></messages>
+
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ title }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "Order", new { area = "Orders" }))"
+            class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
+
+    <!-- Product Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center border-b">
+            <h2 class="text-lg font-semibold">بيانات المنتج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المنتج</label>
+                    <input v-model="storeItemVM.ProductName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نوع المنتج</label>
+                    <input v-model="storeItemVM.FamilyName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">كود المنتج</label>
+                    <input v-model="storeItemVM.ItemCode" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ماركة المنتج</label>
+                    <input v-model="storeItemVM.StoreBrandName" disabled
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>نوع المنتج</label>
-                    <input data-bind="value:StoreItemVM.FamilyName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>كود المنتج</label>
-                    <input data-bind="value:StoreItemVM.ItemCode" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>ماركة المنتج</label>
-                    <input data-bind="value:StoreItemVM.StoreBrandName" disabled="disabled" class="form-control" />
-                </div>
-            </div>
-@*            <div class="col-12">
-                <div class="form-group">
-                    <label>الكمية الاكبر التى يمكن انتاجها من المنتج من المستلزمات الموجود فى المخزن</label>
-                    <input data-bind="value:NumberProductCanMade" disabled="disabled" class="form-control text-center" />
-                </div>
-            </div>*@
         </div>
     </div>
 
+    <!-- Raw Materials Configuration Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 flex items-center justify-between border-b">
+            <div class="flex items-center">
+                <h2 class="text-lg font-semibold">تفاصيل المواد المستخدمة لتجميع المنتج</h2>
+            </div>
+            <button @@click="addItem"
+                class="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1 rounded flex items-center">
+                <i class="fas fa-plus ml-2"></i> إضافة
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right">المادة الخام</th>
+                        <th class="px-6 py-3 text-right">الكمية</th>
+                        <th class="px-6 py-3 text-right">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(item, index) in orderConfigure" v-show="item.RecordStatus !== 2" :key="'config-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span v-if="item.Id !== 0" class="text-gray-900">{{ item.StoreItemsRawName }}</span>
+                            <select v-else
+                                class="raw-material-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
+                                :data-index="index"></select>
+                            <span v-if="errors[`StoreItemId_${index}`]" class="text-red-500 text-xs">
+                                {{ errors[`StoreItemId_${index}`] }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model="item.Qty" @@input="updateItem(item, index)" step="0.1"
+                                min="0.1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                            <span v-if="errors[`Qty_${index}`]" class="text-red-500 text-xs">
+                                {{ errors[`Qty_${index}`] }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button @@click="removeItem(item, index)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-if="visibleItems.length === 0">
+                        <td colspan="3" class="text-center text-lg text-gray-500 py-6">لا توجد مواد خام مضافة</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    
-</card>
-
-<card title="تفاصيل المواد المستخدمة لتجميع المنتج" addational-class="fa-list-ol"
-      text-color-class="text-white" header-class="bg-primary">
-    <table class="table table-bordered table-striped table-hover">
-
-        <thead class="bg-primary text-white">
-
-            <tr>
-                <th>
-                    المادة الخام
-                </th>
-
-                <th>
-                    الكمية
-                </th>
-                <th>
-                    <button class="btn btn-dark" data-bind="click:AddItem">
-                        <span class="fa fa-plus"></span>
-                    </button>
-                </th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: OrderConfigure">
-            <tr data-bind="visible:RecordStatus()!=2">
-                <td>
-                    @Html.Editor("Id","StoreItemRawList", new
-                    {
-                    htmlAttributes = new
-                    {
-                    @data_bind = "value:StoreItemId,select2,event:{change:$parent.UpdateItem}",
-                    @class = "form-select",
-                    }
-                    })
-                </td>
-                <td>
-                    <input type="text" class="form-control" data-bind="value:Qty,event:{change:$parent.UpdateItem}" />
-                </td>
-                <td>
-                    <button class="btn btn-danger" data-bind="click:$parent.RemoveItem">
-                        <span class="fa fa-minus"></span>
-                    </button>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-</card>
-<card-footer>
-    <partial name="_SaveButton" />
-</card-footer>
-
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @@click="save"
+            class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+            <i class="fas fa-save"></i>
+            حفظ
+        </button>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/lib/knockout/knockout-3.5.0.js"></script>
-    <script src="~/lib/knockout.mapping/knockout.mapping.js"></script>
-    <script src="~/lib/knockout-validation/knockout.validation.js"></script>
-    <script src="~/lib/knockout-validation/localization/ar-JO.js"></script>
-    <script src="~/APP/General/KoAddtionalHandler.js" asp-append-version="true"></script>
-    <script src="~/APP/General/KOValidationSetup.js" asp-append-version="true"></script>
-    <script src="~/APP/General/SaveAjax.js" asp-append-version="true"></script>
-    <script src="~/APP/General/ManageUI.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/ConfigurationValidationRules.js" asp-append-version="true"></script>
-    <script src="~/APP/Orders/ConfigurationContainer.js" asp-append-version="true"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script type="text/javascript">
-        var configuration = new ConfigureContainer(@Html.Raw(data));
-        ko.applyBindings(configuration);
-        ko.bindingHandlers.select2 = {
-            update: function (element, valueAccessor, allBindingsAccessor) {
-                $(element).select2();
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Constants
+        const RecordStatus = {
+            Added: 0,
+            Updated: 1,
+            Deleted: 2,
+            UnChanged: 3
+        };
+
+        // Messages Component
+        const Messages = {
+            template: `
+                                            <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                                                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                                                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                                                        <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                                                        <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4">
+                                                        <ul class="space-y-2">
+                                                            <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="p-4 border-t border-gray-200 flex justify-end">
+                                                        <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                                            موافق
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: {
+                Messages
+            },
+            data() {
+                return {
+                    title: "مستلزمات المنتج للتجميع",
+                    storeItemVM: initialData.StoreItemVM || {},
+                    orderConfigure: initialData.OrderConfigure || [],
+                    orderDetailId: initialData.OrderDetailId,
+                    messages: [],
+                    errors: {}
+                };
+            },
+            computed: {
+                visibleItems() {
+                    return this.orderConfigure.filter(item => item.RecordStatus !== RecordStatus.Deleted);
+                }
+            },
+            methods: {
+                addItem() {
+                    const newItem = {
+                        Id: 0,
+                        StoreItemId: 0,
+                        StoreItemName: '',
+                        Qty: 0,
+                        OrderDetailsId: this.orderDetailId,
+                        RecordStatus: RecordStatus.Added,
+                        IsNew: true
+                    };
+
+                    this.orderConfigure.push(newItem);
+
+                    // Initialize Select2 for the new item
+                    this.$nextTick(() => {
+                        this.initSelect2(this.orderConfigure.length - 1);
+                    });
+                },
+                removeItem(item, index) {
+                    if (item.RecordStatus !== RecordStatus.Added) {
+                        item.RecordStatus = RecordStatus.Deleted;
+                    } else {
+                        this.orderConfigure.splice(index, 1);
+                    }
+                },
+                updateItem(item, index) {
+                    // Check for duplicates
+                    const duplicates = this.orderConfigure.filter((x, i) =>
+                        i !== index &&
+                        x.StoreItemId === item.StoreItemId &&
+                        x.RecordStatus !== RecordStatus.Deleted
+                    );
+
+                    if (duplicates.length > 0) {
+                        this.messages.push("تم اختيار هذا العنصر من قبل");
+                        // Reset the item
+                        item.StoreItemId = 0;
+                        item.StoreItemName = '';
+                        const $select = $(`select.raw-material-select[data-index="${index}"]`);
+                        $select.val(null).trigger('change');
+                        return;
+                    }
+
+                    if (item.RecordStatus !== RecordStatus.Added) {
+                        item.RecordStatus = RecordStatus.Updated;
+                    }
+                    item.IsNew = true;
+                },
+                initSelect2(index) {
+                    const self = this;
+                    const $select = $(`select.raw-material-select[data-index="${index}"]`);
+
+                    $select.select2({
+                        placeholder: "اختر المادة الخام",
+                        allowClear: true,
+                        minimumInputLength: 1,
+                        ajax: {
+                            url: '/Store/StoreItemRaw/SearchRawItems', // Update this URL to match your endpoint
+                            dataType: 'json',
+                            delay: 300,
+                            cache: true,
+                            data: params => ({
+                                term: params.term || '',
+                                page: params.page || 1,
+                                pageSize: 10
+                            }),
+                            processResults: (data) => {
+                                return {
+                                    results: data.items.map(x => ({
+                                        id: x.Id,
+                                        text: x.ItemName
+                                    }))
+                                };
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                        const selected = e.params.data;
+                        const selectedId = parseInt(selected.id);
+
+                        // Update the item
+                        const item = self.orderConfigure[index];
+                        item.StoreItemId = selectedId;
+                        item.StoreItemName = selected.text;
+                        self.updateItem(item, index);
+                    }).on('select2:clear', function (e) {
+                        // Clear the selection
+                        const item = self.orderConfigure[index];
+                        item.StoreItemId = 0;
+                        item.StoreItemName = '';
+                        self.updateItem(item, index);
+                    });
+                },
+                validateForm() {
+                    this.errors = {};
+                    this.messages = [];
+                    let isValid = true;
+
+                    // Check if there's at least one item
+                    const visibleItems = this.orderConfigure.filter(item => item.RecordStatus !== RecordStatus.Deleted);
+                    if (visibleItems.length === 0) {
+                        this.messages.push("يجب وضع مستلزمات للمنتج");
+                        isValid = false;
+                    }
+
+                    // Validate each visible item
+                    visibleItems.forEach((item, index) => {
+                        const actualIndex = this.orderConfigure.indexOf(item);
+
+                        if (!item.StoreItemId || item.StoreItemId === 0) {
+                            this.errors[`StoreItemId_${actualIndex}`] = "برجاء اختيار النوع";
+                            isValid = false;
+                        }
+
+                        if (!item.Qty || item.Qty <= 0) {
+                            this.errors[`Qty_${actualIndex}`] = "برجاء اضافة الكمية";
+                            isValid = false;
+                        } else if (item.Qty < 0.1) {
+                            this.errors[`Qty_${actualIndex}`] = "الكمية يجب أن تكون 0.1 على الأقل";
+                            isValid = false;
+                        }
+                    });
+
+                    return isValid;
+                },
+                save() {
+                    if (!this.validateForm()) {
+                        return;
+                    }
+
+                    const data = {
+                        StoreItemVM: this.storeItemVM,
+                        OrderConfigure: this.orderConfigure,
+                        OrderDetailId: this.orderDetailId
+                    };
+
+                    axios.post('/Orders/Order/SaveExtraConfiguration', data)
+                        .then(response => {
+                            if (response.data.success) {
+                                window.location.href = response.data.newLocation || '/Orders/Order/Index';
+                            } else if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                this.messages = response.data.errors || ['حدث خطأ أثناء الحفظ'];
+                            }
+                        })
+                        .catch(error => {
+                            this.messages.push('حدث خطأ في الاتصال بالخادم');
+                        });
+                },
+                clearMessages() {
+                    this.messages = [];
+                    this.errors = {};
+                }
+            },
+            mounted() {
+                // Initialize existing items with Select2
+                this.orderConfigure.forEach((item, index) => {
+                    this.$nextTick(() => {
+                        this.initSelect2(index);
+
+                        // If item already has a raw material selected, set it in Select2
+                        if (item.StoreItemId && item.StoreItemName) {
+                            const $select = $(`select.raw-material-select[data-index="${index}"]`);
+                            const option = new Option(item.StoreItemName, item.StoreItemId, true, true);
+                            $select.append(option).trigger('change');
+                        }
+                    });
+                });
             }
-        }
+        }).mount('#app');
     </script>
-
-
 }

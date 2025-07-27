@@ -11,12 +11,11 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-Horizon-d77d7b1f-fd4b-4dd0-8561-2d83a04827e6")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Horizon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+115e7a4e0ef94a258fef330857b6c21a1c91a4ab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+164955d3b7b484813e020a8ddb206c78bf1d6dfa")]
 [assembly: System.Reflection.AssemblyProductAttribute("Horizon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Horizon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

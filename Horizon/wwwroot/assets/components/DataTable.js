@@ -350,18 +350,22 @@ export const DataTable = {
                                         ]"
                                     >
                                         <div v-if="column.type === 'actions'" class="flex gap-2">
-                                            <button
+                                            <span
                                                 v-for="action in column.actions"
                                                 :key="action.key"
-                                                @click.stop="handleAction(action.key, item)"
-                                                :class="[
-                                                    'px-3 py-1 text-sm rounded-md transition-colors',
-                                                    action.class || 'bg-blue-600 hover:bg-blue-700 text-white'
-                                                ]"
-                                                :disabled="action.disabled ? action.disabled(item) : false"
                                             >
-                                                {{ action.label }}
-                                            </button>
+                                                <button
+                                                    @click.stop="handleAction(action.key, item)"
+                                                    v-if="typeof action.condition === 'function' ? action.condition(item) : true"
+                                                    :class="[
+                                                        'px-3 py-1 text-sm rounded-md transition-colors',
+                                                        action.class || 'bg-blue-600 hover:bg-blue-700 text-white'
+                                                    ]"
+                                                    :disabled="action.disabled ? action.disabled(item) : false"
+                                                >
+                                                    {{ action.label }}
+                                                </button>
+                                            </span>
                                         </div>
                                         <div v-else-if="column.type === 'link'">
                                             <a 
