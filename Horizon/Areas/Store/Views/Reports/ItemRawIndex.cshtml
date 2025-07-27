@@ -316,38 +316,6 @@
                         })
                         .catch(error => {
                             // Demo: Add sample transactions for demonstration
-                            this.transactionRawContainer.Search.StartBalance = 500;
-                            this.transactionRawContainer.Search.EndBalance = 850;
-                            this.transactionRawContainer.StoreItemRawTransactions = [
-                                {
-                                    TransDate: '2024-01-15T00:00:00',
-                                    QTY: 200,
-                                    QtyAfter: 700,
-                                    Descrpition: 'شراء خام جديد',
-                                    TransType: 0,
-                                    TransTypeName: 'شراء',
-                                    ReferanceId: 1
-                                },
-                                {
-                                    TransDate: '2024-01-20T00:00:00',
-                                    QTY: -100,
-                                    QtyAfter: 600,
-                                    Descrpition: 'استخدام في الإنتاج',
-                                    TransType: 1,
-                                    TransTypeName: 'تصنيع',
-                                    ReferanceId: 2
-                                },
-                                {
-                                    TransDate: '2024-01-25T00:00:00',
-                                    QTY: 250,
-                                    QtyAfter: 850,
-                                    Descrpition: 'تسوية مخزون',
-                                    TransType: 3,
-                                    TransTypeName: 'تسوية',
-                                    ReferanceId: 3
-                                }
-                            ];
-
                             console.warn('Using demo data. Replace with actual API call.');
                         });
                 },

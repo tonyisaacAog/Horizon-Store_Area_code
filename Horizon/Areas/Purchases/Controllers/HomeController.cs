@@ -79,6 +79,20 @@ namespace Horizon.Areas.Purchases.Controllers
                 return Json(new { errors = feedback.Messages });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPurchaseBySearchValue(string term, int page = 1, int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(new { items = Array.Empty<object>(), hasMore = false });
+
+            var (items, totalCount) = await _purchaseManager.GetPurchaseBySearchValue(term, page, pageSize);
+
+            bool hasMore = totalCount > page * pageSize;
+
+            return Json(new { items, hasMore });
+        }
+
+
 
     }
 }

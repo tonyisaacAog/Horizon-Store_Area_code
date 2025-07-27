@@ -20,6 +20,7 @@ namespace Horizon.Areas.Purchases.ViewModel
         public int AmountStoreItem { get; set; }
 
 
+
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<Purchasing, PurchasingVM>()
