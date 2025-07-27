@@ -41,7 +41,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
     <!-- Import the separated component -->
     <script type="module">
-        import { DataTable } from '/assets/components/DataTable.js?v=2.6';
+        import { DataTable } from '/assets/components/DataTable.js?v=2.7';
 
         const { createApp } = Vue;
 
@@ -124,14 +124,14 @@
                                     label: 'معالجة امر الشغل',
                                     icon: 'fa-cog',
                                     class: 'bg-indigo-600 hover:bg-indigo-700 text-white',
-                                    condition: (item) => item.OrderStatus === 0
+                                    condition: (item) => item.OrderStatus == 'جديد'
                                 },
                                 {
                                     key: 'invoice',
                                     label: 'انشاء فاتورة',
                                     icon: 'fa-file-invoice',
                                     class: 'bg-gray-600 hover:bg-gray-700 text-white',
-                                    condition: (item) => item.OrderStatus === 2 && !item.IsInvoiceSale
+                                    condition: (item) => item.OrderStatus == 'تم التنفيذ'
                                 }
                             ]
                         }

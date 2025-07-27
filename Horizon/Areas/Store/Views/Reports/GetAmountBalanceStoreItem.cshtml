@@ -77,7 +77,7 @@
                             format: (value) => {
                                 if (value === null || value === undefined || value === '') return '0';
                                 const num = parseFloat(value);
-                                return num.toLocaleString('ar-EG') +
+                                return num +
                                     (this.isUnitVisible ? ' ' + this.unitName : '');
                             }
                         },
@@ -89,7 +89,7 @@
                             format: (value) => {
                                 if (value === null || value === undefined || value === '') return '0';
                                 const num = parseFloat(value);
-                                return num.toLocaleString('ar-EG') +
+                                return num +
                                     (this.isUnitVisible ? ' ' + this.unitName : '');
                             }
                         }
