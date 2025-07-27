@@ -301,7 +301,7 @@
                     this.transactionRawContainer.StoreItemRawTransactions = [];
 
                     // Make API call - replace with actual endpoint
-                    axios.post('/Store/Reports/LoadRawReport', this.transactionRawContainer)
+                    axios.post('/Store/Reports/LoadReportItemRaw', this.transactionRawContainer)
                         .then(response => {
                             if (response.data && response.data.Result) {
                                 const result = response.data.Result;
