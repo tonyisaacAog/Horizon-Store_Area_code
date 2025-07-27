@@ -7,6 +7,7 @@ using Horizon.Areas.Purchases.BoldReports;
 using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
 using Horizon.Areas.Sales.Services;
 using Horizon.Areas.Sales.ViewModel;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Horizon.Areas.Sales.Controllers
@@ -17,12 +18,13 @@ namespace Horizon.Areas.Sales.Controllers
 
         private readonly SalesManager _SalesManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IMessageService _messageService;
 
-        public HomeController(SalesManager salesManager,IWebHostEnvironment webHostEnvironment)
+        public HomeController(SalesManager salesManager, IWebHostEnvironment webHostEnvironment, IMessageService messageService)
         {
             _SalesManager = salesManager;
             _webHostEnvironment = webHostEnvironment;
-
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index()
@@ -45,7 +47,7 @@ namespace Horizon.Areas.Sales.Controllers
             }
             catch (Exception ex) {
 
-                TempData["ErrorMessage"] = ex.Message;
+                _messageService.Error(ex.Message);
                 return Redirect("/Orders/Order/Index?Status=Done");
             }
         }

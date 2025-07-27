@@ -1,6 +1,7 @@
 using EtaMiddleware;
 using Horizon.Areas.Settings.Models;
 using Horizon.Data;
+using Horizon.Services;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -44,6 +45,8 @@ builder.Host.UseLamar((context, registry) =>
 
     });
 
+    registry.AddScoped<IMessageService,MessageService>();
+    registry.AddSession();
 
     builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options =>
     {
@@ -103,6 +106,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 //app.UseAuthentication();
 //app.UseAuthorization();

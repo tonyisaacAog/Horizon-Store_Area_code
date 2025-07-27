@@ -1,10 +1,8 @@
 ﻿using Horizon.Areas.Manufacturing.Services;
 using Horizon.Areas.Manufacturing.VewModels;
-using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Store.Models.Settings;
-using Horizon.Areas.Store.Services;
-using Horizon.Areas.Store.ViewModel.Configuration;
 using Horizon.Areas.Store.ViewModel.Settings;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 using Services;
@@ -17,13 +15,15 @@ namespace Horizon.Areas.Manufacturing.Controllers
         private readonly ManufacturingManager _ManufacturingManager;
         private readonly GenericSettingsManager<StoreItemsRaw, StoreItemRawVM>
             _StoreItemRawManager;
-
+        private readonly IMessageService _messageService;
         public HomeController(
             ManufacturingManager ManufacturingManager,
-            GenericSettingsManager<StoreItemsRaw,StoreItemRawVM> StoreItemRawManager)
+            GenericSettingsManager<StoreItemsRaw, StoreItemRawVM> StoreItemRawManager,
+            IMessageService messageService)
         {
             _ManufacturingManager = ManufacturingManager;
             _StoreItemRawManager = StoreItemRawManager;
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index(int Id)
@@ -35,7 +35,7 @@ namespace Horizon.Areas.Manufacturing.Controllers
 
         public async Task<IActionResult> ManageManufactingForOrder(int Id)
         {
-            var container =await _ManufacturingManager.GetExtraConfigurationForOrder(Id);
+            var container = await _ManufacturingManager.GetExtraConfigurationForOrder(Id);
             return View(container);
         }
 
@@ -50,16 +50,22 @@ namespace Horizon.Areas.Manufacturing.Controllers
         {
             var feedback = await _ManufacturingManager.SaveManufacturing(vm);
             if (feedback.Done)
-                return Json(new { newLocation = vm.RedirectUrl!=null?vm.RedirectUrl: "/Store/StoreItems/Index?success" });
+            {
+                _messageService.Success("تم انشاء امر التصنيع");
+                return Json(new { newLocation = vm.RedirectUrl != null ? vm.RedirectUrl : "/Store/StoreItems/Index" });
+            }
             else
+            {
+                _messageService.Success("فشل انشاء امر التصنيع");
                 return Json(new { errors = feedback.Messages });
+            }
         }
 
         public async Task<JsonResult> GetDataItemRaw(int Id)
         {
-            if(Id<1) return Json(new { errors = "اختر المادة الخام التى تريدها" });
+            if (Id < 1) return Json(new { errors = "اختر المادة الخام التى تريدها" });
             var vm = await _StoreItemRawManager.CheckAndReturn(Id);
-            return Json( vm );
+            return Json(vm);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Horizon.Areas.Purchases.Services;
 using Horizon.Areas.Purchases.ViewModel;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,13 @@ namespace Horizon.Areas.Purchases.Controllers
     {
         private readonly PurchaseManager _purchaseManager;
         private readonly PurchaseOrderManager _purchaseOrderManager;
+        private readonly IMessageService _messageService;
 
-        public HomeController(PurchaseManager purchaseManager,PurchaseOrderManager purchaseOrderManager)
+        public HomeController(PurchaseManager purchaseManager, PurchaseOrderManager purchaseOrderManager, IMessageService messageService)
         {
             _purchaseManager = purchaseManager;
             _purchaseOrderManager = purchaseOrderManager;
-
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index()
@@ -74,9 +76,15 @@ namespace Horizon.Areas.Purchases.Controllers
         {
             var feedback = await _purchaseManager.SavePurchaseForProduct(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Store/StoreItems/Index?success" });
+            {
+                _messageService.Success("تم انشاء اذن اضافة خامات");
+                return Json(new { newLocation = "/Store/StoreItems/Index" });
+            }
             else
+            {
+                _messageService.Success("فشل انشاء اذن اضافة خامات");
                 return Json(new { errors = feedback.Messages });
+            }
         }
 
         [HttpGet]

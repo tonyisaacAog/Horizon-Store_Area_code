@@ -114,7 +114,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="(item, index) in orderConfigure" v-show="item.RecordStatus !== 2" :key="'config-'+index">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span v-if="item.Id !== 0" class="text-gray-900">{{ item.StoreItemsRawName }}</span>
+                            <span v-if="item.Id !== 0" class="text-gray-900">{{ item.StoreItemRaw }}</span>
                             <select v-else
                                 class="raw-material-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]"
                                 :data-index="index"></select>

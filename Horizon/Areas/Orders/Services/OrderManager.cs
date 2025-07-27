@@ -271,6 +271,7 @@ namespace Horizon.Areas.Orders.Services
             {
                 //Id = c.Id,
                 StoreItemId = c.StoreItemRawId,
+                StoreItemRaw = c.StoreItemsRawName,
                 Qty = c.MinimumAmount,
                 OrderDetailsId = details.Id,
                 RecordStatus = RecordStatus.Added,

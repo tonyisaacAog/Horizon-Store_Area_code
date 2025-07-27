@@ -4,6 +4,7 @@ using Horizon.Areas.Orders.Models;
 using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Orders.ViewModel;
 using Horizon.Areas.Orders.ViewModel.Container;
+using Horizon.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ namespace Horizon.Areas.Orders.Controllers
     {
         private readonly OrderManager _orderManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IMessageService _messageService;
 
-        public OrderController(OrderManager orderManager,IWebHostEnvironment webHostEnvironment)
+        public OrderController(OrderManager orderManager, IWebHostEnvironment webHostEnvironment, IMessageService messageService)
         {
             _orderManager = orderManager;
             _webHostEnvironment = webHostEnvironment;
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index(OrderStatus? Status)
@@ -81,19 +84,31 @@ namespace Horizon.Areas.Orders.Controllers
         public async Task<JsonResult> SaveOrder([FromBody] OrderContainer vm)
         {
             var feedback = await _orderManager.SaveOrders(vm);
-            if( feedback.Done )
-                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}?success" });
+            if (feedback.Done)
+            {
+                _messageService.Success("تم انشاء امر الشغل بنجاح");
+                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}" });
+            }
             else
+            {
+                _messageService.Success("فشل انشاء امر الشغل");
                 return Json(new { errors = feedback.Messages });
+            }
         }
         [HttpPost]
         public async Task<JsonResult> SaveOrderForPerson([FromBody] OrderForPersonContainer vm)
         {
             var feedback = await _orderManager.SaveOrdersForPerson(vm);
             if (feedback.Done)
-                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}?success" });
+            {
+                _messageService.Success("تم انشاء امر الشغل بنجاح");
+                return Json(new { newLocation = $"/Orders/Order/Index?Status={OrderStatus.New}" });
+            }
             else
+            {
+                _messageService.Success("فشل انشاء امر الشغل");
                 return Json(new { errors = feedback.Messages });
+            }
         }
 
         ////////////////////////////////////
