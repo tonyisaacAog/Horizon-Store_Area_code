@@ -427,6 +427,7 @@
 
             // Sidebar toggle functionality with localStorage support
             const SIDEBAR_STATE_KEY = 'horizon_sidebar_state';
+            const MENU_STATES_KEY = 'horizon_menu_states';
 
             // Get saved state from localStorage (desktop only)
             function getSavedSidebarState() {
@@ -442,6 +443,43 @@
                 if (!isMobile()) {
                     localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(isOpen));
                 }
+            }
+
+            // Get saved menu states from localStorage
+            function getSavedMenuStates() {
+                const saved = localStorage.getItem(MENU_STATES_KEY);
+                return saved !== null ? JSON.parse(saved) : {};
+            }
+
+            // Save menu states to localStorage
+            function saveMenuStates() {
+                const menuStates = {};
+                $('.collapse').each(function () {
+                    const menuId = $(this).attr('id');
+                    if (menuId) {
+                        menuStates[menuId] = $(this).hasClass('show');
+                    }
+                });
+                localStorage.setItem(MENU_STATES_KEY, JSON.stringify(menuStates));
+            }
+
+            // Restore menu states from localStorage
+            function restoreMenuStates() {
+                const savedStates = getSavedMenuStates();
+                Object.keys(savedStates).forEach(function (menuId) {
+                    const $menu = $('#' + menuId);
+                    const $trigger = $('[data-bs-target="#' + menuId + '"]');
+
+                    if (savedStates[menuId]) {
+                        // Open the menu
+                        $menu.addClass('show');
+                        $trigger.removeClass('collapsed').attr('aria-expanded', 'true');
+                    } else {
+                        // Close the menu
+                        $menu.removeClass('show');
+                        $trigger.addClass('collapsed').attr('aria-expanded', 'false');
+                    }
+                });
             }
 
             let sidebarOpen = getSavedSidebarState();
@@ -476,6 +514,9 @@
 
             // Initialize sidebar state based on screen size
             handleResize();
+
+            // Restore menu states after sidebar is initialized
+            restoreMenuStates();
 
             // Handle window resize
             $(window).on('resize', handleResize);
@@ -523,6 +564,58 @@
                     sidebarOpen = false;
                 }
             });
+
+            // Listen for Bootstrap collapse events to save menu states
+            $('.collapse').on('shown.bs.collapse hidden.bs.collapse', function () {
+                saveMenuStates();
+            });
+
+            // Handle menu item clicks to save states
+            $('[data-bs-toggle="collapse"]').on('click', function () {
+                // Small delay to ensure Bootstrap has processed the toggle
+                setTimeout(function () {
+                    saveMenuStates();
+                }, 100);
+            });
+
+            // Set active menu item based on current URL
+            function setActiveMenuItem() {
+                const currentPath = window.location.pathname.toLowerCase();
+
+                // Remove active class from all nav links
+                $('.nav-link').removeClass('active');
+
+                // Find and activate the matching menu item
+                $('.nav-link').each(function () {
+                    const href = $(this).attr('href');
+                    if (href && href !== '#!' && href !== '#') {
+                        const linkPath = href.replace('~', '').toLowerCase();
+                        if (currentPath.includes(linkPath) ||
+                            (linkPath.includes('?') && currentPath.includes(linkPath.split('?')[0]))) {
+                            $(this).addClass('active');
+
+                            // If this is a submenu item, expand its parent
+                            const $parentCollapse = $(this).closest('.collapse');
+                            if ($parentCollapse.length) {
+                                const parentId = $parentCollapse.attr('id');
+                                const $trigger = $('[data-bs-target="#' + parentId + '"]');
+
+                                $parentCollapse.addClass('show');
+                                $trigger.removeClass('collapsed').attr('aria-expanded', 'true');
+
+                                // Save the updated state
+                                setTimeout(function () {
+                                    saveMenuStates();
+                                }, 100);
+                            }
+                            return false; // Break out of each loop
+                        }
+                    }
+                });
+            }
+
+            // Set active menu item on page load
+            setActiveMenuItem();
         });
     </script>
 
