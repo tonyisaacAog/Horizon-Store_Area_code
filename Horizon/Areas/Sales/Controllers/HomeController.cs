@@ -36,10 +36,18 @@ namespace Horizon.Areas.Sales.Controllers
 
         public async Task<IActionResult> ManageSalesForOrder(int Id)
         {
-            var vm = await _SalesManager.NewSalesForOrder(Id);
-            vm.IsSaleFromOrder = true;
-            vm.OrderId = Id;
-            return View(vm);
+            try
+            {
+                var vm = await _SalesManager.NewSalesForOrder(Id);
+                vm.IsSaleFromOrder = true;
+                vm.OrderId = Id;
+                return View(vm);
+            }
+            catch (Exception ex) {
+
+                TempData["ErrorMessage"] = ex.Message;
+                return Redirect("/Orders/Order/Index?Status=Done");
+            }
         }
 
         public async Task<IActionResult> DetailsSales(int Id)
