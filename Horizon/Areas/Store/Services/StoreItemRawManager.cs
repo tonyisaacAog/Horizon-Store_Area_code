@@ -138,11 +138,11 @@ namespace Horizon.Areas.Store.Services
                  .OrderBy(x => x.ItemName);
 
             var totalCount = query.Count();
-            var items = query
+            var items = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(x => new StoreItemRawVM { Id = x.Id, ItemName = x.ItemName })
-                .ToList();
+                .ToListAsync();
             return (items, totalCount);
         }
 

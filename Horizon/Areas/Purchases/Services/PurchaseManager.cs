@@ -7,6 +7,7 @@ using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
 using Horizon.Areas.Store.Services;
 using Horizon.Areas.Store.ViewModel.Main;
+using Horizon.Areas.Store.ViewModel.Settings;
 using Horizon.Areas.Store.ViewModel.Transaction;
 using Horizon.Data;
 using Microsoft.EntityFrameworkCore;
@@ -225,7 +226,20 @@ namespace Horizon.Areas.Purchases.Services
         }
 
 
+        public async Task<(List<PurchasingSearchVM> items, int totalCount)> GetPurchaseBySearchValue(string term, int page, int pageSize)
+        {
+            var query = _db.Purchasings
+                 .Where(x => x.InvoiceNum.Contains(term)||x.Supplier.SupplierName.Contains(term))
+                 .OrderBy(x => x.PurchasingDate);
 
+            var totalCount = query.Count();
+            var items =  await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new PurchasingSearchVM { Id = x.Id, PurchaseDesc = $"{x.InvoiceNum}_{x.PurchasingDate.Value.Date.Date}_{x.Supplier.SupplierName??"UnknowSupplier"}" })
+                .ToListAsync();
+            return (items, totalCount);
+        }
 
 
     }
