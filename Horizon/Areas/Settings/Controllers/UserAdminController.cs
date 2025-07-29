@@ -1,5 +1,6 @@
 ﻿using Horizon.Areas.Settings.Services;
 using Horizon.Areas.Settings.ViewModel;
+using Horizon.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -12,12 +13,14 @@ namespace Horizon.Areas.Settings.Controllers
     {
         private readonly UserManagmentServices _userManagmentServices;
         private readonly RoleManagmentServices _roleManagmentServices;
+        private readonly IMessageService _messageService;
 
         public UserAdminController(UserManagmentServices userManagmentServices,
-            RoleManagmentServices roleManagmentServices)
+            RoleManagmentServices roleManagmentServices, IMessageService messageService)
         {
             _userManagmentServices = userManagmentServices;
             _roleManagmentServices = roleManagmentServices;
+            _messageService = messageService;
         }
         public IActionResult UserManagment()
         {
@@ -32,9 +35,12 @@ namespace Horizon.Areas.Settings.Controllers
         [ModelValidationWithJsonFeedBackFilter]
         public async Task<IActionResult> SaveNewUser([FromBody] CreateUserViewModel vm)
         {
-           var feedback =  await _userManagmentServices.SaveNewUser(vm);
+            var feedback = await _userManagmentServices.SaveNewUser(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Settings/UserAdmin/UserManagment?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = "/Settings/UserAdmin/UserManagment" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -50,7 +56,10 @@ namespace Horizon.Areas.Settings.Controllers
         {
             var feedback = await _userManagmentServices.UpdateUser(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Settings/UserAdmin/UserManagment?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = "/Settings/UserAdmin/UserManagment" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }

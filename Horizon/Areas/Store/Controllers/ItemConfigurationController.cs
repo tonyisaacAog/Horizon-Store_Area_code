@@ -1,5 +1,6 @@
 ﻿using Horizon.Areas.Store.Services;
 using Horizon.Areas.Store.ViewModel.Configuration;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 
@@ -9,10 +10,12 @@ namespace Horizon.Areas.Store.Controllers
     public class ItemConfigurationController : Controller
     {
         private readonly ItemConfigureManager _itemConfigureManager;
+        private readonly IMessageService _messageService;
 
-        public ItemConfigurationController(ItemConfigureManager ItemConfigureManager)
+        public ItemConfigurationController(ItemConfigureManager ItemConfigureManager, IMessageService messageService)
         {
             _itemConfigureManager = ItemConfigureManager;
+            _messageService = messageService;
         }
 
 
@@ -23,13 +26,16 @@ namespace Horizon.Areas.Store.Controllers
 
         public async Task<IActionResult> ManageConfiguration(int Id)
         => View(await _itemConfigureManager.GetDataStoreItem(Id, x => x.StoreItemId == Id));
-        
+
         [ModelValidationWithJsonFeedBackFilter]
         public async Task<JsonResult> SaveConfiguration([FromBody] ConfigurationContainer vm)
         {
             var feedback = await _itemConfigureManager.SaveConfiguration(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Store/StoreItems/Index?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = "/Store/StoreItems/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }

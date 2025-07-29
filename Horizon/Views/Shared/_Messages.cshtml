@@ -1,11 +1,81 @@
 ﻿@using Horizon.Services
 @inject IMessageService messageService
+
 @{
     var error = messageService.GetErrorMessage();
     var success = messageService.GetSuccessMessage();
 }
-<div id="message-container"
-     data-success="@success"
-     data-error="@error">
-     <h1>@error??@success</h1>
-</div>
+
+@if (!string.IsNullOrWhiteSpace(success))
+{
+    <div id="success-message" class="notification success">
+        @success
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div id="error-message" class="notification error">
+        @error
+    </div>
+}
+
+<script>
+    setTimeout(() => {
+        const success = document.getElementById('success-message');
+        const error = document.getElementById('error-message');
+        if (success) success.classList.add('fade-out');
+        if (error) error.classList.add('fade-out');
+    }, 3000); // fade after 3 seconds
+
+    setTimeout(() => {
+        const success = document.getElementById('success-message');
+        const error = document.getElementById('error-message');
+        if (success) success.remove();
+        if (error) error.remove();
+    }, 4000); // remove after fade
+</script>
+
+<style>
+    .notification {
+        padding: 12px 16px;
+        margin: 10px auto;
+        border-radius: 6px;
+        width: fit-content;
+        font-weight: bold;
+        color: white;
+        animation: fade-in 0.5s ease-in;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 10px;
+        z-index: 9999999999;
+        right: 20px;
+    }
+
+    .success {
+        background-color: #38a169;
+        /* green */
+    }
+
+    .error {
+        background-color: #e53e3e;
+        /* red */
+    }
+
+    @@keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+    }
+</style>

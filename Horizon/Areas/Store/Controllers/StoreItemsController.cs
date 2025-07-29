@@ -5,6 +5,7 @@ using Horizon.Areas.Store.ViewModel.Main;
 using Horizon.Areas.Store.ViewModel.Settings;
 using Horizon.Areas.Store.ViewModel.StoreItems;
 using Horizon.Controllers;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 using Services;
@@ -15,9 +16,12 @@ namespace Horizon.Areas.Store.Controllers
     public class StoreItemsController : Controller
     {
         private readonly StoreItemManager _settingsManager;
-        public StoreItemsController(StoreItemManager settingsManager) 
+        private readonly IMessageService _messageService;
+
+        public StoreItemsController(StoreItemManager settingsManager, IMessageService messageService)
         {
             _settingsManager = settingsManager;
+            _messageService = messageService;
         }
         public virtual async Task<IActionResult> Index()
         {
@@ -26,7 +30,7 @@ namespace Horizon.Areas.Store.Controllers
 
         public async Task<IActionResult> ManageDestoryAmount(int Id)
         {
-            var storeItemVM = await _settingsManager.CheckAndReturnWithRef(Id,rf=>rf.StoreBrand,r=>r.Family);
+            var storeItemVM = await _settingsManager.CheckAndReturnWithRef(Id, rf => rf.StoreBrand, r => r.Family);
             var vm = new StoreItemDestoryVM();
             vm.StoreItem = storeItemVM;
             vm.SaveUrl = @"/Store/StoreItems/SaveDestoryAmount";
@@ -36,7 +40,7 @@ namespace Horizon.Areas.Store.Controllers
         public async Task<IActionResult> InqueryPurchaseForProduct(int Id)
         {
             var vm = await _settingsManager.CheckAndReturnWithRef(Id);
-            if( vm == null )
+            if (vm == null)
                 return RedirectToAction(nameof(Index));
             var container = new InqueryContainerForProduct();
             container.StoreItem = vm;
@@ -71,7 +75,10 @@ namespace Horizon.Areas.Store.Controllers
         {
             var feedback = await _settingsManager.SaveManagerData(vm);
             if (feedback.Done)
-                return Json(new { newLocation = @"/Store/StoreItems/Index?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = @"/Store/StoreItems/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -81,7 +88,10 @@ namespace Horizon.Areas.Store.Controllers
         {
             var feedback = await _settingsManager.SaveDestroyOperation(vm);
             if (feedback.Done)
-                return Json(new { newLocation = @"/Store/StoreItems/Index?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = @"/Store/StoreItems/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
