@@ -45,7 +45,8 @@ namespace Horizon.Areas.Sales.Controllers
                 vm.OrderId = Id;
                 return View(vm);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 _messageService.Error(ex.Message);
                 return Redirect("/Orders/Order/Index?Status=Done");
@@ -62,8 +63,11 @@ namespace Horizon.Areas.Sales.Controllers
         public async Task<JsonResult> SaveSales([FromBody] SalesContainer vm)
         {
             var feedback = await _SalesManager.SaveSales(vm);
-            if( feedback.Done )
-                return Json(new { newLocation = "/Sales/Home/Index?success" });
+            if (feedback.Done)
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = "/Sales/Home/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -72,7 +76,7 @@ namespace Horizon.Areas.Sales.Controllers
             try
             {
                 string uploadsFolder = "Areas/Sales/BoldReports/SaleInvoice.rdlc";
-                FileStream inputStream = new FileStream(uploadsFolder,FileMode.Open,FileAccess.Read);
+                FileStream inputStream = new FileStream(uploadsFolder, FileMode.Open, FileAccess.Read);
 
                 MemoryStream reportStream = new MemoryStream();
                 inputStream.CopyTo(reportStream);
@@ -81,7 +85,7 @@ namespace Horizon.Areas.Sales.Controllers
                 ReportWriter writer = new ReportWriter();
                 writer.ExportResources.UsePhantomJS = true;
                 writer.ExportResources.IncludeText = true;
-                writer.ExportResources.PhantomJSPath = Path.Combine(_webHostEnvironment.WebRootPath,"PhantomJS");
+                writer.ExportResources.PhantomJSPath = Path.Combine(_webHostEnvironment.WebRootPath, "PhantomJS");
                 writer.ExportResources.Scripts = new List<string>
             {
                 //Gauge component scripts
@@ -113,7 +117,7 @@ namespace Horizon.Areas.Sales.Controllers
                     Quantity = obj.QTY,
                     Unit = obj.UnitPrice,
                     PN = obj.StoreItemName
-                   
+
                 }).ToList();
                 data.AddRange(Model.SaleItemRawDetails.Select(obj => new SaleInvoiceRdlcVM
                 {
@@ -133,17 +137,17 @@ namespace Horizon.Areas.Sales.Controllers
                     Signature = "",
                 } };
 
-                writer.DataSources.Add(new ReportDataSource { Name = "ParamterLst",Value = Parameters });
-                writer.DataSources.Add(new ReportDataSource { Name = "Invoice",Value = data });
+                writer.DataSources.Add(new ReportDataSource { Name = "ParamterLst", Value = Parameters });
+                writer.DataSources.Add(new ReportDataSource { Name = "Invoice", Value = data });
                 writer.LoadReport(reportStream);
                 MemoryStream memoryStream = new MemoryStream();
-                writer.Save(memoryStream,WriterFormat.PDF);
+                writer.Save(memoryStream, WriterFormat.PDF);
                 memoryStream.Position = 0;
-                FileStreamResult fileStreamResult = new FileStreamResult(memoryStream,"application/" + "pdf");
+                FileStreamResult fileStreamResult = new FileStreamResult(memoryStream, "application/" + "pdf");
                 fileStreamResult.FileDownloadName = $"{Model.SaleInfo.InvoiceNum ?? DateTime.Today.Date.ToString()}.pdf";
                 return fileStreamResult;
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 throw ex;
             }

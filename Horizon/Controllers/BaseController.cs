@@ -1,5 +1,6 @@
 ﻿using BaseEntities;
 using Horizon.Areas.Purchases.ViewModel;
+using Horizon.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
@@ -7,20 +8,23 @@ using Services;
 
 namespace Horizon.Controllers
 {
-    public class BaseController<TModel, TViewModel> : Controller where TModel : BaseEntity 
+    public class BaseController<TModel, TViewModel> : Controller where TModel : BaseEntity
         where TViewModel : BaseId
     {
         protected readonly string _saveUrl;
         protected readonly GenericSettingsManager<TModel, TViewModel> _settingsManager;
         protected readonly string _IndexUrl;
+        private readonly IMessageService _messageService;
 
-        public BaseController(GenericSettingsManager<TModel, TViewModel> settingsManager, 
+        public BaseController(GenericSettingsManager<TModel, TViewModel> settingsManager,
             string SaveUrl,
-            string IndexUrl)
+            string IndexUrl,
+            IMessageService messageService)
         {
             _saveUrl = SaveUrl;
             _settingsManager = settingsManager;
             _IndexUrl = IndexUrl;
+            _messageService = messageService;
         }
         public virtual async Task<IActionResult> Index()
         {
@@ -50,7 +54,11 @@ namespace Horizon.Controllers
         {
             var feedback = await _settingsManager.SaveManagerData(vm);
             if (feedback.Done)
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+
                 return Json(new { newLocation = _IndexUrl });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }

@@ -3,6 +3,7 @@ using BoldReports.Writer;
 using Horizon.Areas.Purchases.BoldReports;
 using Horizon.Areas.Purchases.Services;
 using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 
@@ -14,10 +15,13 @@ namespace Horizon.Areas.Purchases.Controllers
         public readonly PurchaseOrderManager _purchaseOrderManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PurchaseOrderController(PurchaseOrderManager purchaseOrderManager,IWebHostEnvironment webHostEnvironment)
+        private readonly IMessageService _messageService;
+
+        public PurchaseOrderController(PurchaseOrderManager purchaseOrderManager, IWebHostEnvironment webHostEnvironment, IMessageService messageService)
         {
             _purchaseOrderManager = purchaseOrderManager;
             _webHostEnvironment = webHostEnvironment;
+            _messageService = messageService;
         }
         public async Task<IActionResult> Index()
         {
@@ -31,15 +35,15 @@ namespace Horizon.Areas.Purchases.Controllers
         }
         public async Task<IActionResult> ManagePurchaseOrder(int id)
         {
-            if( id > 0 )
+            if (id > 0)
             {
                 var details = await _purchaseOrderManager.PurchaseOrderDetails(id);
-                if( details == null )
+                if (details == null)
                 {
                     return Redirect("/Purchases/PurchaseOrder/Index");
                 }
-                if( details.IsStoreInStock == true || details.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == true) )
-                { return View("Details",details); }
+                if (details.IsStoreInStock == true || details.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == true))
+                { return View("Details", details); }
                 return View(details);
             }
             return View(new PurchaseOrderVM());
@@ -48,8 +52,11 @@ namespace Horizon.Areas.Purchases.Controllers
         public async Task<JsonResult> SavePurchaseOrder([FromBody] PurchaseOrderVM vm)
         {
             var feedback = await _purchaseOrderManager.SavePurchaseOrder(vm);
-            if( feedback.Done )
-                return Json(new { newLocation = $"/Purchases/PurchaseOrder/Index?success" });
+            if (feedback.Done)
+            {
+                _messageService.Success("تم انشاء امر الشراء بنجاح");
+                return Json(new { newLocation = $"/Purchases/PurchaseOrder/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -59,7 +66,7 @@ namespace Horizon.Areas.Purchases.Controllers
             try
             {
                 string uploadsFolder = "Areas/Purchases/BoldReports/PurchaseOrder.rdlc";
-                FileStream inputStream = new FileStream(uploadsFolder,FileMode.Open,FileAccess.Read);
+                FileStream inputStream = new FileStream(uploadsFolder, FileMode.Open, FileAccess.Read);
 
                 MemoryStream reportStream = new MemoryStream();
                 inputStream.CopyTo(reportStream);
@@ -70,7 +77,7 @@ namespace Horizon.Areas.Purchases.Controllers
 
                 writer.ExportResources.UsePhantomJS = true;
                 writer.ExportResources.IncludeText = true;
-                writer.ExportResources.PhantomJSPath = Path.Combine(_webHostEnvironment.WebRootPath,"PhantomJS");
+                writer.ExportResources.PhantomJSPath = Path.Combine(_webHostEnvironment.WebRootPath, "PhantomJS");
                 writer.ExportResources.Scripts = new List<string>
             {
                 //Gauge component scripts
@@ -99,24 +106,24 @@ namespace Horizon.Areas.Purchases.Controllers
 
                 var Model = await _purchaseOrderManager.PurchaseOrderDetails(id);
 
-                var PurchaseOrderDetails = Model.PurchaseOrderDetails.Select((obj,index) => new PurchaseOrderDetailsReports { Id = index + 1,ItemName = obj.StoreItemName,Notes = obj.Notes,Quantity = obj.StoreItemAmount }).ToList();
-                 PurchaseOrderDetails.AddRange(Model.PurchaseOrderItemRawDetails.Select((obj,index) => new PurchaseOrderDetailsReports { Id = index + 1,ItemName = obj.StoreItemName,Notes = obj.Notes,Quantity = obj.StoreItemAmount }));
-                var PurchaseOrderNotes = Model.Notes.Select((obj,index) => new PurchaseOrderNotesReports { Id = index,Note = obj.Note });
-                var paramters = new PurchaseOrderParamsReport { DeliveryDate = Model.DeliveryDate,Name = "",NoPurchaseOrder = $"امر انتاج رقم ( {Model.PurchaseOrderNumber} )",PurchaseOrderDate = Model.PurchaseOrderDate,Recevier = $"السادة / {Model.SupplierName}",Signature = "",NoNotes = PurchaseOrderNotes.Count() == 0? true:false };
-                writer.DataSources.Add(new ReportDataSource { Name = "Parameters",Value = new List<PurchaseOrderParamsReport> { paramters } });
-                writer.DataSources.Add(new ReportDataSource { Name = "PurchaseOrderDetails",Value = PurchaseOrderDetails });
-                writer.DataSources.Add(new ReportDataSource { Name = "PurchaseOrderNotes",Value = PurchaseOrderNotes });
+                var PurchaseOrderDetails = Model.PurchaseOrderDetails.Select((obj, index) => new PurchaseOrderDetailsReports { Id = index + 1, ItemName = obj.StoreItemName, Notes = obj.Notes, Quantity = obj.StoreItemAmount }).ToList();
+                PurchaseOrderDetails.AddRange(Model.PurchaseOrderItemRawDetails.Select((obj, index) => new PurchaseOrderDetailsReports { Id = index + 1, ItemName = obj.StoreItemName, Notes = obj.Notes, Quantity = obj.StoreItemAmount }));
+                var PurchaseOrderNotes = Model.Notes.Select((obj, index) => new PurchaseOrderNotesReports { Id = index, Note = obj.Note });
+                var paramters = new PurchaseOrderParamsReport { DeliveryDate = Model.DeliveryDate, Name = "", NoPurchaseOrder = $"امر انتاج رقم ( {Model.PurchaseOrderNumber} )", PurchaseOrderDate = Model.PurchaseOrderDate, Recevier = $"السادة / {Model.SupplierName}", Signature = "", NoNotes = PurchaseOrderNotes.Count() == 0 ? true : false };
+                writer.DataSources.Add(new ReportDataSource { Name = "Parameters", Value = new List<PurchaseOrderParamsReport> { paramters } });
+                writer.DataSources.Add(new ReportDataSource { Name = "PurchaseOrderDetails", Value = PurchaseOrderDetails });
+                writer.DataSources.Add(new ReportDataSource { Name = "PurchaseOrderNotes", Value = PurchaseOrderNotes });
                 writer.LoadReport(reportStream);
                 MemoryStream memoryStream = new MemoryStream();
-                writer.Save(memoryStream,WriterFormat.PDF);
+                writer.Save(memoryStream, WriterFormat.PDF);
                 memoryStream.Position = 0;
-                FileStreamResult fileStreamResult = new FileStreamResult(memoryStream,"application/" + "pdf");
+                FileStreamResult fileStreamResult = new FileStreamResult(memoryStream, "application/" + "pdf");
                 fileStreamResult.FileDownloadName = $"{Model.PurchaseOrderNumber ?? DateTime.Today.Date.ToString()}.pdf";
                 return fileStreamResult;
 
 
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 throw ex;
             }

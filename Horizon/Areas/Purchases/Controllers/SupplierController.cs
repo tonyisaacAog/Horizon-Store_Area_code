@@ -2,6 +2,7 @@
 using Horizon.Areas.Purchases.Services;
 using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Controllers;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -9,14 +10,18 @@ namespace Horizon.Areas.Purchases.Controllers
 {
     [Area("Purchases")]
     public class SupplierController : BaseController<Supplier, SupplierVM>
-        
+
     {
         private readonly SupplierManager _supplierManager;
-        public SupplierController(SupplierManager SupplierManager):base(SupplierManager,
+        private readonly IMessageService _messageService;
+
+        public SupplierController(SupplierManager SupplierManager, IMessageService messageService) : base(SupplierManager,
             @"/Purchases/Supplier/SaveRecord",
-            @"/Purchases/Supplier/Index?success")
+            @"/Purchases/Supplier/Index",
+            messageService)
         {
-            _supplierManager= SupplierManager;
+            _supplierManager = SupplierManager;
+            _messageService = messageService;
         }
 
         [HttpGet]

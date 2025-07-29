@@ -1,5 +1,6 @@
 ﻿using Horizon.Areas.Store.Services;
 using Horizon.Areas.Store.ViewModel.Settings;
+using Horizon.Services;
 using Microsoft.AspNetCore.Mvc;
 using MyInfrastructure.Filters;
 using Services;
@@ -11,10 +12,12 @@ namespace Horizon.Areas.Store.Controllers
     public class StoreItemRawController : Controller
     {
         protected readonly StoreItemRawManager _settingsManager;
+        private readonly IMessageService _messageService;
 
-        public StoreItemRawController(StoreItemRawManager settingsManager)
+        public StoreItemRawController(StoreItemRawManager settingsManager, IMessageService messageService)
         {
             _settingsManager = settingsManager;
+            _messageService = messageService;
         }
         public virtual async Task<IActionResult> Index()
         {
@@ -23,7 +26,7 @@ namespace Horizon.Areas.Store.Controllers
 
         public virtual async Task<IActionResult> TeakIndex()
         {
-            return View( await _settingsManager.GetStoreItemRawTeaks());
+            return View(await _settingsManager.GetStoreItemRawTeaks());
         }
 
         public async Task<IActionResult> ManageTeakRecord(int Id)
@@ -34,7 +37,8 @@ namespace Horizon.Areas.Store.Controllers
                 var vm = (StoreItemRawVM)Activator.CreateInstance(typeof(StoreItemRawVM));
                 vm.RawItemTypeId = 1;
                 vm.SaveUrl = @"/Store/StoreItemRaw/SaveRecord";
-                vm.RedirectUrl = @"/Store/StoreItemRaw/TeakIndex?success";
+                vm.RedirectUrl = @"/Store/StoreItemRaw/TeakIndex";
+                _messageService.Success("تم حفظ البيانات بنجاح");
                 return View(vm);
             }
             else
@@ -42,7 +46,8 @@ namespace Horizon.Areas.Store.Controllers
                 var vm = await _settingsManager.CheckAndReturn(Id);
                 vm.RawItemTypeId = 1;
                 vm.SaveUrl = @"/Store/StoreItemRaw/SaveRecord";
-                vm.RedirectUrl = @"/Store/StoreItemRaw/TeakIndex?success";
+                vm.RedirectUrl = @"/Store/StoreItemRaw/TeakIndex";
+                _messageService.Success("تم حفظ البيانات بنجاح");
                 return View(vm);
             }
         }
@@ -54,14 +59,17 @@ namespace Horizon.Areas.Store.Controllers
             {
                 var vm = (StoreItemRawVM)Activator.CreateInstance(typeof(StoreItemRawVM));
                 vm.SaveUrl = @"/Store/StoreItemRaw/SaveRecord";
-                vm.RedirectUrl =  @"/Store/StoreItemRaw/Index?success";
+                vm.RedirectUrl = @"/Store/StoreItemRaw/Index";
+                _messageService.Success("تم حفظ البيانات بنجاح");
+
                 return View(vm);
             }
             else
             {
                 var vm = await _settingsManager.CheckAndReturn(Id);
                 vm.SaveUrl = @"/Store/StoreItemRaw/SaveRecord";
-                vm.RedirectUrl = @"/Store/StoreItemRaw/Index?success";
+                vm.RedirectUrl = @"/Store/StoreItemRaw/Index";
+                _messageService.Success("تم حفظ البيانات بنجاح");
                 return View(vm);
             }
         }
@@ -92,7 +100,10 @@ namespace Horizon.Areas.Store.Controllers
         {
             var feedback = await _settingsManager.SaveDestroyOperation(vm);
             if (feedback.Done)
-                return Json(new { newLocation = @"/Store/StoreItemRaw/Index?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = @"/Store/StoreItemRaw/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -104,7 +115,7 @@ namespace Horizon.Areas.Store.Controllers
             if (string.IsNullOrWhiteSpace(term))
                 return Json(new { items = Array.Empty<object>(), hasMore = false });
 
-            var (items, totalCount) = await _settingsManager.GetStoreItemRawByName(term,page,pageSize);
+            var (items, totalCount) = await _settingsManager.GetStoreItemRawByName(term, page, pageSize);
 
             bool hasMore = totalCount > page * pageSize;
 

@@ -39,14 +39,17 @@ namespace Horizon.Areas.Purchases.Controllers
             return View(purchaseDetails);
         }
 
-        public async Task<IActionResult> ManagePurchase( int Id)
+        public async Task<IActionResult> ManagePurchase(int Id)
         => View(await _purchaseManager.NewPurchase(Id));
-        
+
         public async Task<JsonResult> SavePurchase([FromBody] PurchaseContainer vm)
         {
             var feedback = await _purchaseManager.SavePurchase(vm);
             if (feedback.Done)
-                return Json(new { newLocation = "/Purchases/Home/Index?success" });
+            {
+                _messageService.Success("تم حفظ البيانات بنجاح");
+                return Json(new { newLocation = "/Purchases/Home/Index" });
+            }
             else
                 return Json(new { errors = feedback.Messages });
         }
@@ -68,10 +71,10 @@ namespace Horizon.Areas.Purchases.Controllers
         }
         //public async Task<IActionResult> ManagePurchaseRawForProduct(int Id)
         //{
-           
+
         //    return View(await _purchaseManager.NewPurchaseStoreRawForProduct(Id));
         //}
-        
+
         public async Task<JsonResult> SavePurchaseForProduct([FromBody] PurchaseContainerForProduct vm)
         {
             var feedback = await _purchaseManager.SavePurchaseForProduct(vm);
