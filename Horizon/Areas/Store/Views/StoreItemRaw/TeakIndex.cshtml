@@ -137,6 +137,8 @@
                             window.location.href = `/Store/StoreItemRaw/ManageTeakRecord/${item.Id}`;
                             break;
                         case 'report':
+                            console.log("Selected Item:", item); // شوف هنا لو Id بيرجع فعلاً
+
                             window.location.href = `/Store/Reports/ItemRawIndex/${item.Id}`;
                             break;
                         case 'destroy':
@@ -147,6 +149,7 @@
 
                 handleRowClick(item) {
                     console.log('Row clicked:', item);
+
                     // You can add row click behavior here
                 },
 

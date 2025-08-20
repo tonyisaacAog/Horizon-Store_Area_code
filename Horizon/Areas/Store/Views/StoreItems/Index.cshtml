@@ -109,15 +109,15 @@
                                     icon: 'fa-cog',
                                     class: 'bg-indigo-600 hover:bg-indigo-700 text-white'
                                 },
-                                {
-                                    key: 'manufacturing',
-                                    label: 'امر تجميع',
-                                    icon: 'fa-industry',
-                                    class: 'bg-green-600 hover:bg-green-700 text-white'
-                                },
+                                // {
+                                //     key: 'manufacturing',
+                                //     label: 'امر تجميع',
+                                //     icon: 'fa-industry',
+                                //     class: 'bg-green-600 hover:bg-green-700 text-white'
+                                // },
                                 {
                                     key: 'report',
-                                    label: 'كارت صنف',
+                                    label: 'كارت صنف منتج تام',
                                     icon: 'fa-file-alt',
                                     class: 'bg-gray-600 hover:bg-gray-700 text-white'
                                 },
@@ -159,9 +159,9 @@
                         case 'configuration':
                             window.location.href = `/Store/ItemConfiguration/ManageConfiguration/${item.Id}`;
                             break;
-                        case 'manufacturing':
-                            window.location.href = `/Manufacturing/Home/Index/${item.Id}`;
-                            break;
+                        // case 'manufacturing':
+                        //     window.location.href = `/Manufacturing/Home/Index/${item.Id}`;
+                        //     break;
                         case 'report':
                             window.location.href = `/Store/Reports/Index/${item.Id}`;
                             break;
