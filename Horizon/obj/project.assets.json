@@ -14632,24 +14632,31 @@
     ]
   },
   "packageFolders": {
-    "/home/kareem/.nuget/packages/": {}
+    "C:\\Users\\anton\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/media/kareem/New Volume/projects/Horizon-Store_Area_code/Horizon/Horizon.csproj",
+      "projectUniqueName": "D:\\Company\\Islam\\Horizon\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
       "projectName": "Horizon",
-      "projectPath": "/media/kareem/New Volume/projects/Horizon-Store_Area_code/Horizon/Horizon.csproj",
-      "packagesPath": "/home/kareem/.nuget/packages/",
-      "outputPath": "/media/kareem/New Volume/projects/Horizon-Store_Area_code/Horizon/obj/",
+      "projectPath": "D:\\Company\\Islam\\Horizon\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
+      "packagesPath": "C:\\Users\\anton\\.nuget\\packages\\",
+      "outputPath": "D:\\Company\\Islam\\Horizon\\Horizon-Store_Area_code\\Horizon\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/kareem/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\anton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -14662,7 +14669,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net6.0": {
@@ -14742,20 +14755,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.31, 6.0.31]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.linux-x64",
-            "version": "[6.0.31, 6.0.31]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.31, 6.0.31]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -14764,7 +14763,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

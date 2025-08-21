@@ -354,7 +354,7 @@
 
                     // Filter valid items for saving
                     const itemsToSend = this.ItemConfigurationVMs.filter(item =>
-                        item.RecordStatus !== 2 &&
+                        // item.RecordStatus !== 2 &&
                         item.StoreItemRawId &&
                         item.MinimumAmount > 0
                     );

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@model ItemRawContainer
+@{
+    string data = JsonConvert.SerializeObject(Model.StoreItemRaw);
+}
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -157,7 +161,7 @@
                                 <tr v-for="(transaction, index) in transactionRawContainer.StoreItemRawTransactions"
                                     :key="'transaction-'+index" class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
-                                        {{ formatDate(transaction.TransDate) }}
+                                        {{ transaction.TransDate }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">
                                         {{ transaction.QTY }}
@@ -205,21 +209,23 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         // Sample initial data - replace with server data
+        // {
+        //         ItemName: "خام القطن",
+        //         ItemNameAr: "خام القطن العربي",
+        //         RawItemTypeName: "خامات نسجية",
+        //         QTY: 1000,
+        //         Balance: 850,
+        //         Id: 1
+        //     }
         var initialData = {
-            StoreItemRaw: {
-                ItemName: "خام القطن",
-                ItemNameAr: "خام القطن العربي",
-                RawItemTypeName: "خامات نسجية",
-                QTY: 1000,
-                Balance: 850,
-                Id: 1
-            },
+            StoreItemRaw: @Html.Raw(data),
             TransactionRawContainer: {
                 Search: {
                     StartDate: '',
                     EndDate: '',
                     StartBalance: 0,
-                    EndBalance: 0
+                    EndBalance: 0,
+                    StoreItemId: 0
                 },
                 StoreItemRawTransactions: []
             }
@@ -271,7 +277,7 @@
                             EndDate: initialData.TransactionRawContainer?.Search?.EndDate || '',
                             StartBalance: initialData.TransactionRawContainer?.Search?.StartBalance || 0,
                             EndBalance: initialData.TransactionRawContainer?.Search?.EndBalance || 0,
-                            StoreItemRawId: initialData.StoreItemRaw?.Id || 0
+                            StoreItemId: initialData.StoreItemRaw?.Id || 0
                         },
                         StoreItemRawTransactions: initialData.TransactionRawContainer?.StoreItemRawTransactions || []
                     },
@@ -307,6 +313,7 @@
                                 const result = response.data.Result;
                                 this.transactionRawContainer.Search.StartBalance = result.Search.StartBalance;
                                 this.transactionRawContainer.Search.EndBalance = result.Search.EndBalance;
+                                this.transactionRawContainer.Search.StoreItemId = this.storeItemRaw.Id;
                                 this.transactionRawContainer.StoreItemRawTransactions = result.StoreItemRawTransactions || [];
                             } else if (response.data && response.data.errors) {
                                 this.messages = response.data.errors;
