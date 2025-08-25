@@ -25,6 +25,7 @@ namespace Horizon.Areas.Purchases.Services
         private readonly GenericSettingsManager<StoreItem, StoreItemVM> _StoreItemManager;
         private readonly SaveManager<PurchaseContainer> _PurchaseSaveManager;
         private readonly SaveManager<PurchaseContainerForProduct> _PurchaseForProductSaveManager;
+        private readonly SaveManager<PurchaseContainerForItemRaw> _PurchaseForItemRawSaveManager;
         private readonly PurchaseTransactionManager _purchaseTransactionManager;
         private readonly ItemConfigureManager _itemConfigurationManager;
         public PurchaseManager(ApplicationDbContext db,
@@ -32,9 +33,10 @@ namespace Horizon.Areas.Purchases.Services
             GenericSettingsManager<Supplier, SupplierVM> SupplierManager,
             SaveManager<PurchaseContainer> PurchaseSaveManager,
             PurchaseTransactionManager purchaseTransactionManager,
-            GenericSettingsManager<StoreItem,StoreItemVM> StoreItemManager,
+            GenericSettingsManager<StoreItem, StoreItemVM> StoreItemManager,
             ItemConfigureManager itemConfigureManager,
-            SaveManager<PurchaseContainerForProduct> purchaseForProductSaveManager)
+            SaveManager<PurchaseContainerForProduct> purchaseForProductSaveManager,
+            SaveManager<PurchaseContainerForItemRaw> purchaseForItemRawSaveManager)
         {
             _db = db;
             _mapper = mapper;
@@ -44,6 +46,7 @@ namespace Horizon.Areas.Purchases.Services
             _StoreItemManager = StoreItemManager;
             _itemConfigurationManager = itemConfigureManager;
             _PurchaseForProductSaveManager = purchaseForProductSaveManager;
+            _PurchaseForItemRawSaveManager = purchaseForItemRawSaveManager;
         }
 
 
@@ -58,6 +61,7 @@ namespace Horizon.Areas.Purchases.Services
 
         public async Task<FeedBackWithMessages> SavePurchase(PurchaseContainer vm)
             => await _PurchaseSaveManager.SaveTransactionAsync(SavePurchaseFunc, vm);
+
 
         private async Task<PurchaseContainer> SavePurchaseFunc(PurchaseContainer vm)
         {
@@ -149,6 +153,64 @@ namespace Horizon.Areas.Purchases.Services
 
         public async Task<FeedBackWithMessages> SavePurchaseForProduct(PurchaseContainerForProduct vm)
           => await _PurchaseForProductSaveManager.SaveTransactionAsync(SavePurchaseForProductFunc, vm);
+
+
+        public async Task<FeedBackWithMessages> SavePurchaseForItemRaw(PurchaseContainerForItemRaw vm)
+          => await _PurchaseForItemRawSaveManager.SaveTransactionAsync(SavePurchaseForItemRawFunc, vm);
+
+        private async Task<PurchaseContainerForItemRaw> SavePurchaseForItemRawFunc(PurchaseContainerForItemRaw vm)
+        {
+            if (vm.PurchaseDetails.Count <= 0)
+            {
+                throw new Exception("لا يمكن حفظ فاتورة مشتريات بدون اضافة مواد خام للفاتورة");
+            }
+            // check purchase order
+            var purchaseOrder = await _db.PurchaseOrders.FirstOrDefaultAsync(obj => obj.Id == vm.PurchaseOrderId);
+            if (purchaseOrder == null) { throw new Exception("امر الانتاج غير موجود"); }
+            if (purchaseOrder.IsStoreInStock == true) { throw new Exception("امر الانتاج تم تفريغه"); }
+            var items = vm.PurchaseDetails.Select(obj => obj.StoreItemId).ToList();
+            var purchaseOrderDeails = await _db.PurchaseOrderDetails
+                .Where(obj => obj.PurchaseOrderId == vm.PurchaseOrderId&& obj.DetailType == DetailType.Item && items.Contains((int)obj.StoreItemsRawId))
+                .ToListAsync();
+            if (purchaseOrderDeails.Count == 0) { throw new Exception("المواد الخام غير موجود فى امر الانتاج"); }
+            if (purchaseOrderDeails.Any(obj=>obj.IsCreatedASPurchasing == true)) { throw new Exception("المنتج الخام تم تفريغة امر الانتاج وتم عمل اذن اضافة بالمنتج"); }
+
+
+            var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
+            NewPurchase.SupplierId = purchaseOrder.SupplierId;
+            NewPurchase.PurchaseOrderId = purchaseOrder.Id;
+            NewPurchase.PriceItemsRaw = vm.PurchaseInfo.PriceItemsRaw;
+            NewPurchase.PurchasingDetails = vm.PurchaseDetails.Select(obj => new PurchasingDetails
+            {
+                DetailType = DetailType.Item,
+                Amount = obj.Qty,
+                StoreItemsRawId = obj.StoreItemId,
+                UnitPrice = obj.UnitPrice,
+                TotalSales = obj.Qty * obj.UnitPrice
+                
+            }).ToList();
+            await _db.AddAsync(NewPurchase);
+            await _db.SaveChangesAsync();
+
+            //update item in purchase order 
+            foreach (var item in purchaseOrderDeails)
+            {
+                item.IsCreatedASPurchasing = true;
+                _db.Update(item);
+                await _db.SaveChangesAsync();
+            }
+            //update purchase order if all item collected convert it to true in is Store in Stock
+            var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
+            if (!exist)
+            {
+                purchaseOrder.IsStoreInStock = true;
+                _db.Update(purchaseOrder);
+                await _db.SaveChangesAsync();
+            }
+
+            await _purchaseTransactionManager.DoPurchaseTransactionsForItemRaw(vm, NewPurchase.Id);
+            return vm;
+        }
 
 
         private async Task<PurchaseContainerForProduct> SavePurchaseForProductFunc(PurchaseContainerForProduct vm)

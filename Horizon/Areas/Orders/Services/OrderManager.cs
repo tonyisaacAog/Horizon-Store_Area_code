@@ -226,7 +226,7 @@ namespace Horizon.Areas.Orders.Services
                 else
                 {
                     var itemConfiguration = _db.ItemConfgurations.Include(obj=>obj.StoreItemsRaw)
-                                                                 .Where(obj=>obj.StoreItemsRaw.RawItemTypeId !=1 )
+                                                                 .Where(obj=>obj.StoreItemsRaw.RawItemTypeId !=1 && obj.StoreItemId == configure.ProductId)
                                                                  .Select(obj => new ItemRawReportVM { Name = obj.StoreItemsRaw.ItemName,Id = obj.StoreItemRawId,Quantity = obj.MinimumAmount * configure.QTY })
                                                                  .ToList();
                     report.OrderConfigures.AddRange(itemConfiguration);

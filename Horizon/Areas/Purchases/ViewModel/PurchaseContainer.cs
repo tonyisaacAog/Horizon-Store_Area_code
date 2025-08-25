@@ -20,4 +20,5 @@ namespace Horizon.Areas.Purchases.ViewModel
         public List<PurchaseStoreTransactionVM> PurchaseDetails { get; set; }
         public List<PurchaseStoreTransactionVM> PurchaseStoreItemDetails { get; set; }
     }
+  
 }

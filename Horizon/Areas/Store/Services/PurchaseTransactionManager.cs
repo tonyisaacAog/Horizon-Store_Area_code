@@ -32,7 +32,10 @@ namespace Horizon.Areas.Store.Services
         {
             await DoPurchaseTransactionGeneral(vm.PurchaseDetails, PurchaseId);
         }
-
+        public async Task DoPurchaseTransactionsForItemRaw(PurchaseContainerForItemRaw vm, int PurchaseId)
+        {
+            await DoPurchaseTransactionGeneral(vm.PurchaseDetails, PurchaseId);
+        }
         public async Task DoPurchaseTransactionsForProduct(PurchaseContainer vm,int PurchaseId)
         {
             var StoreItemRawList = new List<PurchaseStoreTransactionVM>();

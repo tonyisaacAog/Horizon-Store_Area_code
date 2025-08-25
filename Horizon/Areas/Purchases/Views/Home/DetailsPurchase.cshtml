@@ -210,7 +210,17 @@
                         return '0';
                     }
                     return parseFloat(value);
+                },
+                 
+
+            },
+            mounted() {
+                if (this.purchaseDetails && this.purchaseDetails.length > 0) {
+                    this.totalQTY = this.purchaseDetails.reduce((sum, obj) => sum + (parseFloat(obj.Qty) || 0), 0);
+                    this.totalAmount = this.purchaseDetails.reduce((sum, obj) => sum + (parseFloat(obj.TotalAmount) || 0), 0);
                 }
+                console.log("Total QTY:", this.totalQTY);
+                console.log("Total Amount:", this.totalAmount);
             }
         }).mount('#app');
     </script>

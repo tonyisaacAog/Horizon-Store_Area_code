@@ -69,6 +69,16 @@ namespace Horizon.Areas.Purchases.Controllers
                 }).ToArray();
             return View(await _purchaseManager.NewPurchaseForProduct(Id));
         }
+
+        public async Task<IActionResult> ManagePurchaseForItemRaw(int Id)
+        {
+            var purchaseOrders = await _purchaseOrderManager.GetAllNotStoreInStockContainStoreItemRaw(Id);
+            if(purchaseOrders == null)
+            {
+                _messageService.Error("لا يمكن عمل اذن من امر الانتاج هذا");
+            }
+            return View(purchaseOrders);
+        }
         //public async Task<IActionResult> ManagePurchaseRawForProduct(int Id)
         //{
 
@@ -78,6 +88,21 @@ namespace Horizon.Areas.Purchases.Controllers
         public async Task<JsonResult> SavePurchaseForProduct([FromBody] PurchaseContainerForProduct vm)
         {
             var feedback = await _purchaseManager.SavePurchaseForProduct(vm);
+            if (feedback.Done)
+            {
+                _messageService.Success("تم انشاء اذن اضافة خامات");
+                return Json(new { newLocation = "/Store/StoreItems/Index" });
+            }
+            else
+            {
+                _messageService.Success("فشل انشاء اذن اضافة خامات");
+                return Json(new { errors = feedback.Messages });
+            }
+        }
+
+        public async Task<JsonResult> SavePurchaseForItemRaw([FromBody] PurchaseContainerForItemRaw vm)
+        {
+            var feedback = await _purchaseManager.SavePurchaseForItemRaw(vm);
             if (feedback.Done)
             {
                 _messageService.Success("تم انشاء اذن اضافة خامات");

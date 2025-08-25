@@ -1,4 +1,5 @@
 ﻿using BaseEntities;
+using Horizon.Areas.Orders.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,6 +11,7 @@ namespace Manufacturing.Models
         [Column(TypeName = "Date")]
         public DateTime BatchDate { get; set; }
         public string? BatchNumber { get; set; }
+        public ICollection<OrderDetails> OrderDetails { get; set; }
         
     }
 }

@@ -2,6 +2,7 @@
 using Data.Services;
 using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Purchases.Validations;
+using Horizon.Areas.Purchases.ViewModel;
 using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
 using Horizon.Data;
 using Horizon.Models.Shared;
@@ -29,6 +30,30 @@ namespace Horizon.Areas.Purchases.Services
             => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders.Include(s => s.Supplier).Where(obj => obj.IsStoreInStock == false).ToListAsync());
         public async Task<List<PurchaseOrderVM>> GetAllNotStoreInStockContainStoreItem(int StoreItemId)
           => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrderDetails.Include(obj => obj.PurchaseOrder).ThenInclude(obj => obj.Supplier).Where(obj => obj.StoreItemId == StoreItemId && obj.IsCreatedASPurchasing == false).Select(obj => obj.PurchaseOrder).ToListAsync());
+
+        public async Task<PurchaseContainerForItemRaw?> GetAllNotStoreInStockContainStoreItemRaw(int OrderId)
+         => await _db.PurchaseOrders.Where(obj => obj.Id == OrderId && obj.IsStoreInStock == false)
+                .Include(obj => obj.Supplier)
+                .Include(obj => obj.PurchaseOrderDetails)
+                .ThenInclude(obj => obj.StoreItemsRaw)
+                .Select(obj => new PurchaseContainerForItemRaw
+                {
+                    SupplierName = obj.Supplier.SupplierName ?? obj.Supplier.SupplierNameAr,
+                    SupplierId = obj.SupplierId,
+                    PurchaseOrderId = obj.Id,
+                    PurchaseOrderNumber = obj.PurchaseOrderNumber,
+                    PurchaseDetails = obj.PurchaseOrderDetails
+                                      .Where(obj => obj.DetailType == DetailType.Item && obj.IsCreatedASPurchasing == false)
+                                        .Select(obj => new Store.ViewModel.Transaction.PurchaseStoreTransactionVM
+                                        {
+                                            Qty = obj.StoreItemAmount,
+                                            StoreItemName = obj.StoreItemsRaw.ItemName ?? obj.StoreItemsRaw.ItemNameAr,
+                                            UnitPrice = 1,
+                                            StoreItemId = obj.StoreItemsRawId??0
+                                        }).ToList()
+
+                }).FirstOrDefaultAsync();
+
         public async Task<PurchaseOrderVM> PurchaseOrderDetails(int id)
         {
             var vm = new PurchaseOrderVM();

@@ -7,3 +7,13 @@ D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\R
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.CoreCompileInputs.cache
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.exe
 D:\Company\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.pdb
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.exe.config
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.exe
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.pdb
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.AssemblyReference.cache
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.exe.config
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.Properties.Resources.resources
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.GenerateResource.cache
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.CoreCompileInputs.cache
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.exe
+D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.pdb

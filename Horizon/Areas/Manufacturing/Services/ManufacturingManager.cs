@@ -146,7 +146,7 @@ namespace Horizon.Areas.Manufacturing.Services
             await _storeTransDetailsManager.DoStoreTransactionDetails(Qty, item, vm.StoreLocationId, StoreTransId, NewManufacturng.Id, LocationBalanceAfter);
             if(vm.param>0)
             {
-                await _orderConfigureManager.UpdateOrderDetailStatus(vm.param);
+                await _orderConfigureManager.UpdateOrderDetailStatus(vm.param, NewManufacturng.Id);
             }
             return vm;
         }

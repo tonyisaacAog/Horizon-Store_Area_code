@@ -12,7 +12,9 @@ namespace Horizon.Areas.Store.ViewModel.Reports
             StoreItemRawTransactions = new();
         }
         public SearchForProductVM Search { get; set; }
-        public List<TransactionRawContainer> StoreItemRawTransactions { get; set; }
+        //public List<TransactionRawContainer> StoreItemRawTransactions { get; set; }
+        public List<StoreItemRawTransactionVM> StoreItemRawTransactions { get; set; }
+
     }
     public class SearchForProductVM
     {

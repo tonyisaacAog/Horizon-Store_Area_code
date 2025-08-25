@@ -466,6 +466,8 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ManfactId");
+
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
@@ -831,10 +833,10 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(8001),
+                            DateCreated = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3815),
                             Email = "",
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7996),
+                            LastModified = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3812),
                             ModifiedBy = "",
                             Phone1 = "",
                             Phone2 = "",
@@ -907,10 +909,10 @@ namespace Horizon.Migrations
                             ClientName = "عميل عام",
                             ClientNameAr = "عميل عام",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7950),
+                            DateCreated = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3781),
                             Email = "",
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7943),
+                            LastModified = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3776),
                             ModifiedBy = "",
                             Phone1 = "",
                             Phone2 = "",
@@ -1188,9 +1190,9 @@ namespace Horizon.Migrations
                         {
                             Id = 1,
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7631),
+                            DateCreated = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3574),
                             IsDeleted = false,
-                            LastModified = new DateTime(2024, 11, 12, 22, 20, 14, 639, DateTimeKind.Local).AddTicks(7577),
+                            LastModified = new DateTime(2025, 8, 24, 13, 22, 57, 375, DateTimeKind.Local).AddTicks(3533),
                             ModifiedBy = "",
                             RawItemTypeName = "صاج"
                         });
@@ -1588,6 +1590,10 @@ namespace Horizon.Migrations
 
             modelBuilder.Entity("Horizon.Areas.Orders.Models.OrderDetails", b =>
                 {
+                    b.HasOne("Manufacturing.Models.ManufacturingBatch", "Manufacturing")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ManfactId");
+
                     b.HasOne("Horizon.Areas.Orders.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -1599,6 +1605,8 @@ namespace Horizon.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Manufacturing");
 
                     b.Navigation("Order");
 
@@ -1839,6 +1847,11 @@ namespace Horizon.Migrations
             modelBuilder.Entity("Horizon.Areas.Sales.Models.Sale", b =>
                 {
                     b.Navigation("SaleDetails");
+                });
+
+            modelBuilder.Entity("Manufacturing.Models.ManufacturingBatch", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

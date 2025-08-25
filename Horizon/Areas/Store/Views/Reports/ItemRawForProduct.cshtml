@@ -69,31 +69,36 @@
     <div v-if="storeItemRawTransactions.length > 0" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
         <div class="bg-primary text-white px-6 py-4 flex items-center gap-2">
             <i class="fas fa-list-ol"></i>
-            <h2 class="text-lg font-semibold">تفاصيل المواد المستخدمة لتجميع المنتج</h2>
+            <h2 class="text-lg font-semibold">تفاصيل الخامات</h2>
         </div>
         <div class="p-6">
-            <div v-for="(item, index) in storeItemRawTransactions" :key="index" class="mb-6 last:mb-0">
+            @* <div v-for="(item, index) in storeItemRawTransactions" :key="index" class="mb-6 last:mb-0"> *@
+                <div class="mb-6 last:mb-0">
                 <div class="bg-gray-50 rounded-lg p-4">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="px-4 py-3 text-right w-1/12">#</th>
-                                    <th class="px-4 py-3 text-right w-4/12">العنصر</th>
+                                    <th class="px-4 py-3 text-right w-4/12">العميل او المورد</th>
                                     <th class="px-4 py-3 text-right w-2/12">التاريخ</th>
-                                    <th class="px-4 py-3 text-right w-2/12">الكمية قبل</th>
-                                    <th class="px-4 py-3 text-right w-2/12">الكمية المستخدمة</th>
-                                    <th class="px-4 py-3 text-right w-2/12">الكمية بعد</th>
+                                    <th class="px-4 py-3 text-right w-4/12">العنصر</th>
+                                    <th class="px-4 py-3 text-right w-4/12">نوع العملية</th>
+                                    <th class="px-4 py-3 text-right w-2/12">الكمية (+)</th>
+                                    <th class="px-4 py-3 text-right w-2/12">الكمية (-)</th>
+                                    <th class="px-4 py-3 text-right w-2/12">الرصيد</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="(transaction, tIndex) in item.StoreItemRawTransactions" :key="tIndex">
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.StoreItemId }}</td>
-                                    <td class="px-4 py-3">{{ transaction.StoreItemRawName }}</td>
+                                <tr v-for="(transaction, tIndex) in storeItemRawTransactions" :key="tIndex">
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ tIndex }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.ClientOrSupplierName }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap">{{ transaction.TransDate }}</td>
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ formatNumber(transaction.AmountBalanceAfter) }}</td>
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ formatNumber(transaction.QTY) }}</td>
-                                    <td class="px-4 py-3 whitespace-nowrap">{{ formatNumber(transaction.QtyAfter) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.StoreItemRawName }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.TransTypeName }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.AmountBalanceAfter == 0? '-':formatNumber(transaction.AmountBalanceAfter) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.QTY == 0? '-':formatNumber(transaction.QTY) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.QtyAfter == 0? '-':formatNumber(transaction.QtyAfter) }}</td>
                                 </tr>
                             </tbody>
                         </table>

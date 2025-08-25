@@ -1,5 +1,6 @@
 ﻿using BaseEntities;
 using Finance.CurrentAssetModule.Stores.Model.Main;
+using Manufacturing.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Horizon.Areas.Orders.Models
@@ -18,6 +19,8 @@ namespace Horizon.Areas.Orders.Models
         public decimal UnitPrice { get; set; }
         public string? Notes { get; set; }
         public int? ManfactId { get; set; }
+        [ForeignKey("ManfactId")]
+        public ManufacturingBatch? Manufacturing { get; set; } 
         public bool IsManufacturing { get; set; } = false;
 
         public List<OrderConfigure> OrderConfigure { get; set; } = new List<OrderConfigure>();

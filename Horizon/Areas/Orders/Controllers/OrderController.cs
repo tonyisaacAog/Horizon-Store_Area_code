@@ -189,7 +189,7 @@ namespace Horizon.Areas.Orders.Controllers
                 writer.DataSources.Add(new ReportDataSource { Name = "ParamterLst",Value = Model.Parameters });
                 writer.DataSources.Add(new ReportDataSource { Name = "Order",Value = new List<OrderVM> { Model.Order } });
                 writer.DataSources.Add(new ReportDataSource { Name = "StoreItems",Value = Model.StoreItems });
-                writer.DataSources.Add(new ReportDataSource { Name = "OrderConfigures",Value = Model.OrderConfigures });
+                writer.DataSources.Add(new ReportDataSource { Name = "OrderConfigures", Value =  Model.OrderConfigures });
                 writer.LoadReport(reportStream);
                 MemoryStream memoryStream = new MemoryStream();
                 writer.Save(memoryStream,WriterFormat.PDF);

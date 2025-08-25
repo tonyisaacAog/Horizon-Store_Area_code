@@ -17,6 +17,7 @@ namespace Horizon.Areas.Store.ViewModel.ItemRawReport
         public string? Descrpition { get; set; }
         //For Purchasing
         public int? ReferanceId { get; set; }
+        public string? ClientOrSupplierName { get; set; }
        
     }
 }

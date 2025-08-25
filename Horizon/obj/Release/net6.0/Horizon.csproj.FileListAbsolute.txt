@@ -994,7 +994,6 @@ D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\refs\System.Xml.XPath.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\refs\System.Xml.XPath.XDocument.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\refs\WindowsBase.dll
-D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\refs\Interop.MSDATASRC.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\AutoMapper.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\Bold.Licensing.dll
@@ -1366,8 +1365,6 @@ D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Threading.AccessControl.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.csproj.AssemblyReference.cache
-D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Interop.MSDATASRC.dll
-D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.csproj.ResolveComReference.cache
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\rpswa.dswa.cache.json
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.GeneratedMSBuildEditorConfig.editorconfig
 D:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Horizon\obj\Release\net6.0\Horizon.AssemblyInfoInputs.cache

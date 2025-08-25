@@ -321,7 +321,7 @@ namespace Horizon.Areas.Store.Services.Reports
             return card;
         }
 
-        public async Task<TransactionRawContainer> GetTransactionItemRawForManufactProduct(TransactionRawContainer card)
+        public async Task<TransactionRawContainer> GetTransactionItemRawForProduct(TransactionRawContainer card)
         {
             var endDate = card.Search.EndDate.ToEgyptionDate().AddDays(1);
             var startDate = card.Search.StartDate.ToEgyptionDate();
@@ -329,31 +329,49 @@ namespace Horizon.Areas.Store.Services.Reports
             var transDetails =
                     await _db.StoreTransactionsRaw.Include(obj=>obj.StoreItems).Where
                     (trans => trans.StoreItemId == card.Search.StoreItemId
-                    && trans.TransType == StoreRawTransTypeEnum.Manfacturing
+                    && new[] { StoreRawTransTypeEnum.Manfacturing, StoreRawTransTypeEnum.Purchase, StoreRawTransTypeEnum.Sales }.Contains(trans.TransType)
                     && trans.TransDate >= startDate
-                    && trans.TransDate < endDate).ToListAsync();
+                    && trans.TransDate < endDate)
+                    .OrderBy(obj=>obj.TransDate).ToListAsync();
 
             foreach( var item in transDetails )
             {
                 var ST = new StoreItemRawTransactionVM();
                 ST.Id = item.Id;
-                ST.QTY = item.Qty;
                 ST.StoreItemRawName = item.StoreItems.ItemName;
                 ST.StoreItemId = item.StoreItemId;
                 ST.TransDate = item.TransDate.ToEgyptianDate();
                 ST.TransType = item.TransType;
-                ST.QtyAfter = item.QtyBalanceAfter;
-                ST.AmountBalanceAfter = item.Qty + item.QtyBalanceAfter;
+         
                 ST.TransTypeName =
-                    item.TransType == StoreRawTransTypeEnum.Manfacturing ? "تصنيع" :
+                    item.TransType == StoreRawTransTypeEnum.Manfacturing ? "مبيعات" :
                     item.TransType == StoreRawTransTypeEnum.Purchase ? "مشتريات" :
                     item.TransType == StoreRawTransTypeEnum.Sales ? "مبيعات" : "تالف";
                 ST.UnitPrice = item.UnitPrice;
                 if( item.TransType == StoreRawTransTypeEnum.Manfacturing )
                 {
                     ST.ReferanceId = item.ManfacturingId;
+                    var clientName = await _db.OrderDetails.Where(obj => obj.ManfactId == item.ManfacturingId)
+                        .Include(obj => obj.Order).ThenInclude(obj => obj.Client).Select(obj => obj.Order.Client.ClientNameAr??obj.Order.ClientName).FirstOrDefaultAsync();
+                    ST.ClientOrSupplierName = clientName;
+                    ST.AmountBalanceAfter = 0;
+                    ST.QTY = item.Qty;
+                    ST.QtyAfter = item.QtyBalanceAfter- item.Qty;
                 }
-               
+                if (item.TransType == StoreRawTransTypeEnum.Purchase)
+                {
+                    ST.ReferanceId = item.PurchaseId;
+                    var supplierName = await _db.Purchasings.Where(obj => obj.Id == item.PurchaseId)
+                        .Include(obj => obj.Supplier).Select(obj => obj.Supplier.SupplierName).FirstOrDefaultAsync();
+                    ST.ClientOrSupplierName = supplierName;
+                    ST.AmountBalanceAfter = item.Qty;
+                    ST.QTY = 0;
+                    ST.QtyAfter = item.QtyBalanceAfter;
+                }
+                if (item.TransType == StoreRawTransTypeEnum.Sales)
+                {
+                    ST.ReferanceId = item.SaleId;
+                }
                 card.StoreItemRawTransactions.Add(ST);
             }
             var listbefore = await _db.StoreTransactionsRaw.Where
@@ -376,11 +394,14 @@ namespace Horizon.Areas.Store.Services.Reports
         {
             var container = new TransactionRawContainerForProduct();
             var productItemRaw = _db.ItemConfgurations.Where(obj => obj.StoreItemId == search.StoreItemId).ToList();
-            foreach(var itemRaw in productItemRaw )
+            foreach (var itemRaw in productItemRaw)
             {
-                var searchvm = new TransactionRawContainer() { Search = new ViewModel.ItemRawReport.SearchVM { StartDate = search.StartDate,EndDate = search.EndDate,StoreItemId = itemRaw.StoreItemRawId } };
-                var trans = await GetTransactionItemRawForManufactProduct(searchvm);
-                container.StoreItemRawTransactions.Add(trans);
+                var searchvm = new TransactionRawContainer() { Search = new ViewModel.ItemRawReport.SearchVM { StartDate = search.StartDate, EndDate = search.EndDate, StoreItemId = itemRaw.StoreItemRawId } };
+                var trans = await GetTransactionItemRawForProduct(searchvm);
+                if (trans.StoreItemRawTransactions.Count > 0)
+                {
+                    container.StoreItemRawTransactions.AddRange(trans.StoreItemRawTransactions);
+                }
             }
             container.Search = search;
             return container;

@@ -16,12 +16,14 @@ namespace Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs
         public int StoreItemId { get; set; }
         public int PurchaseOrderId { get; set; }
         public string? StoreItemName { get; set; }
+        public string? StoreItemRawName { get; set; }
         public RecordStatus RecordStatus { get; set; } = RecordStatus.UnChanged;
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<PurchaseOrderDetailsVM, PurchaseOrderDetails>();
-            configuration.CreateMap<PurchaseOrderDetails,PurchaseOrderDetailsVM>()
-                .ForMember(x=>x.StoreItemName ,y=>y.MapFrom(obj=>obj.StoreItem.ProductNameAr?? obj.StoreItem.ProductName));
+            configuration.CreateMap<PurchaseOrderDetails, PurchaseOrderDetailsVM>()
+                .ForMember(x => x.StoreItemName, y => y.MapFrom(obj =>  obj.StoreItem.ProductName ?? obj.StoreItem.ProductNameAr ))
+                .ForMember(x => x.StoreItemName, y => y.MapFrom(obj =>  obj.StoreItemsRaw.ItemName ?? obj.StoreItemsRaw.ItemNameAr ));
         }
     }
 }

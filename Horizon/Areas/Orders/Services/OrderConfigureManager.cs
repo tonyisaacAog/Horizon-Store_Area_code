@@ -88,7 +88,7 @@ namespace Horizon.Areas.Orders.Services
         }
 
 
-        public async Task UpdateOrderDetailStatus(int detailsId)
+        public async Task UpdateOrderDetailStatus(int detailsId,int NewManufacturngId)
         {
             try
             {
@@ -99,6 +99,7 @@ namespace Horizon.Areas.Orders.Services
                     throw new Exception("قد تم تجميع هذا العنصر");
                 }
                 details.IsManufacturing = true;
+                details.ManfactId = NewManufacturngId;
                 _db.Update(details);
                 await _db.SaveChangesAsync();
                 await CheckAndUpdateOrderStatus(details.OrderId);

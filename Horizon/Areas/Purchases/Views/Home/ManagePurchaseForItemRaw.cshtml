@@ -1,0 +1,287 @@
+﻿@using Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs;
+@model PurchaseContainerForItemRaw
+@{
+    var title = "اذن اضافة خامات لامر الانتاج";
+    ViewData["Title"] = title;
+    string data = JsonConvert.SerializeObject(Model);
+}
+
+<div id="app" class="container mx-auto px-4 py-6">
+    <!-- Messages Component -->
+    <messages :messages="messages" @@clear-messages ="clearMessages"></messages>
+
+    <!-- Page Title -->
+    <div class="flex justify-between items-center mb-8 mt-4">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="stroke-[#212b36]" viewBox="0 0 24 24"
+                 fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <h1 class="text-2xl text-[#212b36] font-bold">{{ pageTitle }}</h1>
+        </div>
+        <a href="@((Context.Request.Headers["Referer"].ToString() != string.Empty) ? Context.Request.Headers["Referer"].ToString() : Url.Action("Index", "PurchaseOrder", new { area = "Purchases" }))"
+           class="bg-[#212b36] hover:bg-[#222] text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-colors">
+            رجوع
+            <i class="fa fa-arrow-left"></i>
+        </a>
+    </div>
+
+    <!-- Purchase Order Information Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold">بيانات امر الانتاج</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">اسم المورد</label>
+                    <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px] flex items-center">
+                        {{ purchaseOrder.SupplierName }}
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم امر الانتاج</label>
+                    <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px] flex items-center">
+                        {{ purchaseOrder.PurchaseOrderNumber }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Order Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold">تفاصيل عملية تخزين المستلزمات</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right bg-sky-50 font-semibold">العنصر</th>
+                        <th class="px-6 py-3 text-right bg-sky-50 font-semibold">الكمية</th>
+                        <th class="px-6 py-3 text-right bg-sky-50 font-semibold">سعر الوحدة</th>
+                        <th class="px-6 py-3 text-right bg-sky-50 font-semibold">الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(detail, index) in visiblePurchaseOrderDetails" :key="'detail-'+index">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.StoreItemName" disabled
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="text" v-model="detail.Qty" disabled
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="number" v-model.number="detail.UnitPrice"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="font-semibold">{{ formatNumber((parseFloat(detail.Qty)||0) * (parseFloat(detail.UnitPrice)||0)) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100 font-bold">
+                        <td colspan="3" class="px-6 py-3 text-right">الإجمالي الكلي</td>
+                        <td class="px-6 py-3">{{ formatNumber(totalPrice) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Storage Summary Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="text-gray-900 px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold">ملخص عملية التخزين</h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الفاتورة</label>
+                    <input type="text" v-model="purchaseOrder.PurchaseInfo.InvoiceNum"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الفاتورة</label>
+                    <input type="date" v-model="purchaseOrder.PurchaseInfo.PurchasingDate"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]">
+                </div>
+              
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">ملاحظات</label>
+                <textarea v-model="purchaseOrder.PurchaseInfo.Notes"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
+                          rows="3"></textarea>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    <span class="font-semibold">إجمالي الفاتورة:</span>
+                    <span>{{ formatNumber(totalPrice) }}</span>
+                </div>
+                <div class="flex gap-3">
+                    <button @@click ="save"
+                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center gap-2 transition-colors">
+                        <i class="fas fa-save"></i>
+                        حفظ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script type="text/javascript">
+        // Initialize data from server
+        var initialData = @Html.Raw(data);
+
+        // Messages Component
+        const Messages = {
+            template: `
+                <div v-if="messages.length > 0" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">رسائل</h3>
+                            <button @@click="$emit('clear-messages')" class="text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <ul class="space-y-2">
+                                <li v-for="(message, index) in messages" :key="index" class="text-red-600 text-sm">{{ message }}</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border-t border-gray-200 flex justify-end">
+                            <button @@click="$emit('clear-messages')" class="px-4 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900">
+                                موافق
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            props: ['messages'],
+            emits: ['clear-messages']
+        };
+
+        const { createApp } = Vue;
+
+        createApp({
+            components: { Messages },
+            data() {
+                return {
+                    pageTitle: "انشاء اذن اضافة خامات من امر الانتاج",
+                    purchaseOrder: initialData,   // يتوقع خصائص PascalCase من السيرفر
+                    messages: [],
+                    errors: { PurchasingDate: '', PurchaseOrderId: '', Quantity: '' }
+                };
+            },
+            computed: {
+                visiblePurchaseOrderDetails() {
+                    if (!this.purchaseOrder || !this.purchaseOrder.PurchaseDetails) return [];
+                    return this.purchaseOrder.PurchaseDetails.filter(d => d.RecordStatus !== 2);
+                },
+                totalPrice() {
+                    return this.visiblePurchaseOrderDetails.reduce((sum, d) => {
+                        const qty = parseFloat(d.Qty) || 0;
+                        const price = parseFloat(d.UnitPrice) || 0;
+                        return sum + (qty * price);
+                    }, 0);
+                }
+            },
+            methods: {
+                clearMessages() { this.messages = []; },
+                formatNumber(v) { const n = parseFloat(v); return isNaN(n) ? '0.00' : n.toFixed(2); },
+
+                validateForm() {
+                    this.messages = [];
+                    this.errors = { PurchasingDate: '', PurchaseOrderId: '', Quantity: '' };
+
+                    let ok = true;
+
+                    if (!this.purchaseOrder?.PurchaseInfo?.PurchasingDate) {
+                        this.errors.PurchasingDate = "برجاء تحديد التاريخ";
+                        ok = false;
+                    }
+
+                    if (!this.purchaseOrder?.PurchaseOrderId) {
+                        this.errors.PurchaseOrderId = "برجاء اختيار امر الانتاج";
+                        ok = false;
+                    }
+
+                    const details = this.purchaseOrder?.PurchaseDetails || [];
+                    if (details.length < 1) {
+                        this.messages.push("الفاتورة يجب أن تحتوي على مادة خام واحدة على الأقل.");
+                        ok = false;
+                    }
+
+                    details.forEach((detail, i) => {
+                        if (!detail.StoreItemId) {
+                            this.messages.push(`برجاء اختيار العنصر في الصف ${i + 1}`);
+                            ok = false;
+                        }
+                        const q = parseFloat(detail.Qty);
+                        if (isNaN(q) || q < 0.1) {
+                            this.messages.push(`الكمية غير صحيحة في الصف ${i + 1}`);
+                            ok = false;
+                        }
+                        const p = parseFloat(detail.UnitPrice);
+                        if (isNaN(p) || p < 0.01) {
+                            this.messages.push(`السعر غير صحيح في الصف ${i + 1}`);
+                            ok = false;
+                        }
+                    });
+
+                    return ok;
+                },
+
+                async save() {
+                    if (!this.validateForm()) return;
+
+                    // خزّن الإجمالي في PurchaseInfo
+                    if (!this.purchaseOrder.PurchaseInfo) this.purchaseOrder.PurchaseInfo = {};
+                    this.purchaseOrder.PurchaseInfo.TotalAmount = this.totalPrice;
+
+                    const payload = {
+                        PurchaseInfo: this.purchaseOrder.PurchaseInfo,
+                        PurchaseDetails: this.purchaseOrder.PurchaseDetails,
+                        PurchaseOrderId: this.purchaseOrder.PurchaseOrderId,
+                        SupplierId: this.purchaseOrder.SupplierId
+                    };
+
+                    try {
+                        const response = await axios.post('/Purchases/Home/SavePurchaseForItemRaw', payload);
+
+                        if (response.data && (response.data.success || response.data.newLocation)) {
+                            if (response.data.newLocation) {
+                                window.location.href = response.data.newLocation;
+                            } else {
+                                window.location.href = '/Purchases/Home/Index';
+                            }
+                        } else {
+                            this.messages = [
+                                (response.data && response.data.errors && response.data.errors.length > 0)
+                                    ? response.data.errors[0]
+                                    : 'حدث خطأ أثناء الحفظ'
+                            ];
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        this.messages = ['حدث خطأ في الاتصال بالخادم'];
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+}
