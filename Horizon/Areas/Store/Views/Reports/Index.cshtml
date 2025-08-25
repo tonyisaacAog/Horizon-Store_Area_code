@@ -1,6 +1,6 @@
 ﻿@model ItemCardContainer
 @{
-    var title = "كارت صنف للمنتج";
+    var title = "كارت صنف منتج تام";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -198,7 +198,7 @@
                                 </th>
                                 <th
                                     class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
-                                    العميل / المورد
+                                    العميل
                                 </th>
                             </tr>
                         </thead>
@@ -290,7 +290,7 @@
             },
             data() {
                 return {
-                    title: "كارت صنف للمنتج",
+                    title: "كارت صنف منتج تام",
                     storeItem: initialData.StoreItem || {},
                     storeLocationBalances: initialData.StoreLocationBalances || [],
                     transactionContainer: {

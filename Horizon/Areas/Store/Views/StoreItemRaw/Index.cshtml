@@ -1,6 +1,6 @@
 ﻿@model List<StoreItemRawVM>
 @{
-    var title = "قائمة المواد الخام الاكسوارات";
+    var title = "مستلزمات الانتاج الاكسسوارات والاستخدامات العامة";
     ViewData["Title"] = title;
     string data = JsonConvert.SerializeObject(Model);
 }
@@ -50,7 +50,7 @@
             },
             data() {
                 return {
-                    title: 'قائمة المواد الخام الاكسوارات',
+                    title: 'مستلزمات الانتاج الاكسسوارات والاستخدامات العامة',
                     storeItems: @Html.Raw(data),
                     totalItems: 0,
                     searchResults: 0,
@@ -136,6 +136,7 @@
                             window.location.href = `/Store/StoreItemRaw/ManageRecord/${item.Id}`;
                             break;
                         case 'report':
+                            console.log("Selected Item:", item); // شوف هنا لو Id بيرجع فعلاً
                             window.location.href = `/Store/Reports/ItemRawIndex/${item.Id}`;
                             break;
                         case 'destroy':

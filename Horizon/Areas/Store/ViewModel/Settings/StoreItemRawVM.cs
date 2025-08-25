@@ -39,8 +39,12 @@ namespace Horizon.Areas.Store.ViewModel.Settings
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<StoreItemsRaw, StoreItemRawVM>()
+                        .ForMember(x => x.Id, y => y.MapFrom(s => s.Id)) // لو اسم العمود Id
                 .ForMember(x => x.RawItemTypeName, y => y.MapFrom(s => s.RawItemType.RawItemTypeName));
             configuration.CreateMap<StoreItemRawVM, StoreItemsRaw>();
+
+            configuration.CreateMap<StoreItemRawVM, StoreItemsRaw>()
+                 .ForMember(x => x.Id, y => y.MapFrom(s => s.Id));
         }
     }
 }
