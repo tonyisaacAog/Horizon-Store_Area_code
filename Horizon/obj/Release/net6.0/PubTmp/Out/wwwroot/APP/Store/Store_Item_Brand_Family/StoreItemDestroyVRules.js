@@ -1,2 +1,0 @@
-﻿const ValidateVM = function (self) {
- }
