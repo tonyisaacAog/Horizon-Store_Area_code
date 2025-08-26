@@ -356,7 +356,7 @@ namespace Horizon.Areas.Store.Services.Reports
                     ST.ClientOrSupplierName = clientName;
                     ST.AmountBalanceAfter = 0;
                     ST.QTY = item.Qty;
-                    ST.QtyAfter = item.QtyBalanceAfter- item.Qty;
+                    ST.QtyAfter = item.QtyBalanceAfter;
                 }
                 if (item.TransType == StoreRawTransTypeEnum.Purchase)
                 {

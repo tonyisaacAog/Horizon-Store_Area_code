@@ -22,6 +22,7 @@ namespace Horizon.Areas.Purchases.ViewModel.PurchaseOrderVMs
         public string? SupplierName { get; set; }
         public List<PurchaseOrderDetailsVM> PurchaseOrderDetails { get; set; }
         public List<PurchaseOrderDetailsVM> PurchaseOrderItemRawDetails { get; set; }
+        public bool hasItemRaw => PurchaseOrderDetails?.Any() ?? false;
         public void CreateMapping(Profile configuration)
         {
             configuration.CreateMap<PurchaseOrderVM,PurchaseOrder>()

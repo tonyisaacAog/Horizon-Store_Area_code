@@ -76,6 +76,7 @@ namespace Horizon.Areas.Purchases.Controllers
             if(purchaseOrders == null)
             {
                 _messageService.Error("لا يمكن عمل اذن من امر الانتاج هذا");
+                return Redirect("/Purchases/PurchaseOrder/Index");
             }
             return View(purchaseOrders);
         }

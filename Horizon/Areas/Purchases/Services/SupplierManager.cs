@@ -8,6 +8,7 @@ using Services;
 
 namespace Horizon.Areas.Purchases.Services
 {
+   
     public class SupplierManager : GenericSettingsManager<Supplier, SupplierVM>
     {
         private readonly SaveManager<SupplierVM> _saveSupplierManager;

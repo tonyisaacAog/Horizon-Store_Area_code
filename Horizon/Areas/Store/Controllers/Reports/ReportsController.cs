@@ -119,12 +119,10 @@ namespace Horizon.Areas.Store.Controllers.Reports
         [HttpPost]
         public async Task<IActionResult> ItemRawForProduct([FromForm]SearchForProductVM search)
         {
-
             if (string.IsNullOrEmpty(search.StartDate) || string.IsNullOrEmpty(search.EndDate))
             {
                 ViewBag.Errors = "اختر التاريخ";
                 return View(search);
-
             }
             var result = await _reportManager.GetTransactionItemRawForManufactProduct(search);            
             return View(result);

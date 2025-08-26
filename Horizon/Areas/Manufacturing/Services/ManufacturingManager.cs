@@ -148,6 +148,7 @@ namespace Horizon.Areas.Manufacturing.Services
             {
                 await _orderConfigureManager.UpdateOrderDetailStatus(vm.param, NewManufacturng.Id);
             }
+            
             return vm;
         }
 

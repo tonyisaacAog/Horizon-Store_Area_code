@@ -25,7 +25,9 @@ namespace Horizon.Areas.Purchases.Services
             _purchaseOrderSaveManager = purchaseOrderSaveManager;
         }
         public async Task<List<PurchaseOrderVM>> GetAll()
-            => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders.Include(s => s.Supplier).ToListAsync());
+            => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders
+                .Include(obj=>obj.PurchaseOrderDetails.Where(obj=>obj.IsCreatedASPurchasing==false&& obj.DetailType == DetailType.Item))
+                .Include(s => s.Supplier).ToListAsync());
         public async Task<List<PurchaseOrderVM>> GetAllNotStoreInStock()
             => _mapper.Map<List<PurchaseOrderVM>>(await _db.PurchaseOrders.Include(s => s.Supplier).Where(obj => obj.IsStoreInStock == false).ToListAsync());
         public async Task<List<PurchaseOrderVM>> GetAllNotStoreInStockContainStoreItem(int StoreItemId)

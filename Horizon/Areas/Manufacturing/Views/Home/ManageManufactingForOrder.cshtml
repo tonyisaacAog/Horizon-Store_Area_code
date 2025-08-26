@@ -236,6 +236,8 @@
                     },
                     manufacturingInfo: initialData.ManufacturingInfoVM || {},
                     storeLocationId: initialData.StoreLocationId || 0,
+                    param : initialData.param,
+                    isManufacturingForOrder : initialData.IsManufacturingForOrder,
                     messages: [],
                     errors: {
                         BatchDate: '',
@@ -336,18 +338,19 @@
                     if (!this.validateForm()) {
                         return;
                     }
-
                     const data = {
                         Order: this.order,
                         ProductConfigurations: this.productConfigurations,
                         ManufacturingInfoVM: this.manufacturingInfo,
-                        StoreLocationId: this.storeLocationId
+                        StoreLocationId: this.storeLocationId,
+                        param : this.param,
+                        isManufacturingForOrder:this.isManufacturingForOrder
                     };
 
                     axios.post('/Manufacturing/Home/SaveManufacturing', data)
                         .then(response => {
                             if (response.data.success) {
-                                window.location.href = '/Manufacturing/Home/Index';
+                                window.location.href = '/Orders/Order/ProcessOrderDetails/'+data.Order.Id//'/Manufacturing/Home/Index';
                             } else if (response.data.newLocation) {
                                 window.location.href = response.data.newLocation;
                             } else {

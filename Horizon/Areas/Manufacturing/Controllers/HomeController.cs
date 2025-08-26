@@ -52,7 +52,7 @@ namespace Horizon.Areas.Manufacturing.Controllers
             if (feedback.Done)
             {
                 _messageService.Success("تم انشاء امر التصنيع");
-                return Json(new { newLocation = vm.RedirectUrl != null ? vm.RedirectUrl : "/Store/StoreItems/Index" });
+                return Json(new { newLocation = vm.RedirectUrl != null ? vm.RedirectUrl : "/Orders/Order/ProcessOrderDetails/" + vm.Order.Id });
             }
             else
             {

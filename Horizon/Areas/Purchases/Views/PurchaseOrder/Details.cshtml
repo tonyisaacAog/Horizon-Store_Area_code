@@ -79,7 +79,7 @@
     <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
         <div class=" text-white px-6 py-4 flex items-center border-b">
 
-            <h2 class="text-lg font-semibold">تفاصيل امر الانتاج</h2>
+            <h2 class="text-lg font-semibold">تفاصيل المنتجات</h2>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -118,6 +118,49 @@
             </table>
         </div>
     </div>
+
+    <!-- Purchase Order Details Card -->
+    <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class=" text-white px-6 py-4 flex items-center border-b">
+
+            <h2 class="text-lg font-semibold">تفاصيل الخامات</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50 text-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-right font-medium">العنصر</th>
+                        <th class="px-6 py-3 text-right font-medium" style="width:10%">الكمية</th>
+                        <th class="px-6 py-3 text-right font-medium">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="(detail, index) in visiblePurchaseOrderItemRawDetails" :key="'detail-'+index"
+                        class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px] flex items-center">
+                                {{ detail.StoreItemName }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 h-[48px] flex items-center">
+                                {{ formatNumber(detail.StoreItemAmount) }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <textarea rows="1" readonly
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 resize-none"
+                                      :value="detail.Notes"></textarea>
+                        </td>
+                    </tr>
+                    <tr v-if="visiblePurchaseOrderItemRawDetails.length === 0">
+                        <td colspan="3" class="text-center text-lg text-gray-500 py-6">لا توجد تفاصيل للعرض</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     <!-- Purchase Order Notes Card -->
     <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
@@ -222,6 +265,10 @@
                 visiblePurchaseOrderDetails() {
                     if (!this.purchaseOrder.PurchaseOrderDetails) return [];
                     return this.purchaseOrder.PurchaseOrderDetails.filter(detail => detail.RecordStatus !== 2);
+                },
+                visiblePurchaseOrderItemRawDetails(){
+                    if (!this.purchaseOrder.PurchaseOrderItemRawDetails) return [];
+                    return this.purchaseOrder.PurchaseOrderItemRawDetails.filter(detail => detail.RecordStatus !== 2);
                 }
             },
             methods: {

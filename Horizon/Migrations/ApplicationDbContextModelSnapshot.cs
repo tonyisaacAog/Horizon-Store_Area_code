@@ -75,7 +75,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactions");
+                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactions", (string)null);
                 });
 
             modelBuilder.Entity("Finance.CurrentAssetModule.Stores.Model.Main.StoreItem", b =>
@@ -138,7 +138,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreBrandId");
 
-                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreItem");
+                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreItem", (string)null);
                 });
 
             modelBuilder.Entity("Finance.CurrentAssetModule.Stores.Model.Main.StoreLocationsBalance", b =>
@@ -159,7 +159,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemId");
 
-                    b.ToTable("Finance_CurrentAssets_Store_StoreLocationsBalance");
+                    b.ToTable("Finance_CurrentAssets_Store_StoreLocationsBalance", (string)null);
                 });
 
             modelBuilder.Entity("Finance.CurrentAssetModule.Stores.Model.Main.StoreTransactionDetails", b =>
@@ -220,7 +220,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreTransId");
 
-                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactionDetails");
+                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactionDetails", (string)null);
                 });
 
             modelBuilder.Entity("Finance.CurrentAssetModule.Stores.Model.Settings.StoreBrand", b =>
@@ -260,7 +260,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreBrand");
+                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreBrand", (string)null);
                 });
 
             modelBuilder.Entity("Finance.CurrentAssetModule.Stores.Model.Settings.StoreFamily", b =>
@@ -300,7 +300,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreFamily");
+                    b.ToTable("Finance_CurrentAsset_Stores_Settings_StoreFamily", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Orders.Models.Order", b =>
@@ -365,7 +365,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Finance_OrderModule_Order");
+                    b.ToTable("Finance_OrderModule_Order", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Orders.Models.OrderConfigure", b =>
@@ -415,7 +415,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemId");
 
-                    b.ToTable("Finance_OrderModule_OrderConfigure");
+                    b.ToTable("Finance_OrderModule_OrderConfigure", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Orders.Models.OrderDetails", b =>
@@ -472,7 +472,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Finance_OrderModule_OrderDetails");
+                    b.ToTable("Finance_OrderModule_OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrder", b =>
@@ -528,7 +528,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Finance_PurchasingModule_PurchaseOrder");
+                    b.ToTable("Finance_PurchasingModule_PurchaseOrder", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchaseOrderDetails", b =>
@@ -585,7 +585,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemsRawId");
 
-                    b.ToTable("Finance_PurchasingModule_PurchaseOrderDetails");
+                    b.ToTable("Finance_PurchasingModule_PurchaseOrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Purchasing", b =>
@@ -649,7 +649,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Finance_PurchasingModule_Purchasing");
+                    b.ToTable("Finance_PurchasingModule_Purchasing", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.PurchasingDetails", b =>
@@ -709,7 +709,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemsRawId");
 
-                    b.ToTable("Finance_PurchasingModule_PurchasingDetails");
+                    b.ToTable("Finance_PurchasingModule_PurchasingDetails", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.SaleDetails", b =>
@@ -769,7 +769,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemsRawId");
 
-                    b.ToTable("Finance_PurchasingModule_SaleDetails");
+                    b.ToTable("Finance_PurchasingModule_SaleDetails", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Purchases.Models.Supplier", b =>
@@ -826,7 +826,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_PurchasingModule_Supplier");
+                    b.ToTable("Finance_PurchasingModule_Supplier", (string)null);
 
                     b.HasData(
                         new
@@ -900,7 +900,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_SalesModule_Client");
+                    b.ToTable("Finance_SalesModule_Client", (string)null);
 
                     b.HasData(
                         new
@@ -962,7 +962,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Finance_SalesModule_Sale");
+                    b.ToTable("Finance_SalesModule_Sale", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Settings.Models.ApplicationUser", b =>
@@ -1113,7 +1113,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemId");
 
-                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactionsRaw");
+                    b.ToTable("Finance_CurrentAssets_Store_StoreTransactionsRaw", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Store.Models.Settings.ItemConfguration", b =>
@@ -1148,7 +1148,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("StoreItemRawId");
 
-                    b.ToTable("Finance_CurrentAssets_Store_ItemConfguration");
+                    b.ToTable("Finance_CurrentAssets_Store_ItemConfguration", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Store.Models.Settings.RawItemType", b =>
@@ -1183,7 +1183,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAssets_Store_RawItemType");
+                    b.ToTable("Finance_CurrentAssets_Store_RawItemType", (string)null);
 
                     b.HasData(
                         new
@@ -1252,7 +1252,7 @@ namespace Horizon.Migrations
 
                     b.HasIndex("RawItemTypeId");
 
-                    b.ToTable("Finance_CurrentAssets_Store_StoreItemsRaw");
+                    b.ToTable("Finance_CurrentAssets_Store_StoreItemsRaw", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Store.Models.Settings.StoreLocations", b =>
@@ -1290,7 +1290,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAssets_StoreSetting_StoreLocations");
+                    b.ToTable("Finance_CurrentAssets_StoreSetting_StoreLocations", (string)null);
                 });
 
             modelBuilder.Entity("Horizon.Areas.Store.Models.Settings.StoreMeasureUnit", b =>
@@ -1329,7 +1329,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_CurrentAssets_StoreSetting_StoreMeasureUnit");
+                    b.ToTable("Finance_CurrentAssets_StoreSetting_StoreMeasureUnit", (string)null);
                 });
 
             modelBuilder.Entity("Manufacturing.Models.ManufacturingBatch", b =>
@@ -1365,7 +1365,7 @@ namespace Horizon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Finance_Manufacturing_ManufacturingBatch");
+                    b.ToTable("Finance_Manufacturing_ManufacturingBatch", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -269,7 +269,7 @@ namespace Horizon.Areas.Orders.Services
             orderConfigureContainer.StoreItemVM = _mapper.Map<StoreItemVM>(configurations.StoreItemVM);
             orderConfigureContainer.OrderConfigure = configurations.ItemConfigurationVMs.Select(c => new OrderConfigureVM()
             {
-                //Id = c.Id,
+                Id = c.Id,
                 StoreItemId = c.StoreItemRawId,
                 StoreItemRaw = c.StoreItemsRawName,
                 Qty = c.MinimumAmount,

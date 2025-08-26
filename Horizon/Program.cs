@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Host.UseLamar((context, registry) =>
 {
 
