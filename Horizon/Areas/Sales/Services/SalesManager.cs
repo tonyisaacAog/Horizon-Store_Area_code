@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Data.Services;
+using Horizon.Areas.Orders.Models;
 using Horizon.Areas.Orders.Services;
 using Horizon.Areas.Purchases.Models;
 using Horizon.Areas.Purchases.ViewModel;
@@ -128,7 +129,7 @@ namespace Horizon.Areas.Sales.Services
 
             NewSales.ClientId = vm.Client.Id;
             NewSales.TotalAmount = vm.SaleDetails.Sum(obj => obj.UnitPrice * obj.QTY) + vm.SaleItemRawDetails.Sum(obj => obj.UnitPrice * obj.QTY);
-          
+            
             await _db.AddAsync(NewSales);
 
             await _db.SaveChangesAsync();
@@ -141,11 +142,14 @@ namespace Horizon.Areas.Sales.Services
 
             if( vm.IsSaleFromOrder )
             {
-                var order = await _orderManager.ConvertOrderToSaleInvoice(vm.OrderId);
-                if( !order.Done )
+                var order = await _orderManager.ConvertOrderToSaleInvoice(vm.OrderId,NewSales.InvoiceNum);
+                if ( !order.Done )
                 {
                     throw new Exception(order.Messages.FirstOrDefault());
                 }
+                NewSales.OrderId = order.GetData<Order>().Id;
+                _db.Sales.Update(NewSales);
+                await _db.SaveChangesAsync();
             }
 
             return vm;

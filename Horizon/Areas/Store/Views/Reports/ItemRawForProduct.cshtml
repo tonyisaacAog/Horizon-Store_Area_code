@@ -80,6 +80,7 @@
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="px-4 py-3 text-right w-1/12">#</th>
+                                    <th class="px-4 py-3 text-right w-2/12">رقم الفاتورة</th>
                                     <th class="px-4 py-3 text-right w-4/12">العميل او المورد</th>
                                     <th class="px-4 py-3 text-right w-2/12">التاريخ</th>
                                     <th class="px-4 py-3 text-right w-4/12">العنصر</th>
@@ -92,6 +93,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr v-for="(transaction, tIndex) in storeItemRawTransactions" :key="tIndex">
                                     <td class="px-4 py-3 whitespace-nowrap">{{ tIndex }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">{{ transaction.NoOfOrderOrInvoice }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap">{{ transaction.ClientOrSupplierName }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap">{{ transaction.TransDate }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap">{{ transaction.StoreItemRawName }}</td>

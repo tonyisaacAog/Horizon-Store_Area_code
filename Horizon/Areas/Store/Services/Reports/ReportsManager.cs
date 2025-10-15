@@ -298,9 +298,15 @@ namespace Horizon.Areas.Store.Services.Reports
                 {
                     ST.ReferanceId = item.ManfacturingId;
                 }
-                else if( item.TransType == StoreRawTransTypeEnum.Purchase )
+                if (item.TransType == StoreRawTransTypeEnum.Purchase)
                 {
                     ST.ReferanceId = item.PurchaseId;
+                    var supplierName = await _db.Purchasings.Where(obj => obj.Id == item.PurchaseId)
+                        .Include(obj => obj.Supplier).Select(obj => obj.Supplier.SupplierName).FirstOrDefaultAsync();
+                    ST.ClientOrSupplierName = supplierName;
+                    ST.AmountBalanceAfter = item.Qty;
+                    ST.QTY = 0;
+                    ST.QtyAfter = item.QtyBalanceAfter;
                 }
                 card.StoreItemRawTransactions.Add(ST);
             }
@@ -351,22 +357,30 @@ namespace Horizon.Areas.Store.Services.Reports
                 if( item.TransType == StoreRawTransTypeEnum.Manfacturing )
                 {
                     ST.ReferanceId = item.ManfacturingId;
-                    var clientName = await _db.OrderDetails.Where(obj => obj.ManfactId == item.ManfacturingId)
-                        .Include(obj => obj.Order).ThenInclude(obj => obj.Client).Select(obj => obj.Order.Client.ClientNameAr??obj.Order.ClientName).FirstOrDefaultAsync();
-                    ST.ClientOrSupplierName = clientName;
+                    var order = await _db.OrderDetails.Where(obj => obj.ManfactId == item.ManfacturingId)
+                        .Include(obj => obj.Order).ThenInclude(obj => obj.Client)
+                        .Select(obj => new { ClientName=(obj.Order.Client.ClientNameAr ?? obj.Order.ClientName), obj.Order.IsInvoiceSale, obj.Order.InvoiceNo })
+                        .FirstOrDefaultAsync();
+                    ST.ClientOrSupplierName = order?.ClientName??"N/A";
                     ST.AmountBalanceAfter = 0;
                     ST.QTY = item.Qty;
                     ST.QtyAfter = item.QtyBalanceAfter;
+                    if(order!=null && order.IsInvoiceSale)
+                        ST.NoOfOrderOrInvoice = order.InvoiceNo;
+                    else
+                        ST.NoOfOrderOrInvoice = "N/A";
+
                 }
                 if (item.TransType == StoreRawTransTypeEnum.Purchase)
                 {
                     ST.ReferanceId = item.PurchaseId;
-                    var supplierName = await _db.Purchasings.Where(obj => obj.Id == item.PurchaseId)
-                        .Include(obj => obj.Supplier).Select(obj => obj.Supplier.SupplierName).FirstOrDefaultAsync();
-                    ST.ClientOrSupplierName = supplierName;
+                    var purchasing = await _db.Purchasings.Where(obj => obj.Id == item.PurchaseId)
+                        .Include(obj => obj.Supplier).Select(obj => new { obj.Supplier.SupplierName ,obj.InvoiceNum}).FirstOrDefaultAsync();
+                    ST.ClientOrSupplierName = purchasing.SupplierName;
                     ST.AmountBalanceAfter = item.Qty;
                     ST.QTY = 0;
                     ST.QtyAfter = item.QtyBalanceAfter;
+                    ST.NoOfOrderOrInvoice = purchasing.InvoiceNum;
                 }
                 if (item.TransType == StoreRawTransTypeEnum.Sales)
                 {

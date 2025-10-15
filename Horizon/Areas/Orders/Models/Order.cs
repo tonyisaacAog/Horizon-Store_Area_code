@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Horizon.Areas.Orders.Models
 {
     [Table("Finance_OrderModule_Order")]
-    public class Order: BaseEntity
+    public class Order : BaseEntity
     {
         public int ClientId { get; set; }
         [ForeignKey("ClientId")]
@@ -24,8 +24,9 @@ namespace Horizon.Areas.Orders.Models
         public bool IsProcess { get; set; } = false;
         public OrderStatus OrderStatus { get; set; }
         public bool IsInvoiceSale { get; set; }
+        public string? InvoiceNo { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
-        
+
         public static void GenerateSerial(Order order)
         {
             order.NoOfOrder = $"{order.Id}/{DateTime.Now.Year}";

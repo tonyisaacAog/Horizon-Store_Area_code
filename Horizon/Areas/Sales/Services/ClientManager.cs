@@ -23,7 +23,7 @@ namespace Horizon.Areas.Sales.Services
             var items = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new ClientVM { Id = x.Id, ClientName = x.ClientName })
+                .Select(x => new ClientVM { Id = x.Id, ClientName = x.ClientName, Phone1=x.Phone1,Phone2=x.Phone2,Phone3 =x.Phone3,Email=x.Email })
                 .ToListAsync();
             return (items, totalCount);
         }

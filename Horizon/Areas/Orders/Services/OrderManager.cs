@@ -69,14 +69,15 @@ namespace Horizon.Areas.Orders.Services
                 return new FeedBackWithMessages { Done = false,Messages = new List<string> { "امر الشغل غير موجود" } };
             }
         }
-        public async Task<FeedBackWithMessages> ConvertOrderToSaleInvoice(int orderId)
+        public async Task<FeedBackWithMessages> ConvertOrderToSaleInvoice(int orderId,string invoiceNo)
         {
             var order = await _db.Orders.FirstOrDefaultAsync(obj => obj.Id == orderId);
             if( order != null )
             {
                 order.IsInvoiceSale = true;
+                order.InvoiceNo = invoiceNo;
                 await _db.SaveChangesAsync();
-                return new FeedBackWithMessages { Done = true };
+                return new FeedBackWithMessages { Done = true ,Data = order};
             }
             else
             {
