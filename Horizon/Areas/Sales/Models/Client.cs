@@ -15,7 +15,6 @@ namespace Horizon.Areas.Sales.Models
 
         [StringLength(50),
             RegularExpression("^[0-9]*$", ErrorMessage = "Only Numbers")]
-
         public string Phone1 { get; set; }
 
         [StringLength(50),

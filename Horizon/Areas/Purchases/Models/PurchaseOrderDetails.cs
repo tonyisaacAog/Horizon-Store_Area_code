@@ -8,6 +8,7 @@ namespace Horizon.Areas.Purchases.Models
     [Table("Finance_PurchasingModule_PurchaseOrderDetails")]
     public class PurchaseOrderDetails : BaseEntity
     {
+        public decimal ReceivedAmount { get; set; }
         public decimal StoreItemAmount { get; set; }
         public string? Notes { get; set; }
         public bool IsCreatedASPurchasing { get; set; } = false;

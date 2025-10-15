@@ -226,7 +226,14 @@ namespace Horizon.Areas.Purchases.Services
             var purchaseOrderDeails = await _db.PurchaseOrderDetails.FirstOrDefaultAsync(obj => obj.PurchaseOrderId == vm.PurchaseOrderId&&obj.StoreItemId == vm.StoreItem.Id);
             if( purchaseOrderDeails == null ) { throw new Exception("المنتج الخام غير موجود فى امر الانتاج"); }
             if( purchaseOrderDeails.IsCreatedASPurchasing==true ) { throw new Exception("المنتج الخام تم تفريغة امر الانتاج وتم عمل اذن اضافة بالمنتج"); }
-            if( purchaseOrderDeails.StoreItemAmount != vm.StoreItem.Quantity ) { throw new Exception("الكمية المضافة فى اذن اضافة خامات ليست كما هى فى امر الانتاج"); }
+          
+            // wee need review this line again
+            if( (purchaseOrderDeails.StoreItemAmount - purchaseOrderDeails.ReceivedAmount) < vm.StoreItem.Quantity )
+            {
+                throw new Exception(
+                    $"الكمية المرسلة ({vm.StoreItem.Quantity}) أكبر من الكمية المتبقية ({purchaseOrderDeails.StoreItemAmount - purchaseOrderDeails.ReceivedAmount}) فى أمر الإنتاج."
+                );
+            }
 
 
             var NewPurchase = _mapper.Map<Purchasing>(vm.PurchaseInfo);
@@ -238,7 +245,13 @@ namespace Horizon.Areas.Purchases.Services
             await _db.AddAsync(NewPurchase);
 
             //update item in purchase order 
-            purchaseOrderDeails.IsCreatedASPurchasing = true;
+            purchaseOrderDeails.ReceivedAmount += vm.StoreItem.Quantity;
+
+            if ((purchaseOrderDeails.StoreItemAmount - purchaseOrderDeails.ReceivedAmount) == 0)
+            {
+                purchaseOrderDeails.IsCreatedASPurchasing = true;
+            }
+          
             _db.Update(purchaseOrderDeails);
             await _db.SaveChangesAsync();
 

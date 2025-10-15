@@ -76,9 +76,24 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون</label>
-                    <input type="text" v-model="Order.ClientPhone"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-[48px]">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون 1</label>
+                    <input type="text" v-model="Order.ClientPhone1"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون 2</label>
+                    <input type="text" v-model="Order.ClientPhone2"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">التليفون 3</label>
+                    <input type="text" v-model="Order.ClientPhone3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                    <input type="text" v-model="Order.ClientEmail"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none h-[48px]" readonly>
                 </div>
             </div>
         </div>
@@ -404,13 +419,23 @@
                     dataType: 'json',
                     delay: 300,
                     processResults: data => ({
-                        results: data.items.map(x => ({ id: x.Id, text: x.ClientName }))
+                        results: data.items.map(x => ({  id: x.Id,
+                    text: x.ClientName,
+                    phone1: x.Phone1,
+                    phone2: x.Phone2,
+                    phone3: x.Phone3,
+                    email: x.Email }))
                     })
                 }
             }).on('select2:select', function (e) {
                 const selected = e.params.data;
                 self.Order.ClientId = selected.id;
                 self.Order.ClientName = selected.text;
+                self.Order.ClientPhone1 = selected.phone1;
+                self.Order.ClientPhone2 = selected.phone2;
+                self.Order.ClientPhone3 = selected.phone3;
+                self.Order.ClientEmail = selected.email;
+
             });
 
             // 👇 بعد تهيئة select2 ضيف القيمة القديمة لو موجودة

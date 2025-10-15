@@ -77,7 +77,7 @@ namespace Horizon.Areas.Purchases.Services
                 RecordStatus = RecordStatus.UnChanged,
                 StoreItemId = (int)obj.StoreItemId,
                 Notes = obj.Notes,
-                StoreItemAmount = obj.StoreItemAmount,
+                StoreItemAmount = obj.StoreItemAmount-obj.ReceivedAmount,
                 StoreItemName = obj.StoreItem.ProductName
             }).ToList();
             vm.PurchaseOrderItemRawDetails = purchaseOrder.PurchaseOrderDetails.Where(obj => obj.DetailType == DetailType.Item).Select(obj => new PurchaseOrderDetailsVM
@@ -88,7 +88,7 @@ namespace Horizon.Areas.Purchases.Services
                 RecordStatus = RecordStatus.UnChanged,
                 StoreItemId = (int)obj.StoreItemsRawId,
                 Notes = obj.Notes,
-                StoreItemAmount = obj.StoreItemAmount,
+                StoreItemAmount = obj.StoreItemAmount-obj.ReceivedAmount,
                 StoreItemName = obj.StoreItemsRaw.ItemName
 
             }).ToList();

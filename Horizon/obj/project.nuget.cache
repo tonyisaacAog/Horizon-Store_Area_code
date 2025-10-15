@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MNiYWmOYqUQ=",
+  "dgSpecHash": "IJIzKhKeLy0=",
   "success": true,
-  "projectFilePath": "D:\\Company Projects\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
+  "projectFilePath": "G:\\Company Projects\\Horizon-Store_Area_code\\Horizon-Store_Area_code\\Horizon\\Horizon.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hp\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
