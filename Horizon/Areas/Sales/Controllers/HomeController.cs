@@ -63,13 +63,17 @@ namespace Horizon.Areas.Sales.Controllers
         public async Task<JsonResult> SaveSales([FromBody] SalesContainer vm)
         {
             var feedback = await _SalesManager.SaveSales(vm);
+
             if (feedback.Done)
             {
                 _messageService.Success("تم حفظ البيانات بنجاح");
-                return Json(new { newLocation = "/Sales/Home/Index" });
+
+                return Json(new { success = true, newLocation = "/Sales/Home/Index" });
             }
             else
-                return Json(new { errors = feedback.Messages });
+            {
+                return Json(new { success = false, errors = feedback.Messages });
+            }
         }
         public async Task<IActionResult> PrintSalesInvoice(int id)
         {

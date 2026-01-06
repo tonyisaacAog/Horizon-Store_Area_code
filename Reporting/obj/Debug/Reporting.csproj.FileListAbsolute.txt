@@ -25,3 +25,12 @@ G:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\ob
 G:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.CoreCompileInputs.cache
 G:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.exe
 G:\Company Projects\Horizon-Store_Area_code\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.pdb
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.exe.config
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.exe
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\bin\Debug\Reporting.pdb
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.Properties.Resources.resources
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.GenerateResource.cache
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.exe
+C:\Users\HP\Desktop\CyrusProjectsRepos\Horizon-Store_Area_code\Reporting\obj\Debug\Reporting.pdb

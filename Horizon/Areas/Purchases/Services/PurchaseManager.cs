@@ -200,7 +200,10 @@ namespace Horizon.Areas.Purchases.Services
                 await _db.SaveChangesAsync();
             }
             //update purchase order if all item collected convert it to true in is Store in Stock
-            var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
+            //var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
+           // لازم تحددي رقم الأمر هنا كمان
+            var exist = await _db.PurchaseOrderDetails
+                .AnyAsync(obj => obj.PurchaseOrderId == purchaseOrder.Id && obj.IsCreatedASPurchasing == false);
             if (!exist)
             {
                 purchaseOrder.IsStoreInStock = true;
@@ -256,8 +259,10 @@ namespace Horizon.Areas.Purchases.Services
             await _db.SaveChangesAsync();
 
             //update purchase order if all item collected convert it to true in is Store in Stock
-            var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
-            if( !exist )
+            //var exist = _db.PurchaseOrderDetails.Any(obj => obj.IsCreatedASPurchasing == false);
+            var exist = await _db.PurchaseOrderDetails
+               .AnyAsync(obj => obj.PurchaseOrderId == purchaseOrder.Id && obj.IsCreatedASPurchasing == false);
+            if ( !exist )
             {
                 purchaseOrder.IsStoreInStock = true;
                 _db.Update(purchaseOrder);
@@ -315,7 +320,7 @@ namespace Horizon.Areas.Purchases.Services
                 .ToListAsync();
             return (items, totalCount);
         }
-
+        
 
     }
 }
